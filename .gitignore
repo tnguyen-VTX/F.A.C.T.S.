@@ -1,0 +1,6 @@
+node_modules/
+dist/
+# Real workbooks contain employee names and payroll. Never commit them.
+fixtures/*.xlsx
+fixtures/*.xlsm
+*.xlsx

@@ -1,0 +1,102 @@
+# FACTS web app
+
+FACTS (Financial Analysis & Control Tracking System) is a web app for a business manager serving several
+New Mexico charter schools. It replaces the Excel workbooks used to track fund budgets, spending, journal
+entries, budget adjustment requests (BARs), requests for reimbursement (RfRs), cash receipts, and capital
+outlay projects. Anything that varies by school (district/parent code, account code format, report layouts,
+funds, contacts) belongs in a school profile, never in code. One school's data must never mix with another's.
+The current fiscal year is FY2027 (7/1/2026 to 6/30/2027).
+
+## Planning
+
+When I ask to plan a feature, read PLANNING_PARTNER.md and follow it. Draft plans live in `plans/`.
+Do not write code until I say "Plan approved."
+
+## How it works today (v0.1)
+
+Version 0.1 was built from the Gilbert L. Sena Charter High School workbook and assumes its 6-segment account
+codes. Other schools (e.g. Cesar Chavez Community School, 7-segment codes) need school profiles before they work.
+
+The user drops the FACTS workbook (.xlsx) into the page. Everything is parsed **in the browser** with
+SheetJS; nothing is uploaded. The last workbook is cached in IndexedDB. User-entered data (JE list, BAR
+settings and notes) lives in `localStorage` under `facts.v1`, keyed by fiscal cycle (e.g. `FY2027`).
+
+The app reads only these five raw sheets. Every pivot, slicer, and formula in the workbook is rebuilt in code.
+
+| Sheet | Source system export | Parser | Used by |
+|---|---|---|---|
+| Account Summary Report | Account Summary, subtotaled by Fund, Function | `parseASR` | Budget by fund, BAR builder |
+| Fund Audit Report | Fund audit / transaction detail (table `Fund`) | `parseFA` | Transactions, Journal entries |
+| RfR Summary Report | RfR summary (table `Table3`) | `parseRfR` | Reimbursements |
+| Cash Receipts Journal Report | Cash receipts journal (table `Table1`) | `parseCR` | Cash receipts, Reimbursements |
+| Capital Outlay Projects | Hand-maintained | `parseCap` | Capital outlay |
+
+### Workbook sheet to screen mapping
+
+- **Account Summary Report** side panel (fund subtotals, % Expensed / % Planned / % Encumbrance) → `views/budget.js`
+- **Fund Audit Detail** pivot + slicers (Fund, Function, Object, Job Class, Program, Name, Detail) → `views/transactions.js`
+- **JE Worksheet** pivot (Job Class filter; Account > Detail > Date; manual "Reclass" notes) → `views/journal.js`
+- **BAR Worksheet** (share of a fund's lines × BAR amount, `ROUND(...,0)`, Transfer vs Increase) → `views/bar.js`
+- **RfR Tracker** (monthly COUNTIFS/SUMIF by PeriodDateTo; cash received per RfR fund, objects `4*`) → `views/reimbursements.js`
+- **Cash Receipts Pivot Table** (Fund > TransactionDate, sum of CreditAmount) → `views/cashReceipts.js`
+- **Capital Outlay Projects** → `views/capitalOutlay.js`
+
+## Domain notes
+
+- Account code format: `FFFFF-NNNN-OOOOO-PPPP-LLLLLL-JJJJ` = Fund-Function-Object-Program-Location-JobClass,
+  e.g. `11000-1000-51100-1010-001707-1411`. `splitCode()` in `lib/format.js` splits it.
+- Account Summary rows are account lines, `Subtotal of Element: [Function] ...`, `Subtotal of Element: [Fund] ...`,
+  `Subtotal of Element: Expenditure`, and `Grand Total`. The sheet has **two** Grand Total rows with different
+  encumbrance; the parser stops at the first. Fund totals come from the `[Fund]` subtotal rows.
+- Available = Budget − Actual − Encumbrance. Negative available = over budget (shown red).
+- Fund Audit `Src` codes: DE deductions, PO purchase orders, JO jobs, IN vouchers, JE journal entries, CR cash receipts.
+- RfR status classification (`rfrState`): contains "disapproved" → disapproved; "paid" → paid; "approved" → approved;
+  else in review. This intentionally differs from the workbook, whose formula only counted statuses starting with
+  "RfR Approved" and would have put "DC RfR Approved" under In review.
+- BAR rounding matches Excel `ROUND` (half away from zero, `roundAway`). Optional: rounding remainder goes on the
+  largest line. The workbook's BARs cover a subset of lines (e.g. benefits, objects `52xxx`); the builder supports
+  an object-prefix filter and per-line include checkboxes.
+- Reimbursements "by fund" includes funds with RfRs plus grant/state capital funds (24000–27999, 31200, 31400)
+  that have revenue receipts. This list mirrors the RfR Tracker's hand-typed fund list; consider making it configurable.
+- Dates arrive as Excel serial numbers and are converted with `serialToISO` (UTC, no timezone drift).
+
+## Layout
+
+```
+index.html            Vite entry
+src/main.js           App shell, navigation, event delegation (data-act = clicks, data-in = inputs), file loading
+src/state.js          D (parsed data), UI (view state), S()/saveStore (localStorage), loadBuffer()
+src/lib/parse.js      Sheet parsers (pure; also run in Node tests)
+src/lib/format.js     Formatting, math, and account-code helpers
+src/lib/idb.js        IndexedDB cache for the last workbook
+src/views/*.js        One module per screen; each renders HTML strings into #main
+src/styles.css        Design tokens (light/dark), Public Sans, layout
+test/                 Vitest: parser checks against real totals + jsdom smoke test of every screen
+fixtures/             Put facts.xlsx here to run the data tests (git-ignored)
+```
+
+Views render HTML strings. Always pass user or workbook text through `esc()`. Events use delegation: add a
+handler to `ACT` (clicks on `[data-act]`) or `IN` (inputs on `[data-in]`) in `main.js`.
+
+## Commands
+
+- `npm install`, `npm run dev`, `npm run build`, `npm test`
+- Data tests are skipped unless `fixtures/facts.xlsx` exists. `EXPECTED` in `test/parse.test.js` holds totals
+  from the 9/29/2026 workbook; update them when the fixture changes.
+
+## Rules
+
+- Never commit real workbooks or exports. They contain employee names and payroll.
+- Keep parsing client-side unless the user decides otherwise; if a backend is added, treat payroll data as sensitive.
+- Verify numbers against the workbook's pivots before changing any calculation.
+
+## Open questions / likely next steps
+
+1. Data source: keep importing the whole workbook, or import each raw export (Account Summary, Fund Audit,
+   RfR Summary, Cash Receipts) directly so the workbook is no longer needed?
+2. Single user vs. business-office team: if shared, JE list, BAR notes, and capital outlay entries need a
+   shared store with auth instead of localStorage.
+3. Capital outlay projects are read-only from the sheet; they should become editable in the app.
+4. The JE Worksheet and BAR Worksheet in the workbook hold hand-typed notes ("Posted 09/15/2026",
+   "Submitted 09/09/2026") that are not imported yet.
+5. Possible move to TypeScript and a component framework once the data model settles.
