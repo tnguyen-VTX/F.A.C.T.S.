@@ -38,7 +38,7 @@ Environment note: `cdn.sheetjs.com` is blocked in the cloud session, so `npm ins
 ## Milestone 5: later
 
 - [x] Brand colors as tokens (Vertex Blue on primary buttons, focus, headings). [ ] Logos and favicon: need the files in the repo.
-- [-] Position/FTE slot dropped (no such export exists; FTE stays manual). [ ] Second school (Cesar Chavez) profile test.
+- [-] Position/FTE slot dropped (no such export exists; FTE stays manual). [x] Second school: a 7-segment profile test with made-up data (location 3 digits, nothing from Gilbert).
 - [ ] AI narrative button. Real OBMS test uploads.
 
 ## Hosting prep (ledgersandlearning.com)
