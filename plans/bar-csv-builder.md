@@ -29,7 +29,8 @@ Everything school-specific comes from the profile: district code, code pattern, 
 
 - Account Summary and Fund Audit from the import slots. Position/FTE optional, for FTE.
 - The paste box accepts BAR lines copied from Excel; find columns by header, never by letter.
-- Output header (UBH, 15 fields) and lines (UBL, 9 fields). Layouts for Increase, Decrease, Maintenance and Flowthrough come from the PED guide, not yet supplied.
+- Output header (UBH, 15 fields) and lines (UBL, 9 fields, location 3 digits), per the OBMS Import & Export File Specifications v2.1.4 (see `context/obms-formats.md`). Increase revenue lines use function 0000, a 4xxxx object, location 000.
+- A user-supplied Maintenance example pads each UBL to 15 fields (likely Excel). Build to the spec; settle it with a real test upload.
 - Saved BARs (lines, type, justification, Document ID, dated status steps) are keyed by school and fiscal year.
 
 ## 5. Accuracy and tie-out
@@ -86,10 +87,11 @@ Problem: BARs are hand-built and fixed up until OBMS accepts them. Solution: pic
 
 ## Open questions
 
-1. Location rule in the upload file, per school.
-2. Flowthrough header fields 9-14.
-3. How Increase and Decrease revenue lines appear in the upload.
+1. Location: the file wants 3 digits; which 3 digits for each school (profile rule)?
+2. Flowthrough header fields 9-14: meaning and validation beyond the spec table.
+3. Does OBMS accept UBL lines padded to 15 fields (as in the user's Maintenance example)?
 4. Rounding-plug rules; zero-dollar lines.
+5. Which school is the "CIS" Maintenance example from, and was it accepted?
 5. Position/FTE report name and layout.
 6. Backup reminder cadence.
 7. Which funds are flowthrough at each school (profile).
@@ -100,7 +102,7 @@ Problem: BARs are hand-built and fixed up until OBMS accepts them. Solution: pic
 2. Import slots for Account Summary and Fund Audit.
 3. Fund picker, deficit finder and donor suggestions.
 4. BAR model for the types, OBMS-style view, saved BARs with status log, backup export/import.
-5. CSV generator and validation panel, tested against the accepted BARs (needs the PED guide).
+5. CSV generator and validation panel, tested against the accepted BARs (the PED specification is now in `context/obms-formats.md`).
 6. Rule-based justification.
 7. Position/FTE slot and proportional FTE.
 8. Second school profile and sample test.
