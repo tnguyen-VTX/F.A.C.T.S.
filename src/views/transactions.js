@@ -8,6 +8,10 @@ export const SRC = {
   IN: 'Vouchers',
   JE: 'Journal entries',
   CR: 'Cash receipts',
+  // Derived for CSV exports that have no Src column (see deriveSource in lib/parse.js).
+  PR: 'Payroll registers',
+  RF: 'Cash receipt fees',
+  EN: 'Encumbrances',
 };
 export const TXF = [
   ['fund', 'Fund'],
@@ -139,7 +143,7 @@ export function txTable(rows) {
     .slice(0, LIM)
     .map(
       (r) =>
-        `<tr><td class="num">${fmtD(r.date)}</td><td>${esc(r.src)}</td><td>${esc(r.tdesc)} <span class="muted">#${esc(r.tno)}</span></td><td>${esc(r.name)}</td><td>${esc([r.number, r.desc].filter(Boolean).join(' '))}</td><td>${esc(r.detail)}</td><td class="code">${r.code}</td><td class="r">${money(r.actual)}</td><td class="r">${money(r.enc)}</td></tr>`,
+        `<tr><td class="num">${fmtD(r.date)}</td><td>${esc(r.src)}</td><td>${esc(r.tdesc)} ${r.tno !== '' ? `<span class="muted">#${esc(r.tno)}</span>` : ''}</td><td>${esc(r.name)}</td><td>${esc([r.number, r.desc].filter(Boolean).join(' '))}</td><td>${esc(r.detail)}</td><td class="code">${r.code}</td><td class="r">${money(r.actual)}</td><td class="r">${money(r.enc)}</td></tr>`,
     )
     .join('')}
   </tbody></table></div>${list.length > LIM ? `<p class="note">First ${LIM} of ${list.length} lines. Add a filter to narrow this group.</p>` : ''}`;

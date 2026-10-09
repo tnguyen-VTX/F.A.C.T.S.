@@ -1,5 +1,7 @@
 import * as XLSX from 'xlsx';
 import { T0, addT, num, serialToISO } from './format.js';
+import { findColumns, findHeaderRow, missingColumnsMessage } from './columns.js';
+import { parseCSV } from './csv.js';
 import { gilbertPreset, looseSplit, splitWith } from './profile.js';
 
 // Account codes are read through a school profile. Callers that pass none get the
@@ -77,34 +79,74 @@ export function parseASR(rows, profile = DEFAULT_PROFILE) {
   }
   return out;
 }
+// Fund Audit columns, found by header name. The workbook table and the AptaFund CSV export
+// spell some headers differently and the CSV has no Src, Trans. No. or Trans. Desc.
+export const FA_SPEC = {
+  code: { names: ['Account Code'], required: true },
+  date: { names: ['Trans. Date', 'Transaction Date'], required: true },
+  budget: { names: ['Budget'], required: true },
+  actual: { names: ['Actuals', 'Actual'], required: true },
+  enc: { names: ['Encumbrance'], required: true },
+  avail: { names: ['Available'], required: true },
+  acctDesc: { names: ['Acct. Desc.'] },
+  tno: { names: ['Trans. No.'] },
+  tdesc: { names: ['Trans. Desc.'] },
+  src: { names: ['Src'] },
+  name: { names: ['Name'] },
+  number: { names: ['Number'] },
+  desc: { names: ['Description'] },
+  detail: { names: ['Detail'] },
+  check: { names: ['Check'] },
+};
+// Source for exports with no Src column, from the Number prefix and Detail text:
+// Reg = payroll register, Inv = invoice, Rec = a fee inside a cash receipt (the report lists
+// expenditures only), J/E = journal entry. Rows with none of these are encumbrance-only lines
+// (purchase orders, jobs and payroll encumbrances cannot be told apart).
+export function deriveSource(number, detail) {
+  const n = String(number ?? '').trim();
+  if (/^Reg:/i.test(n)) return 'PR';
+  if (/^Inv:/i.test(n)) return 'IN';
+  if (/^Rec:/i.test(n)) return 'RF';
+  if (/^J\/E/i.test(String(detail ?? '').trim())) return 'JE';
+  return 'EN';
+}
 export function parseFA(rows, profile = DEFAULT_PROFILE) {
   if (!rows) return [];
+  const hi = findHeaderRow(rows, { code: FA_SPEC.code });
+  if (hi < 0) return [];
+  const { map, missing, found } = findColumns(rows[hi], FA_SPEC);
+  if (missing.length) throw new Error(missingColumnsMessage('The Fund Audit Report', missing, found));
+  const get = (r, k) => (map[k] == null ? undefined : r[map[k]]);
   const out = [];
-  for (const o of objectsFrom(rows, 'Account Code')) {
-    const code = String(o['Account Code'] ?? '').trim();
+  for (const r of rows.slice(hi + 1)) {
+    if (!r) continue;
+    const code = String(get(r, 'code') ?? '').trim();
     const s = splitWith(profile, code);
     if (!s) continue;
+    const number = get(r, 'number') ?? '',
+      detail = String(get(r, 'detail') ?? '').trim();
     out.push({
       code,
       ...s,
-      acctDesc: String(o['Acct. Desc.'] ?? '').trim(),
-      date: serialToISO(o['Trans. Date']),
-      tno: o['Trans. No.'] ?? '',
-      tdesc: String(o['Trans. Desc.'] ?? ''),
-      src: String(o['Src'] ?? ''),
-      name: String(o['Name'] ?? '').trim(),
-      number: o['Number'] ?? '',
-      desc: String(o['Description'] ?? ''),
-      detail: String(o['Detail'] ?? '').trim(),
-      check: o['Check'] ?? '',
-      budget: num(o['Budget']),
-      actual: num(o['Actuals']),
-      enc: num(o['Encumbrance']),
-      avail: num(o['Available']),
+      acctDesc: String(get(r, 'acctDesc') ?? '').trim(),
+      date: serialToISO(get(r, 'date')),
+      tno: get(r, 'tno') ?? '',
+      tdesc: String(get(r, 'tdesc') ?? ''),
+      src: map.src == null ? deriveSource(number, detail) : String(get(r, 'src') ?? ''),
+      name: String(get(r, 'name') ?? '').trim(),
+      number,
+      desc: String(get(r, 'desc') ?? ''),
+      detail,
+      check: get(r, 'check') ?? '',
+      budget: num(get(r, 'budget')),
+      actual: num(get(r, 'actual')),
+      enc: num(get(r, 'enc')),
+      avail: num(get(r, 'avail')),
     });
   }
   return out;
 }
+export const parseFACSV = (text, profile) => parseFA(parseCSV(text), profile);
 export function parseRfR(rows) {
   if (!rows) return [];
   return objectsFrom(rows, 'ReimbursementName')
