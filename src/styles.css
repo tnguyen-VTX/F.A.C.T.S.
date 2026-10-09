@@ -746,3 +746,29 @@ tr.over > td {
 .fld textarea {
   width: 100%;
 }
+
+/* Import slots */
+.slot .drop {
+  display: block;
+  margin: 10px 0;
+}
+.checks {
+  list-style: none;
+  margin: 8px 0;
+  padding: 0;
+}
+.checks li {
+  padding: 6px 10px;
+  border-left: 3px solid var(--line, #c0c3c2);
+  margin: 6px 0;
+  font-size: 14px;
+}
+.checks .chk-stop {
+  border-left-color: #b3261e;
+}
+.checks .chk-warn {
+  border-left-color: #b26a00;
+}
+.loaded {
+  margin: 8px 0;
+}

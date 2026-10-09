@@ -1,12 +1,28 @@
 import './styles.css';
 import { $, esc, money, num, sumBy } from './lib/format.js';
 import { IDB } from './lib/idb.js';
-import { SHEETS } from './lib/parse.js';
+import { readAccountSummary, readFundAudit } from './lib/importReport.js';
+import { hasStop } from './lib/reportCheck.js';
 import { deleteProfile, makeProfileId, saveProfile } from './lib/profileStore.js';
 import { parseFundLines, parseList } from './lib/profile.js';
-import { D, PF, S, UI, loadBuffer, profile, saveStore, storage, switchSchool } from './state.js';
+import {
+  D,
+  FY,
+  PF,
+  REP,
+  S,
+  UI,
+  acceptReport,
+  loadBuffer,
+  profile,
+  saveStore,
+  setFiscalYear,
+  storage,
+  switchSchool,
+} from './state.js';
 import { barCompute, barResults, loadBarFund, viewBAR } from './views/bar.js';
 import { viewBudget } from './views/budget.js';
+import { viewImport } from './views/import.js';
 import { viewCap } from './views/capitalOutlay.js';
 import { scDraftErrors, scErrors, scForm, scOpen, viewSchools } from './views/schools.js';
 import { crResults, viewCR } from './views/cashReceipts.js';
@@ -15,6 +31,7 @@ import { viewRfR } from './views/reimbursements.js';
 import { txResults, viewTx } from './views/transactions.js';
 
 const NAV = [
+  ['import', 'Load reports'],
   ['budget', 'Budget by fund'],
   ['tx', 'Transactions'],
   ['je', 'Journal entries'],
@@ -24,16 +41,13 @@ const NAV = [
   ['cap', 'Capital outlay'],
   ['schools', 'Schools'],
 ];
+// Screens that work before any report is loaded.
+const LITE = new Set(['import', 'schools']);
 const wbKey = () => 'workbook:' + PF.active;
 const LEGACY_KEY = 'workbook';
 export function render() {
   const app = $('#app');
-  if (!D.loaded && UI.view !== 'schools') {
-    app.dataset.mode = '';
-    app.innerHTML = importHTML();
-    return;
-  }
-  // Without a workbook only the Schools screen is available.
+  if (!D.loaded && !LITE.has(UI.view)) UI.view = 'import';
   const mode = D.loaded ? 'full' : 'lite';
   if (!$('#main') || app.dataset.mode !== mode) {
     app.innerHTML = shellHTML();
@@ -53,30 +67,21 @@ const schoolPicker = () =>
     )
     .join('')}</select></label>`;
 function shellHTML() {
-  const nav = D.loaded ? NAV : NAV.filter(([k]) => k === 'schools');
+  const nav = D.loaded ? NAV : NAV.filter(([k]) => LITE.has(k));
   return `<div class="app"><aside class="side"><div class="brand"><div class="word">FACTS</div>
   <div class="expand">Financial Analysis &amp; Control Tracking System</div><div class="school">${schoolPicker()}${D.loaded ? `<span class="muted">${esc(D.school)} · ${esc(D.cycle)}</span>` : ''}</div></div>
   <nav class="nav" aria-label="Sections">${nav.map(([k, l]) => `<button data-act="nav" data-v="${k}">${l}</button>`).join('')}</nav>
   <div class="side-foot">${
     D.loaded
       ? `<div class="file">${esc(D.fileName)}${D.asOf ? `<br>Run ${esc(D.asOf)}` : ''}</div>
-  <div><button class="linkbtn" data-act="replace">Load a newer workbook</button></div>
-  <div><button class="linkbtn" data-act="forget">Remove workbook from this browser</button></div>`
-      : `<div><button class="linkbtn" data-act="toImport">Back to loading a workbook</button></div>`
+  <div><button class="linkbtn" data-act="forget">Clear loaded reports</button></div>`
+      : ''
   }</div></aside>
   <main id="main" tabindex="-1"></main></div>`;
 }
-function importHTML(msg, err) {
-  return `<div class="import"><div class="imp-card"><div class="word">FACTS</div><div class="expand">Financial Analysis &amp; Control Tracking System</div>
-  <div class="school" style="margin:14px 0">${schoolPicker()} <button class="linkbtn" data-act="nav" data-v="schools">Manage schools</button></div>
-  <label class="drop" id="drop"><input type="file" id="file" accept=".xlsx,.xlsm" data-in="file"><strong>Drop the FACTS workbook here, or choose a file</strong>
-  <span class="muted">The file is read inside this browser and is never uploaded.</span></label>
-  <div class="status${err ? ' err' : ''}" id="status" role="status">${esc(msg || '')}</div>
-  <p class="muted" style="font-size:14px;margin-top:22px">It reads these sheets and rebuilds everything else from them:</p>
-  <ul>${SHEETS.map((s) => `<li>${s}</li>`).join('')}</ul></div></div>`;
-}
 
 const VIEWS = {
+  import: viewImport,
   budget: viewBudget,
   tx: viewTx,
   je: viewJE,
@@ -189,23 +194,26 @@ const ACT = {
     UI.cr.open.has(k) ? UI.cr.open.delete(k) : UI.cr.open.add(k);
     crResults();
   },
-  replace: () => {
-    const i = document.createElement('input');
-    i.type = 'file';
-    i.accept = '.xlsx,.xlsm';
-    i.onchange = () => i.files[0] && handleFile(i.files[0]);
-    i.click();
-  },
   forget: async () => {
     try {
       await IDB.del(wbKey());
       if (PF.active === 'gilbert-l-sena') await IDB.del(LEGACY_KEY);
     } catch (e) {}
-    D.loaded = false;
+    Object.assign(D, { loaded: false, asr: null, fa: null, rfr: null, cr: null, cap: null });
+    REP.asr = REP.fa = null;
+    UI.imp = { asr: null, fa: null, wb: null };
+    UI.view = 'import';
     render();
   },
-  toImport: () => {
-    UI.view = 'budget';
+  impAccept: (t) => {
+    const st = UI.imp[t.dataset.kind];
+    if (st?.status !== 'pending') return;
+    acceptReport(st.result);
+    UI.imp[t.dataset.kind] = null;
+    render();
+  },
+  impDiscard: (t) => {
+    UI.imp[t.dataset.kind] = null;
     render();
   },
   scNew: () => {
@@ -325,6 +333,12 @@ const IN = {
     crResults();
   },
   school: (t) => useSchool(t.value),
+  fy: (t) => {
+    setFiscalYear(parseInt(t.value, 10));
+    UI.imp.asr = UI.imp.fa = null;
+    render();
+  },
+  repFile: (t) => t.files[0] && handleReport(t.dataset.kind, t.files[0]),
   sc: (t) => {
     const d = UI.sc.draft,
       k = t.dataset.k;
@@ -390,25 +404,51 @@ document.addEventListener('input', (e) => {
   const t = e.target.closest('[data-in]');
   if (t && IN[t.dataset.in]) IN[t.dataset.in](t, e);
 });
+const DROP = '#drop, .drop[data-kind]';
 document.addEventListener('dragover', (e) => {
-  const d = e.target.closest && e.target.closest('#drop');
+  const d = e.target.closest && e.target.closest(DROP);
   if (d) {
     e.preventDefault();
     d.classList.add('hover');
   }
 });
 document.addEventListener('dragleave', (e) => {
-  const d = e.target.closest && e.target.closest('#drop');
+  const d = e.target.closest && e.target.closest(DROP);
   if (d) d.classList.remove('hover');
 });
 document.addEventListener('drop', (e) => {
-  const d = e.target.closest && e.target.closest('#drop');
+  const d = e.target.closest && e.target.closest(DROP);
   if (!d) return;
   e.preventDefault();
   d.classList.remove('hover');
   const f = e.dataTransfer.files[0];
-  if (f) handleFile(f);
+  if (!f) return;
+  if (d.dataset.kind) handleReport(d.dataset.kind, f);
+  else handleFile(f);
 });
+
+// Read one dropped report for the selected school and fiscal year, run the checks, then load it,
+// hold it for confirmation (warnings), or reject it (a stop).
+async function handleReport(kind, file) {
+  UI.imp[kind] = { status: 'reading', name: file.name };
+  render();
+  try {
+    const bytes = new Uint8Array(await file.arrayBuffer());
+    await new Promise((r) => setTimeout(r, 20));
+    const ctx = { profile: profile(), fiscalYear: FY.value, asr: REP.asr ? D.asr : null };
+    const result =
+      kind === 'asr' ? readAccountSummary(file.name, bytes, ctx) : readFundAudit(file.name, bytes, ctx);
+    if (hasStop(result.checks)) UI.imp[kind] = { status: 'rejected', result };
+    else if (result.checks.some((c) => c.level === 'warn')) UI.imp[kind] = { status: 'pending', result };
+    else {
+      acceptReport(result);
+      UI.imp[kind] = null;
+    }
+  } catch (err) {
+    UI.imp[kind] = { status: 'error', msg: err.message || 'That file could not be read.' };
+  }
+  render();
+}
 
 async function handleFile(file) {
   const st = $('#status');
@@ -423,15 +463,12 @@ async function handleFile(file) {
     try {
       await IDB.put(wbKey(), { name: file.name, buf });
     } catch (e) {}
-    if (UI.view === 'schools') UI.view = 'budget';
+    if (LITE.has(UI.view)) UI.view = 'budget';
     render();
   } catch (err) {
-    if (D.loaded) {
-      alert(err.message);
-      return;
-    }
-    $('#app').dataset.mode = '';
-    $('#app').innerHTML = importHTML(err.message || 'That file could not be read.', true);
+    UI.imp.wb = { error: err.message || 'That file could not be read.' };
+    UI.view = 'import';
+    render();
   }
 }
 // Open the active school's saved workbook, if this browser has one. Returns an error message or ''.
@@ -461,11 +498,8 @@ async function useSchool(id) {
   const err = await loadSaved();
   render();
   if (err && !D.loaded) {
-    const st = $('#status');
-    if (st) {
-      st.className = 'status err';
-      st.textContent = err;
-    }
+    UI.imp.wb = { error: err };
+    render();
   }
 }
 (async function init() {

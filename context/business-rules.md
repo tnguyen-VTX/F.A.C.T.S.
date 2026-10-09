@@ -41,3 +41,11 @@ Hard stops: BAR doesn't balance; a line fails the code pattern or is in a differ
 ## Fiscal year handling
 
 BARs are for the current fiscal year. The prior year stays editable until 10/31, then read-only with an unlock override.
+
+## Fund Audit source (AptaFund CSV export)
+
+The CSV has no Src column. Source is derived: `Number` prefix `Reg:` = payroll register, `Inv:` = invoice, `Rec:` = a fee within a cash receipt (the report lists expenditures only), `Detail` starting `J/E:` = journal entry, anything else = encumbrance only (purchase orders, jobs and payroll encumbrances cannot be told apart). Confirmed by the user 2026-10-09.
+
+## Report tie-out
+
+A Fund Audit and an Account Summary run for the same school and period tie exactly: each fund's Budget, Actual, Encumbrance and Available equal that fund's `[Fund]` subtotal, and the sums equal the Account Summary Grand Total. A fund with no activity in either report is ignored. A difference means a different period, school or filter, and the load warns.

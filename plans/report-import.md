@@ -72,6 +72,12 @@ Gilbert first (known baseline), then Cesar Chavez. Keep v0.1 workbook import wor
 
 Problem: the workbook is a manual middleman that only works for one layout. Solution: drop the raw AptaFund reports, pick the school, and FACTS checks them against the school profile. Impact: no workbook upkeep, and a new school means a new profile instead of new code.
 
+## What the real AptaFund exports look like (checked 10/9/2026, structure only)
+
+- Account Summary .xlsx: school name, title, a parameter row (`Cycle: FY26-27; Begin Date; End Date; Account Type: Expenditure; Account Expression; Include Unposted Transactions; Budget Category; Created On`), then `Account Code, Description, Actual (Date Range), Budget (YTD), Actual (YTD), Encumbrance (YTD), Available (YTD), % of Budget`. Account Type is Expenditure only.
+- Fund Audit .csv: `Fund, Account Code, Acct. Desc., Transaction Date, Name, Number, Description, Detail, Check, Budget, Actuals, Encumbrance, Available`. No header block, no Src, no transaction number. Quoted fields can hold line breaks. Dates are M/D/YYYY text; amounts plain decimals.
+- The two tie exactly, fund by fund; this is the check that stands in for the header the CSV lacks.
+
 ## Open questions
 
 1. Exact AptaFund header block layout for each .xlsx report (school, fiscal year, parameters). Need a sample with made-up names.

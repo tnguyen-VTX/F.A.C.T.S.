@@ -51,6 +51,17 @@ The OBMS upload location is 3 digits (spec v2.1.4); each profile's `locationRule
 unconfirmed until checked against an accepted upload. See `plans/` and `context/` for the approved plans, OBMS formats and
 business rules, and `plans/build-checklist.md` for build progress.
 
+## Load reports (added after v0.1)
+
+The Load reports screen takes the AptaFund Account Summary (.xlsx) and Fund Audit (.csv) one file at a time, for the
+selected school and fiscal year. Each file is checked before it loads (`lib/reportCheck.js`): a wrong school or a layout
+that does not fit the school's account code stops it; a wrong year, a short date range, a filtered report or a Fund Audit
+that does not tie to the Account Summary (fund by fund) asks the user to confirm. The v0.1 whole-workbook import is still
+available under "Or load the whole FACTS workbook". The Fund Audit CSV has no Src column, so Source is derived from the
+Number prefix and Detail (`deriveSource` in `lib/parse.js`: Reg → PR payroll register, Inv → IN invoice, Rec → RF fee within
+a cash receipt, `J/E:` → JE, otherwise EN encumbrance). Report cycle `FY26-27` and `FY2027` both mean fiscal year 2027.
+Real exports go in `fixtures/` (git-ignored: `*.xlsx`, `*.csv`); tests that use them are skipped when absent.
+
 ## Domain notes
 
 - Account code format: `FFFFF-NNNN-OOOOO-PPPP-LLLLLL-JJJJ` = Fund-Function-Object-Program-Location-JobClass,
@@ -79,9 +90,13 @@ src/state.js          D (parsed data), UI (view state), PF (school profiles), S(
 src/lib/parse.js      Sheet parsers (pure; also run in Node tests). Account codes are read through a school profile
 src/lib/profile.js    School profile model: segments, code pattern, 3-digit OBMS upload location rule, validation (pure)
 src/lib/profileStore.js  Saves/loads profiles (localStorage key facts.profiles.v1); first run seeds the Gilbert preset
+src/lib/csv.js        CSV reader (quoted fields, line breaks inside quotes)
+src/lib/columns.js    Find report columns by header name (aliases, missing-column message)
+src/lib/reportCheck.js  School/year/parameter checks and the Fund Audit vs Account Summary tie-out (pure)
+src/lib/importReport.js Reads a dropped .xlsx/.csv report for a school and runs the checks (pure)
 src/lib/format.js     Formatting, math, and account-code helpers
 src/lib/idb.js        IndexedDB cache for the last workbook
-src/views/*.js        One module per screen; each renders HTML strings into #main (schools.js is the profile editor)
+src/views/*.js        One module per screen; each renders HTML strings into #main (schools.js = profile editor, import.js = Load reports)
 src/styles.css        Design tokens (light/dark), Public Sans, layout
 test/                 Vitest: parser checks against real totals + jsdom smoke test of every screen
 fixtures/             Put facts.xlsx here to run the data tests (git-ignored)
