@@ -55,11 +55,13 @@ export function parseASR(rows, profile = DEFAULT_PROFILE) {
       .map((r) => r && r[0])
       .find((v) => typeof v === 'string' && /Cycle:/.test(v)) || '';
   const getFund = (code, name) => {
-    if (!out.funds.has(code)) out.funds.set(code, { code, name: name || '', lines: [], sub: null });
+    if (!out.funds.has(code))
+      out.funds.set(code, { code, name: name || '', lines: [], sub: null, funcs: [] });
     const f = out.funds.get(code);
     if (name && !f.name) f.name = name;
     return f;
   };
+  let block = []; // account lines since the last [Function] subtotal; the subtotal row follows its lines
   for (let i = hi + 1; i < rows.length; i++) {
     const r = rows[i];
     if (!r) continue;
@@ -73,11 +75,17 @@ export function parseASR(rows, profile = DEFAULT_PROFILE) {
     let m;
     const s = splitWith(profile, a);
     if (s) {
-      getFund(s.fund).lines.push({ code: a, desc: String(r[1] ?? '').trim(), ...s, ...v });
+      const line = { code: a, desc: String(r[1] ?? '').trim(), ...s, ...v };
+      getFund(s.fund).lines.push(line);
+      block.push(line);
     } else if ((m = a.match(/\[Fund\]\s*(\d+)\s*-\s*(.*)$/))) {
       getFund(m[1], m[2].trim()).sub = v;
     } else if ((m = a.match(/\[Function\]\s*(\d+)\s*-\s*(.*)$/))) {
       out.funcNames[m[1]] = m[2].trim();
+      // Keep the function's own subtotal (Budget, Actual, Encumbrance, Available) with its fund.
+      if (block.length)
+        getFund(block[0].fund).funcs.push({ code: m[1], name: m[2].trim(), tot: v, lines: block });
+      block = [];
     }
   }
   for (const f of out.funds.values()) {

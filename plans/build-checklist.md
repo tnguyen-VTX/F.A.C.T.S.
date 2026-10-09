@@ -23,7 +23,7 @@ Environment note: `cdn.sheetjs.com` is blocked in the cloud session, so `npm ins
 
 ## Milestone 3: BAR logic (pure first)
 
-- [ ] 3a. Deficit finder (function subtotal Available < 0, per selected fund).
+- [x] 3a. Deficit finder (function subtotal Available < 0, per selected fund).
 - [ ] 3b. Receiving-line allocation and donor split (nets to exactly 0.00).
 - [ ] 3c. BAR model and validation rules for T, T-flowthrough, I, D, M.
 - [ ] 3d. FTE proportional calculation.
