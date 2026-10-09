@@ -113,10 +113,12 @@ src/lib/reportStore.js  Keys, pruning and records for parsed reports kept in Ind
 src/lib/importReport.js Reads a dropped .xlsx/.csv report for a school and runs the checks (pure)
 src/lib/barLogic.js   Deficit finder, whole-dollar spreading, receiving lines and donor split for transfers (pure)
 src/lib/bar.js        BAR model, totals and validation for T, M, I, IB, D (stop/warn checks before download) (pure)
+src/lib/justify.js    Rule-based justification wording per BAR type (no commas, quotes or pipes; max 255) (pure)
+src/lib/barCsv.js     OBMS BAR upload file (UBH 15 fields, UBL 9, CRLF); none is made while a check says stop (pure)
 src/lib/fte.js        FTE change for salary lines (proportional to dollars; assumption to confirm) (pure)
 src/lib/format.js     Formatting, math, and account-code helpers
 src/lib/idb.js        IndexedDB cache for the last workbook
-src/views/*.js        One module per screen; each renders HTML strings into #main (schools.js = profile editor, import.js = Load reports)
+src/views/*.js        One module per screen (barBuilder.js = BAR builder: fund picker, deficits, OBMS-style view, download); each renders HTML strings into #main (schools.js = profile editor, import.js = Load reports)
 src/styles.css        Design tokens (light/dark), DM Sans and Red Hat Display (src/fonts), layout
 test/                 Vitest: parser checks against real totals + jsdom smoke test of every screen
 fixtures/             Put facts.xlsx here to run the data tests (git-ignored)

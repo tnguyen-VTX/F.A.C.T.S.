@@ -30,8 +30,8 @@ Environment note: `cdn.sheetjs.com` is blocked in the cloud session, so `npm ins
 
 ## Milestone 4: BAR screens and output
 
-- [ ] 4a. Fund picker, New BAR by type, deficit list.
-- [ ] 4b. OBMS-style view, justification template, validation panel.
+- [x] 4a. Fund picker, New BAR by type, deficit list (`src/views/barBuilder.js`; the working BAR is kept as a draft in `S().bbDraft`).
+- [x] 4b. OBMS-style view, justification template (`src/lib/justify.js`), validation panel. Browser check with the real fixtures still to do.
 - [ ] 4c. Saved BARs, status log, drafts per school, backup export/import.
 - [x] 4d. CSV generator to spec v2.1.4 (`src/lib/barCsv.js`: UBH 15 fields, UBL 9 fields, CRLF, no BOM; never made while a check says stop). Tests: the accepted Maintenance BAR byte for byte (made-up contact), the PED spec's Increase example, and, with the real accepted file in git-ignored fixtures, the same lines apart from its padding commas. Still unproven until a real OBMS upload.
 

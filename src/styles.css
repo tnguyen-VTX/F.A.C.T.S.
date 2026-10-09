@@ -794,3 +794,37 @@ h3,
 .imp-card .word {
   font-family: var(--font-head);
 }
+
+/* BAR builder */
+.fundpick {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 18px;
+}
+.obms dl.kv {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  gap: 4px 14px;
+  margin: 0 0 12px;
+}
+.obms dl.kv dt {
+  color: var(--muted);
+}
+.obms dl.kv dd {
+  margin: 0;
+}
+input.amt {
+  width: 9em;
+  text-align: right;
+}
+input.fte {
+  width: 6em;
+  text-align: right;
+}
+tr.give td {
+  background: var(--sunk);
+}
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}

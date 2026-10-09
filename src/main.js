@@ -29,6 +29,19 @@ import {
   switchSchool,
 } from './state.js';
 import { barCompute, barResults, loadBarFund, viewBAR } from './views/bar.js';
+import {
+  bb,
+  bbBuildTransfer,
+  bbDeficits,
+  bbDraft,
+  bbFile,
+  bbStartEmpty,
+  bbSummary,
+  viewBarBuilder,
+} from './views/barBuilder.js';
+import { barLine } from './lib/bar.js';
+import { suggestJustification } from './lib/justify.js';
+import { splitWith } from './lib/profile.js';
 import { viewBudget } from './views/budget.js';
 import { viewImport } from './views/import.js';
 import { viewCap } from './views/capitalOutlay.js';
@@ -43,7 +56,8 @@ const NAV = [
   ['budget', 'Budget by fund'],
   ['tx', 'Transactions'],
   ['je', 'Journal entries'],
-  ['bar', 'BAR builder'],
+  ['bars', 'BAR builder'],
+  ['bar', 'BAR spread (v0.1)'],
   ['rfr', 'Reimbursements'],
   ['cr', 'Cash receipts'],
   ['cap', 'Capital outlay'],
@@ -51,6 +65,12 @@ const NAV = [
 ];
 // Screens that work before any report is loaded.
 const LITE = new Set(['import', 'schools']);
+const keepBB = () => {
+  const b = bb();
+  S().bb = { funds: [...b.funds], type: b.type, mode: b.mode, cushion: b.cushion };
+  S().bbDraft = b.draft;
+  saveStore();
+};
 const wbKey = () => 'workbook:' + PF.active;
 const LEGACY_KEY = 'workbook';
 export function render() {
@@ -93,6 +113,7 @@ const VIEWS = {
   budget: viewBudget,
   tx: viewTx,
   je: viewJE,
+  bars: viewBarBuilder,
   bar: viewBAR,
   rfr: viewRfR,
   cr: viewCR,
@@ -212,6 +233,61 @@ const ACT = {
     UI.imp = { asr: null, fa: null, wb: null };
     UI.view = 'import';
     render();
+  },
+  bbBuild: (t) => {
+    bbBuildTransfer(t.dataset.fund, t.dataset.func);
+    bbDraft();
+    $('#bbdraft')?.scrollIntoView?.({ behavior: 'smooth', block: 'start' });
+  },
+  bbStart: () => {
+    bbStartEmpty();
+    bbDraft();
+  },
+  bbDel: (t) => {
+    bb().draft.lines.splice(+t.dataset.i, 1);
+    keepBB();
+    bbDraft();
+  },
+  bbAddLine: () => {
+    const b = bb(),
+      code = b.add.code.trim();
+    if (!splitWith(profile(), code)) {
+      b.note = `"${code}" does not match the account code layout of ${profile().name}.`;
+      return bbDraft();
+    }
+    b.note = '';
+    b.draft.lines.push(barLine(profile(), code, num(b.add.amount)));
+    b.add = { code: '', amount: '' };
+    keepBB();
+    bbDraft();
+  },
+  bbDiscard: () => {
+    if (!confirm('Discard this BAR? Its lines and wording will be lost.')) return;
+    bb().draft = null;
+    bb().note = '';
+    keepBB();
+    bbDraft();
+  },
+  bbSuggest: () => {
+    const d = bb().draft;
+    d.justification = suggestJustification(d, { funcNames: D.asr.funcNames, fundNames: D.fundNames });
+    keepBB();
+    bbDraft();
+  },
+  bbDownload: () => {
+    const r = bbFile();
+    if (!r.ok) return;
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(new Blob([r.csv], { type: 'text/csv;charset=utf-8' }));
+    a.download = r.name;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+  },
+  bbCopy: (t) => {
+    const r = bbFile();
+    if (r.ok) copyText(r.csv, t);
   },
   impAccept: (t) => {
     const kind = t.dataset.kind,
@@ -341,6 +417,55 @@ const IN = {
   crq: (t) => {
     UI.cr.q = t.value;
     crResults();
+  },
+  bbFund: (t) => {
+    const b = bb();
+    t.checked ? b.funds.add(t.dataset.code) : b.funds.delete(t.dataset.code);
+    keepBB();
+    viewBarBuilder();
+  },
+  bbType: (t) => {
+    bb().type = t.value;
+    keepBB();
+    viewBarBuilder();
+  },
+  bbStartFund: (t) => {
+    bb().startFund = t.value;
+  },
+  bbCushion: (t) => {
+    bb().cushion = Math.max(0, num(t.value));
+    keepBB();
+  },
+  bbMode: (t) => {
+    bb().mode = t.value;
+    keepBB();
+  },
+  bbAmt: (t) => {
+    bb().draft.lines[+t.dataset.i].amount = num(t.value);
+    keepBB();
+    bbSummary();
+  },
+  bbFte: (t) => {
+    const l = bb().draft.lines[+t.dataset.i];
+    l.fte = num(t.value);
+    l.fteManual = true;
+    keepBB();
+    bbSummary();
+  },
+  bbField: (t) => {
+    const path = t.dataset.k.split('.'),
+      d = bb().draft;
+    let o = d;
+    for (const k of path.slice(0, -1)) o = o[k];
+    o[path.at(-1)] = t.value;
+    keepBB();
+    bbSummary();
+  },
+  bbAddCode: (t) => {
+    bb().add.code = t.value;
+  },
+  bbAddAmt: (t) => {
+    bb().add.amount = t.value;
   },
   school: (t) => useSchool(t.value),
   fy: (t) => {

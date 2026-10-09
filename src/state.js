@@ -26,6 +26,7 @@ export const UI = {
   cr: { open: new Set(), q: '' },
   sc: null,
   imp: { asr: null, fa: null, wb: null },
+  bb: null,
 };
 export const storage =
   typeof localStorage !== 'undefined' ? localStorage : { getItem: () => null, setItem: () => {} };
@@ -57,6 +58,7 @@ export function switchSchool(id) {
   UI.bar.fund = '';
   REP.asr = REP.fa = null;
   UI.imp = { asr: null, fa: null, wb: null };
+  UI.bb = null;
   return true;
 }
 
