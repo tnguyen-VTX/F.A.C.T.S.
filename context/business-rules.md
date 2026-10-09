@@ -15,16 +15,16 @@ Marked **[state]** if statewide, **[school]** if it varies by school (belongs in
 |---|---|---|
 | Transfer (T) | Expenditure | Nets to 0.00 |
 | Transfer (Flowthrough) | Expenditure, plus flowthrough header fields and FTE | Nets to 0.00. Header rules pending the PED guide |
-| Increase (I / IB) | Revenue (objects 4xxxx) plus expenditure, amounts from the award | Revenue total = expenditure total, to the cent |
+| Increase (I / IB) | Revenue (objects 4xxxx) plus expenditure, amounts from the award; expenditure is limited to what was awarded for the fund | Revenue total = expenditure total, to the cent |
 | Decrease (D) | Mirrors Increase, negative amounts | Revenue = expenditure; no line below actuals plus encumbrances |
-| Maintenance (M) | Transfer within one function. OBMS approves it automatically | Every line in one function; nets to 0.00 |
+| Maintenance (M) | Transfer within one function, no object rule. OBMS approves it automatically | Every line in one function; nets to 0.00 |
 
 ## Deficits and donors (Transfer)
 
 - A deficit is a **function within a fund** whose subtotal Available is negative (from the `Subtotal of Element: [Function]` rows). An over-budget line inside a function that nets positive is not a deficit. [assumed from the user's justification wording and answer]
 - Transfer amount = function deficit + cushion (dollar or percent, default 0), rounded up to a whole dollar. [assumed: rounding]
 - Receiving lines: fill over-budget lines first, then spread any remainder by budget share.
-- Donors: same fund; donor function's subtotal Available stays ≥ 0; only lines with room give; same object group. Ranked by a priority list in the school profile. User can change any donor. Per-BAR mode: top-ranked first, or spread across all by share of room.
+- Donors: same fund; donor function's subtotal Available stays ≥ 0; only lines with room give. **No object rule** for Transfer and Maintenance BARs: any object may fund any other (user, 10/9/2026). Ranked by a priority list in the school profile. User can change any donor. Per-BAR mode: top-ranked first, or spread across all by share of room.
 
 ## Fund selection
 

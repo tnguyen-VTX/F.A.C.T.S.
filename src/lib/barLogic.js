@@ -47,7 +47,6 @@ export function findDeficits(asr, fundCodes) {
 // ---- Allocation (whole dollars) -------------------------------------------------------------
 const up = (n) => Math.ceil(r2(n) - 1e-9);
 const down = (n) => Math.floor(r2(n) + 1e-9);
-export const objGroup = (obj) => String(obj).slice(0, 2); // 51 salaries, 52 benefits, ...
 
 // Split a whole-dollar total across weights, rounding like Excel ROUND (half away from zero)
 // and putting the rounding difference on the line with the largest weight.
@@ -102,76 +101,64 @@ export function allocateReceiving(deficit, T) {
     );
     spread.forEach((l, i) => amt.set(l.code, (amt.get(l.code) || 0) + extra[i]));
   }
-  return deficit.allLines
-    .filter((l) => amt.get(l.code))
-    .map((l) => ({ ...l, amount: amt.get(l.code), group: objGroup(l.obj) }));
+  return deficit.allLines.filter((l) => amt.get(l.code)).map((l) => ({ ...l, amount: amt.get(l.code) }));
 }
 
-// Donor side. needByGroup: { '51': dollars, ... }. Takes only from other functions of the same fund,
-// only from lines in the same object group that have room, and never more from a function than its
-// subtotal Available (so it stays at or above zero). mode: 'rank' (profile order first) or 'spread'.
-export function allocateDonors(asr, { fund, excludeFunc, needByGroup, mode = 'rank', priority = [] }) {
+// Donor side. Takes `need` whole dollars from other functions of the same fund. Any object may fund any
+// other (no object rule for Transfer and Maintenance BARs). A line gives at most its own Available, and a
+// function at most its subtotal Available, so no function ends below zero. mode: 'rank' (the profile's
+// function order first, then most room) or 'spread' (every function with room gives by share of its room).
+// Returns the negative lines and the shortfall (dollars the donors could not cover; 0 if none).
+export function allocateDonors(asr, { fund, excludeFunc, need, mode = 'rank', priority = [] }) {
   const f = asr.funds.get(fund);
   const fns = f ? fundFunctions(f).filter((x) => x.code !== excludeFunc) : [];
-  const left = new Map(fns.map((x) => [x.code, Math.max(0, down(x.tot.avail))])); // capacity not yet used
   const rank = (code) => {
     const i = priority.indexOf(code);
     return i < 0 ? Infinity : i;
   };
-  const lines = [],
-    shortfall = {};
-  for (const g of Object.keys(needByGroup).sort()) {
-    const N = needByGroup[g];
-    const rooms = new Map(
-      fns.map((x) => [
-        x.code,
-        x.lines
-          .filter((l) => objGroup(l.obj) === g && down(l.avail) > 0)
-          .map((l) => ({ l, room: down(l.avail) })),
-      ]),
-    );
-    const cand = fns
-      .map((x) => ({
+  const cand = fns
+    .map((x) => {
+      const rooms = x.lines.filter((l) => down(l.avail) > 0).map((l) => ({ l, room: down(l.avail) }));
+      return {
         code: x.code,
+        rooms,
         cap: Math.min(
-          left.get(x.code),
-          sumBy(rooms.get(x.code), (r) => r.room),
+          Math.max(0, down(x.tot.avail)),
+          sumBy(rooms, (r) => r.room),
         ),
-      }))
-      .filter((c) => c.cap > 0);
-    let take;
-    if (mode === 'spread')
-      take = spreadCapped(
-        Math.min(
-          N,
-          sumBy(cand, (c) => c.cap),
-        ),
-        cand.map((c) => c.cap),
-      );
-    else {
-      cand.sort((a, b) => rank(a.code) - rank(b.code) || b.cap - a.cap || a.code.localeCompare(b.code));
-      let rest = N;
-      take = cand.map((c) => {
-        const t = Math.min(rest, c.cap);
-        rest -= t;
-        return t;
-      });
-    }
-    let got = 0;
-    cand.forEach((c, i) => {
-      if (!take[i]) return;
-      const rs = rooms.get(c.code),
-        parts = spreadCapped(
-          take[i],
-          rs.map((r) => r.room),
-        );
-      rs.forEach((r, j) => parts[j] && lines.push({ ...r.l, amount: -parts[j], group: g }));
-      left.set(c.code, left.get(c.code) - take[i]);
-      got += take[i];
+      };
+    })
+    .filter((c) => c.cap > 0);
+  let take;
+  if (mode === 'spread')
+    take = spreadCapped(
+      Math.min(
+        need,
+        sumBy(cand, (c) => c.cap),
+      ),
+      cand.map((c) => c.cap),
+    );
+  else {
+    cand.sort((a, b) => rank(a.code) - rank(b.code) || b.cap - a.cap || a.code.localeCompare(b.code));
+    let rest = need;
+    take = cand.map((c) => {
+      const t = Math.min(rest, c.cap);
+      rest -= t;
+      return t;
     });
-    if (got < N) shortfall[g] = N - got;
   }
-  return { lines, shortfall };
+  const lines = [];
+  let got = 0;
+  cand.forEach((c, i) => {
+    if (!take[i]) return;
+    const parts = spreadCapped(
+      take[i],
+      c.rooms.map((r) => r.room),
+    );
+    c.rooms.forEach((r, j) => parts[j] && lines.push({ ...r.l, amount: -parts[j] }));
+    got += take[i];
+  });
+  return { lines, shortfall: need - got };
 }
 
 // A whole transfer for one deficit function. amount defaults to the deficit plus the cushion,
@@ -179,12 +166,10 @@ export function allocateDonors(asr, { fund, excludeFunc, needByGroup, mode = 'ra
 export function buildTransfer(asr, deficit, { amount, cushion = 0, mode = 'rank', priority = [] } = {}) {
   const T = amount != null ? Math.round(amount) : up(deficit.deficit + cushion);
   const receiving = allocateReceiving(deficit, T);
-  const needByGroup = {};
-  for (const l of receiving) needByGroup[l.group] = (needByGroup[l.group] || 0) + l.amount;
   const donors = allocateDonors(asr, {
     fund: deficit.fund,
     excludeFunc: deficit.func,
-    needByGroup,
+    need: sumBy(receiving, (l) => l.amount),
     mode,
     priority,
   });
@@ -197,6 +182,6 @@ export function buildTransfer(asr, deficit, { amount, cushion = 0, mode = 'rank'
     receiving,
     donors: donors.lines,
     shortfall: donors.shortfall,
-    net: lines.reduce((s, l) => s + l.amount, 0),
+    net: sumBy(lines, (l) => l.amount),
   };
 }

@@ -102,20 +102,21 @@ describe('donors', () => {
       ['51300', 0, 900, 0],
     ], // function Available is only 100
   });
-  const need = { 51: 400 };
-  it('takes from the profile order first, in the same object group only', () => {
+  const need = 400;
+  it('takes from the profile order first', () => {
     const r = allocateDonors(asr, {
       fund: '11000',
       excludeFunc: '2600',
-      needByGroup: need,
+      need,
       mode: 'rank',
       priority: ['2100', '1000'],
     });
-    expect(r.shortfall).toEqual({});
-    expect(r.lines.map((l) => [l.func, l.obj, l.amount])).toEqual([['2100', '51100', -400]]);
+    expect(r.shortfall).toBe(0);
+    expect(new Set(r.lines.map((l) => l.func))).toEqual(new Set(['2100']));
+    expect(sum(r.lines.map((l) => l.amount))).toBe(-400);
   });
   it('shares the need across every eligible function in spread mode', () => {
-    const r = allocateDonors(asr, { fund: '11000', excludeFunc: '2600', needByGroup: need, mode: 'spread' });
+    const r = allocateDonors(asr, { fund: '11000', excludeFunc: '2600', need, mode: 'spread' });
     expect(sum(r.lines.map((l) => l.amount))).toBe(-400);
     expect(new Set(r.lines.map((l) => l.func)).size).toBeGreaterThan(1);
   });
@@ -123,7 +124,7 @@ describe('donors', () => {
     const r = allocateDonors(asr, {
       fund: '11000',
       excludeFunc: '2600',
-      needByGroup: { 51: 6000 },
+      need: 6000,
       mode: 'rank',
       priority: ['3000'],
     });
@@ -134,21 +135,24 @@ describe('donors', () => {
     const r = allocateDonors(asr, {
       fund: '11000',
       excludeFunc: '2600',
-      needByGroup: { 51: 100000 },
+      need: 100000,
       mode: 'spread',
     });
-    expect(r.shortfall[51]).toBeGreaterThan(0);
+    expect(r.shortfall).toBeGreaterThan(0);
     expect(r.lines.some((l) => l.func === '2600')).toBe(false);
     expect(r.lines.every((l) => l.amount < 0)).toBe(true);
   });
-  it('uses the donor line group: a benefit need is met only from benefit lines', () => {
+  it('has no object rule: a benefit need can be met from salary lines', () => {
     const r = allocateDonors(asr, {
       fund: '11000',
       excludeFunc: '2600',
-      needByGroup: { 52: 500 },
-      mode: 'spread',
+      need: 500,
+      mode: 'rank',
+      priority: ['1000'],
     });
-    expect(r.lines.every((l) => l.obj.startsWith('52'))).toBe(true);
+    expect(r.shortfall).toBe(0);
+    expect(sum(r.lines.map((l) => l.amount))).toBe(-500);
+    expect(r.lines.some((l) => l.obj.startsWith('51'))).toBe(true);
   });
 });
 
@@ -167,7 +171,7 @@ describe('a whole transfer', () => {
     const d = findDeficits(asr)[0];
     for (const mode of ['rank', 'spread']) {
       const t = buildTransfer(asr, d, { mode, priority: ['1000'] });
-      expect(t.shortfall).toEqual({});
+      expect(t.shortfall).toBe(0);
       expect(t.net).toBe(0);
       expect(t.amount).toBe(Math.ceil(d.deficit));
     }
@@ -205,8 +209,7 @@ describe.skipIf(!existsSync(XL))('real Cesar Chavez deficits', () => {
       expect(deficits.length).toBeGreaterThan(0);
       for (const d of deficits) {
         const t = buildTransfer(asr, d, { mode });
-        const short = Object.values(t.shortfall).reduce((s, x) => s + x, 0);
-        expect(t.net).toBe(short);
+        expect(t.net).toBe(t.shortfall);
         expect(t.lines.every((l) => Number.isInteger(l.amount) && l.fund === d.fund)).toBe(true);
         expect(t.receiving.reduce((s, l) => s + l.amount, 0)).toBe(t.amount);
         const fns = new Map(fundFunctions(asr.funds.get(d.fund)).map((f) => [f.code, f]));
