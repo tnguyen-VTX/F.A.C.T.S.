@@ -1,5 +1,17 @@
 import { makeBarFile } from '../lib/barCsv.js';
-import { STATUSES, addStatus, isFrozen, isLocked, saveBar } from '../lib/barLog.js';
+import {
+  STATUSES,
+  addStatus,
+  checkBackup,
+  exportBackup,
+  isFrozen,
+  isLocked,
+  newId,
+  planRestore,
+  saveBar,
+} from '../lib/barLog.js';
+import { newProfile } from '../lib/profile.js';
+import { saveProfile } from '../lib/profileStore.js';
 import {
   BAR_TYPES,
   JUSTIFICATION_MAX,
@@ -14,7 +26,7 @@ import { buildTransfer, findDeficits } from '../lib/barLogic.js';
 import { isSalaryObject } from '../lib/fte.js';
 import { $, esc, fmtM, missingMsg, num } from '../lib/format.js';
 import { suggestJustification } from '../lib/justify.js';
-import { D, FY, REP, S, UI, fundLabel, profile, saveStore } from '../state.js';
+import { D, FY, PF, REP, S, STORE, UI, fundLabel, profile, saveStore, storage } from '../state.js';
 
 const TYPES = ['T', 'M', 'I', 'IB', 'D'];
 const LEVEL = { stop: 'Stop', warn: 'Check', info: 'Note' };
@@ -73,10 +85,11 @@ export function viewBarBuilder() {
   <label>BAR type<select data-in="bbType">${TYPES.map((t) => `<option value="${t}"${b.type === t ? ' selected' : ''}>${esc(BAR_TYPES[t])} (${t})</option>`).join('')}</select></label>
   <label>Fund<select data-in="bbStartFund"><option value="">Choose…</option>${funds.map((f) => `<option value="${esc(f.code)}"${b.startFund === f.code ? ' selected' : ''}>${esc(fundLabel(f.code))}</option>`).join('')}</select></label>
   <button class="btn" data-act="bbStart">Start an empty ${esc(BAR_TYPES[b.type])} BAR</button></div></section>
-  <div id="bbdef"></div><div id="bbdraft"></div><div id="bbsaved"></div>`;
+  <div id="bbdef"></div><div id="bbdraft"></div><div id="bbsaved"></div><div id="bbbackup"></div>`;
   bbDeficits();
   bbDraft();
   bbSaved();
+  bbBackup();
 }
 
 export function bbDeficits() {
@@ -287,4 +300,105 @@ export function bbSaved() {
           .join('')
       : '<p class="muted">Nothing saved yet. Build a BAR and choose Save BAR.</p>'
   }</section>`;
+}
+
+// ---- Backup: export, and restore with a per-BAR comparison ----
+export const backupFile = () => {
+  const data = exportBackup({ profiles: Object.values(PF.profiles), store: STORE });
+  return { name: `facts-backup-${today()}.json`, text: JSON.stringify(data, null, 2) };
+};
+
+// Read a backup file's text and work out what restoring it would change. Nothing is applied yet.
+export function bbRestoreRead(text) {
+  const b = bb();
+  let data;
+  try {
+    data = JSON.parse(text);
+  } catch (e) {
+    data = null;
+  }
+  const err = checkBackup(data);
+  if (err) {
+    b.restore = { error: err };
+    return bbBackup();
+  }
+  const plans = Object.entries(data.schools).map(([key, v]) => ({
+    key,
+    data: v,
+    plan: planRestore(STORE[key]?.bars || [], v.bars || []),
+  }));
+  const newSchools = (data.profiles || []).filter((p) => p.id && !PF.profiles[p.id]);
+  b.restore = { plans, newSchools };
+  bbBackup();
+}
+
+export function bbRestoreApply() {
+  const b = bb(),
+    r = b.restore;
+  if (!r?.plans) return;
+  for (const p of r.newSchools) saveProfile(storage, PF, newProfile(p));
+  for (const { key, data, plan } of r.plans) {
+    const st = (STORE[key] ??= {});
+    st.je ??= [];
+    st.bar ??= {};
+    st.bars ??= [];
+    st.bars.push(...plan.added);
+    for (const c of plan.conflicts) {
+      const pick = document.querySelector(`input[name="rs-${key}-${c.id}"]:checked`)?.value || 'keep';
+      if (pick === 'backup') st.bars = st.bars.map((e) => (e.id === c.id ? c.incoming : e));
+      else if (pick === 'both') {
+        const id = newId(Date.now());
+        st.bars.push({ ...c.incoming, id, bar: { ...c.incoming.bar, savedId: id } });
+      }
+    }
+    if (data.bbDraft && !st.bbDraft) st.bbDraft = data.bbDraft;
+    if (data.bb && !st.bb) st.bb = data.bb;
+  }
+  saveStore();
+  UI.bb = null;
+  b.restore = null;
+  viewBarBuilder();
+}
+
+const logText = (e) => e.log.map((l) => `${esc(l.status)} ${esc(l.date)}`).join(', ');
+const when = (n) => (n ? new Date(n).toISOString().slice(0, 10) : '—');
+
+export function bbBackup() {
+  const el = $('#bbbackup');
+  if (!el) return;
+  const r = bb().restore;
+  let panel = '';
+  if (r?.error) panel = `<div class="warn">${esc(r.error)}</div>`;
+  else if (r) {
+    const n = (k) => r.plans.reduce((s, p) => s + p.plan[k].length, 0);
+    panel = `<h3>Restore from backup</h3><p>${n('added')} new BAR(s) will be added, ${n('same')} already here, ${n('conflicts')} differ.${
+      r.newSchools.length ? ` ${r.newSchools.length} school profile(s) will be added.` : ''
+    } Nothing is replaced unless you choose it.</p>${r.plans
+      .flatMap((p) =>
+        p.plan.conflicts.map(
+          (
+            c,
+          ) => `<div class="saved"><b>${esc(p.key)} · ${esc(BAR_TYPES[c.current.bar.type])} · fund ${esc(c.current.bar.fund)}</b>
+      <table class="t"><thead><tr><th></th><th>Last changed</th><th>Status</th><th>Lines</th><th>Log</th></tr></thead><tbody>
+      <tr><td>This browser</td><td>${when(c.current.updatedAt)}</td><td>${esc(c.current.status)}</td><td>${c.current.bar.lines.length}</td><td>${logText(c.current)}</td></tr>
+      <tr><td>Backup</td><td>${when(c.incoming.updatedAt)}</td><td>${esc(c.incoming.status)}</td><td>${c.incoming.bar.lines.length}</td><td>${logText(c.incoming)}</td></tr></tbody></table>
+      ${[
+        ['keep', 'Keep this browser’s'],
+        ['backup', 'Use the backup’s'],
+        ['both', 'Keep both'],
+      ]
+        .map(
+          ([v, t], i) =>
+            `<label class="chk"><input type="radio" name="rs-${esc(p.key)}-${esc(c.id)}" value="${v}"${i === 0 ? ' checked' : ''}> ${t}</label>`,
+        )
+        .join(' ')}</div>`,
+        ),
+      )
+      .join(
+        '',
+      )}<div class="toolbar"><button class="btn primary" data-act="bbRestoreApply">Restore</button> <button class="btn" data-act="bbRestoreCancel">Cancel</button></div>`;
+  }
+  el.innerHTML = `<section class="panel"><h2>Backup</h2><p class="muted">The backup file holds school profiles, saved BARs with their status logs, drafts and settings. It never holds reports, position data or keys. Restoring on a new browser means loading the reports again.</p>
+  <div class="toolbar"><button class="btn" data-act="bbBackupDownload">Download a backup</button>
+  <label class="btn">Restore from a backup…<input type="file" accept=".json,application/json" data-in="bbRestoreFile" hidden></label></div>${panel}</section>`;
 }

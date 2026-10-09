@@ -42,6 +42,10 @@ import {
   bbRemove,
   bbAddStatus,
   bbUnlock,
+  backupFile,
+  bbRestoreRead,
+  bbRestoreApply,
+  bbBackup,
   viewBarBuilder,
 } from './views/barBuilder.js';
 import { barLine } from './lib/bar.js';
@@ -266,6 +270,21 @@ const ACT = {
     keepBB();
     bbDraft();
   },
+  bbBackupDownload: () => {
+    const f = backupFile();
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(new Blob([f.text], { type: 'application/json' }));
+    a.download = f.name;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+  },
+  bbRestoreApply: () => bbRestoreApply(),
+  bbRestoreCancel: () => {
+    bb().restore = null;
+    bbBackup();
+  },
   bbSave: () => bbSave(),
   bbOpen: (t) => bbOpen(t.dataset.id),
   bbRemove: (t) => bbRemove(t.dataset.id),
@@ -427,6 +446,11 @@ const IN = {
   crq: (t) => {
     UI.cr.q = t.value;
     crResults();
+  },
+  bbRestoreFile: async (t) => {
+    const f = t.files?.[0];
+    if (f) bbRestoreRead(await f.text());
+    t.value = '';
   },
   bbFund: (t) => {
     const b = bb();

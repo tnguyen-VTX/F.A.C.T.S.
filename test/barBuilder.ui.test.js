@@ -114,6 +114,26 @@ describe('BAR builder screen', () => {
     click($('button[data-act="bbOpen"]'));
     expect(st.UI.bb.draft.lines.length).toBeGreaterThan(0);
   });
+  it('backs up only BARs, drafts and settings', async () => {
+    const { backupFile } = await import('../src/views/barBuilder.js');
+    const f = backupFile();
+    expect(f.name).toMatch(/^facts-backup-\d{4}-\d\d-\d\d\.json$/);
+    const data = JSON.parse(f.text);
+    expect(data.app).toBe('FACTS');
+    expect(JSON.stringify(data)).not.toContain('"je"');
+    st.__backup = f.text;
+  });
+  it('shows a conflict on restore and keeps both when asked', async () => {
+    const { bbRestoreRead, bbRestoreApply } = await import('../src/views/barBuilder.js');
+    st.S().bars[0].updatedAt += 5000;
+    bbRestoreRead(st.__backup);
+    expect($('#bbbackup').textContent).toContain('1 differ');
+    $('input[type="radio"][value="both"]').checked = true;
+    bbRestoreApply();
+    expect(st.S().bars).toHaveLength(2);
+    bbRestoreRead('not json');
+    expect($('#bbbackup').textContent).toContain('not a FACTS backup');
+  });
   it('switching schools clears the working BAR', () => {
     st.switchSchool(st.PF.active);
     expect(st.UI.bb).toBeNull();
