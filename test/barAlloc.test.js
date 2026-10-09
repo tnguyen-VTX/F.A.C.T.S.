@@ -11,35 +11,10 @@ import {
   spreadCapped,
 } from '../src/lib/barLogic.js';
 import { parseASR, rowsOf } from '../src/lib/parse.js';
+import { makeAsr } from './helpers/makeAsr.js';
+import { barLine, canDownload, newBar, validateBar } from '../src/lib/bar.js';
 import { newProfile } from '../src/lib/profile.js';
 
-// Build a made-up Account Summary: { '2600': [[obj, budget, actual, enc], ...], ... } for fund 11000.
-function makeAsr(blocks) {
-  const rows = [
-    ['Test School'],
-    ['Cycle: FY26-27'],
-    [
-      'Account Code',
-      'Description',
-      'Actual (Date Range)',
-      'Budget (YTD)',
-      'Actual (YTD)',
-      'Encumbrance (YTD)',
-      'Available (YTD)',
-    ],
-  ];
-  for (const [fn, lines] of Object.entries(blocks)) {
-    const tot = [0, 0, 0, 0];
-    for (const [obj, b, a, e] of lines) {
-      const v = [b, a, e, b - a - e];
-      v.forEach((x, i) => (tot[i] += x));
-      rows.push([`11000-${fn}-${obj}-0000-001707-1411`, 'x', 0, ...v]);
-    }
-    rows.push([`Subtotal of Element: [Function] ${fn} - F${fn}`, '', 0, ...tot]);
-  }
-  rows.push(['Grand Total', '', 0, 0, 0, 0, 0]);
-  return parseASR(rows);
-}
 const sum = (a) => a.reduce((s, x) => s + x, 0);
 
 describe('spreading whole dollars', () => {
@@ -226,4 +201,25 @@ describe.skipIf(!existsSync(XL))('real Cesar Chavez deficits', () => {
       }
     });
   }
+
+  it('the validator agrees with the allocator: covered transfers pass, short ones are stopped', () => {
+    const prof = newProfile({ ...cesar, districtCode: '512', locationRule: { type: 'lastN', n: 3 } });
+    let passed = 0,
+      stopped = 0;
+    for (const d of deficits) {
+      const t = buildTransfer(asr, d, { mode: 'rank' });
+      const b = newBar('T', d.fund);
+      b.justification = 'Aligning budget with actual expenditures';
+      b.lines = t.lines.map((l) => barLine(prof, l.code, l.amount));
+      const checks = validateBar(b, { profile: prof, asr });
+      if (t.shortfall === 0) {
+        expect(checks.filter((c) => c.level === 'stop')).toEqual([]);
+        passed++;
+      } else {
+        expect(canDownload(checks)).toBe(false);
+        stopped++;
+      }
+    }
+    expect(passed + stopped).toBe(deficits.length);
+  });
 });

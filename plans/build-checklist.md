@@ -25,8 +25,8 @@ Environment note: `cdn.sheetjs.com` is blocked in the cloud session, so `npm ins
 
 - [x] 3a. Deficit finder (function subtotal Available < 0, per selected fund).
 - [x] 3b. Receiving-line allocation and donor split (`src/lib/barLogic.js`; nets to 0 or reports a shortfall). User decision: no object rule on Transfer and Maintenance, so any object may fund any other. On the real Cesar Chavez file 6 of 10 over-budget functions can be fully covered by other functions in the same fund (the rest have no function with enough room).
-- [ ] 3c. BAR model and validation rules for T, T-flowthrough, I, D, M.
-- [ ] 3d. FTE proportional calculation.
+- [x] 3c. BAR model and validation rules (`src/lib/bar.js`): T, T on a flowthrough fund, I, IB, D, M. Tests include the user's accepted Maintenance BAR (made-up contact) and the spec's Increase example; on the real file the allocator's output passes validation when covered and is stopped when short.
+- [x] 3d. FTE proportional calculation (`src/lib/fte.js`); salary objects are a profile setting (default 511). Formula is an assumption until checked against an accepted BAR; no screen to edit the setting yet.
 
 ## Milestone 4: BAR screens and output
 

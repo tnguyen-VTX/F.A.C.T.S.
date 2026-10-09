@@ -31,6 +31,7 @@ export function newProfile(over = {}) {
     locationRule: { type: 'lastN', n: UPLOAD_LOCATION_LEN, confirmed: false },
     funds: [], // { code, name, flowthrough, reimbursable }
     donorPriority: [], // function codes, first = take from first
+    fteObjects: ['511'], // object prefixes whose BAR lines carry an FTE change (salaries)
     defaultCushion: { type: 'amount', value: 0 },
     contacts: [], // { name, title }: typed by the user, never committed
     ...over,
@@ -81,6 +82,8 @@ export function validateProfile(p) {
   const codes = (p.funds || []).map((f) => f.code);
   if (codes.some((c) => !/^\d{5}$/.test(String(c)))) errs.push('Fund codes are 5 digits.');
   if (new Set(codes).size !== codes.length) errs.push('A fund is listed twice.');
+  if ((p.fteObjects || []).some((x) => !/^\d{1,5}$/.test(String(x))))
+    errs.push('FTE objects are digits, like 511.');
   if ((p.donorPriority || []).some((c) => !/^\d{4}$/.test(String(c))))
     errs.push('Donor priority lists 4-digit function codes.');
   return errs;

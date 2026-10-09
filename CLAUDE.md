@@ -64,6 +64,13 @@ Accepted reports are kept as parsed rows (not the original file) in IndexedDB un
 of each kind is restored on reload, and loads older than 30 days are pruned (`lib/reportStore.js`). Browsing older loads is not built yet.
 Real exports go in `fixtures/` (git-ignored: `*.xlsx`, `*.csv`); tests that use them are skipped when absent.
 
+## BAR logic (added after v0.1; no screens yet)
+
+`barLogic.js` finds deficits (a function within a fund whose subtotal Available is negative) and builds a balanced transfer:
+over-budget lines first, then donors from other functions of the same fund. There is no object rule on Transfer and
+Maintenance BARs. A function never gives more than its Available. `bar.js` checks a BAR before download: balance by type,
+code layout, one fund, never over budget, flowthrough fields, justification and contact limits. Amounts are whole dollars.
+
 ## Domain notes
 
 - Account code format: `FFFFF-NNNN-OOOOO-PPPP-LLLLLL-JJJJ` = Fund-Function-Object-Program-Location-JobClass,
@@ -97,6 +104,9 @@ src/lib/columns.js    Find report columns by header name (aliases, missing-colum
 src/lib/reportCheck.js  School/year/parameter checks and the Fund Audit vs Account Summary tie-out (pure)
 src/lib/reportStore.js  Keys, pruning and records for parsed reports kept in IndexedDB (pure)
 src/lib/importReport.js Reads a dropped .xlsx/.csv report for a school and runs the checks (pure)
+src/lib/barLogic.js   Deficit finder, whole-dollar spreading, receiving lines and donor split for transfers (pure)
+src/lib/bar.js        BAR model, totals and validation for T, M, I, IB, D (stop/warn checks before download) (pure)
+src/lib/fte.js        FTE change for salary lines (proportional to dollars; assumption to confirm) (pure)
 src/lib/format.js     Formatting, math, and account-code helpers
 src/lib/idb.js        IndexedDB cache for the last workbook
 src/views/*.js        One module per screen; each renders HTML strings into #main (schools.js = profile editor, import.js = Load reports)
