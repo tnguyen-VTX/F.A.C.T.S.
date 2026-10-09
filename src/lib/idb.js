@@ -22,6 +22,9 @@ export const IDB = {
   get(k) {
     return this.tx('readonly', (s) => s.get(k));
   },
+  keys() {
+    return this.tx('readonly', (s) => s.getAllKeys());
+  },
   del(k) {
     return this.tx('readwrite', (s) => s.delete(k));
   },

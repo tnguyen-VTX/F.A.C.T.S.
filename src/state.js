@@ -115,11 +115,11 @@ const emptyASR = () => ({
 });
 
 // Accept a read report (from lib/importReport.js) and rebuild D for the screens.
-export function acceptReport(result) {
+export function acceptReport(result, at = Date.now()) {
   const fy = FY.value;
   REP[result.kind] = {
     name: result.name,
-    at: Date.now(),
+    at,
     params: result.params || null,
     checks: result.checks,
     fy,

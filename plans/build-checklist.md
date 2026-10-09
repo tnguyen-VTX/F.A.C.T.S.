@@ -18,7 +18,7 @@ Environment note: `cdn.sheetjs.com` is blocked in the cloud session, so `npm ins
 - [x] 2a. CSV reader and header-based column finder (pure, tested), with the "missing columns" error.
 - [x] 2b. Account Summary slot (.xlsx), header-block read, school/year check.
 - [x] 2c. Fund Audit slot (.csv), data checks.
-- [ ] 2d. Load history in IndexedDB (parsed rows only, 30 days), as-of date and range labels.
+- [x] 2d. Accepted reports kept as parsed rows in IndexedDB (newest per school, year and kind restored on reload; loads older than 30 days pruned). Not built yet: a screen to browse older loads, and as-of date labels beyond the load card.
 - [x] 2e. Tie-out of the Account Summary and Fund Audit, tested on the real pair in git-ignored fixtures (compares them to each other and to the Grand Total; no real totals in the repo). The v0.1 Gilbert workbook tie-out still needs fixtures/facts.xlsx.
 
 ## Milestone 3: BAR logic (pure first)

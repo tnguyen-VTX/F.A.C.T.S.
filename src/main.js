@@ -3,6 +3,14 @@ import { $, esc, money, num, sumBy } from './lib/format.js';
 import { IDB } from './lib/idb.js';
 import { readAccountSummary, readFundAudit } from './lib/importReport.js';
 import { hasStop } from './lib/reportCheck.js';
+import {
+  expiredKeys,
+  isReportKey,
+  latestKeys,
+  makeRecord,
+  reportKey,
+  resultFromRecord,
+} from './lib/reportStore.js';
 import { deleteProfile, makeProfileId, saveProfile } from './lib/profileStore.js';
 import { parseFundLines, parseList } from './lib/profile.js';
 import {
@@ -206,11 +214,13 @@ const ACT = {
     render();
   },
   impAccept: (t) => {
-    const st = UI.imp[t.dataset.kind];
+    const kind = t.dataset.kind,
+      st = UI.imp[kind];
     if (st?.status !== 'pending') return;
     acceptReport(st.result);
-    UI.imp[t.dataset.kind] = null;
+    UI.imp[kind] = null;
     render();
+    persistReport(kind);
   },
   impDiscard: (t) => {
     UI.imp[t.dataset.kind] = null;
@@ -443,6 +453,7 @@ async function handleReport(kind, file) {
     else {
       acceptReport(result);
       UI.imp[kind] = null;
+      persistReport(kind);
     }
   } catch (err) {
     UI.imp[kind] = { status: 'error', msg: err.message || 'That file could not be read.' };
@@ -471,8 +482,40 @@ async function handleFile(file) {
     render();
   }
 }
+// Keep the accepted report's parsed rows so a reload brings them back. Old loads are pruned.
+async function persistReport(kind) {
+  try {
+    const r = REP[kind];
+    if (!r) return;
+    const result =
+      kind === 'asr'
+        ? { kind, name: r.name, asr: D.asr, params: r.params, checks: r.checks }
+        : { kind, name: r.name, fa: D.fa, checks: r.checks };
+    await IDB.put(
+      reportKey(PF.active, r.fy, kind, r.at),
+      makeRecord(result, { school: PF.active, fy: r.fy, at: r.at }),
+    );
+    for (const k of expiredKeys((await IDB.keys()).filter(isReportKey))) await IDB.del(k);
+  } catch (e) {}
+}
+// Bring back the newest saved reports for the active school and fiscal year. True if any came back.
+async function restoreReports() {
+  try {
+    const latest = latestKeys((await IDB.keys()).filter(isReportKey), PF.active, FY.value);
+    // Fund Audit first, so loading the Account Summary re-checks it.
+    for (const kind of ['fa', 'asr']) {
+      if (!latest[kind]) continue;
+      const rec = await IDB.get(latest[kind]);
+      if (rec) acceptReport(resultFromRecord(rec), rec.at);
+    }
+    return !!(latest.asr || latest.fa);
+  } catch (e) {
+    return false;
+  }
+}
 // Open the active school's saved workbook, if this browser has one. Returns an error message or ''.
 async function loadSaved() {
+  if (await restoreReports()) return '';
   let saved = null;
   try {
     saved = await IDB.get(wbKey());

@@ -60,6 +60,8 @@ that does not tie to the Account Summary (fund by fund) asks the user to confirm
 available under "Or load the whole FACTS workbook". The Fund Audit CSV has no Src column, so Source is derived from the
 Number prefix and Detail (`deriveSource` in `lib/parse.js`: Reg → PR payroll register, Inv → IN invoice, Rec → RF fee within
 a cash receipt, `J/E:` → JE, otherwise EN encumbrance). Report cycle `FY26-27` and `FY2027` both mean fiscal year 2027.
+Accepted reports are kept as parsed rows (not the original file) in IndexedDB under `rpt:<school>:<fy>:<kind>:<time>`; the newest
+of each kind is restored on reload, and loads older than 30 days are pruned (`lib/reportStore.js`). Browsing older loads is not built yet.
 Real exports go in `fixtures/` (git-ignored: `*.xlsx`, `*.csv`); tests that use them are skipped when absent.
 
 ## Domain notes
@@ -93,6 +95,7 @@ src/lib/profileStore.js  Saves/loads profiles (localStorage key facts.profiles.v
 src/lib/csv.js        CSV reader (quoted fields, line breaks inside quotes)
 src/lib/columns.js    Find report columns by header name (aliases, missing-column message)
 src/lib/reportCheck.js  School/year/parameter checks and the Fund Audit vs Account Summary tie-out (pure)
+src/lib/reportStore.js  Keys, pruning and records for parsed reports kept in IndexedDB (pure)
 src/lib/importReport.js Reads a dropped .xlsx/.csv report for a school and runs the checks (pure)
 src/lib/format.js     Formatting, math, and account-code helpers
 src/lib/idb.js        IndexedDB cache for the last workbook
