@@ -8,6 +8,7 @@ import {
   isReportKey,
   latestKeys,
   makeRecord,
+  recordUsable,
   reportKey,
   resultFromRecord,
 } from './lib/reportStore.js';
@@ -674,7 +675,7 @@ async function restoreReports() {
     for (const kind of ['fa', 'asr']) {
       if (!latest[kind]) continue;
       const rec = await IDB.get(latest[kind]);
-      if (rec) acceptReport(resultFromRecord(rec), rec.at);
+      if (recordUsable(rec)) acceptReport(resultFromRecord(rec), rec.at);
     }
     return !!(latest.asr || latest.fa);
   } catch (e) {

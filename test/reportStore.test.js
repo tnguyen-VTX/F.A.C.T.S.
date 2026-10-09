@@ -3,6 +3,7 @@ import {
   expiredKeys,
   latestKeys,
   makeRecord,
+  recordUsable,
   parseReportKey,
   reportKey,
   resultFromRecord,
@@ -76,5 +77,16 @@ describe('saved report records', () => {
     );
     expect(Object.keys(rec)).not.toContain('bytes');
     expect(resultFromRecord(rec).fa[0].actual).toBe(5);
+  });
+  it('versions records and skips ones from a newer version', () => {
+    const rec = makeRecord(
+      { kind: 'fa', name: 'f.csv', fa: [], checks: [] },
+      { school: 'a', fy: 2027, at: 1 },
+    );
+    expect(rec.v).toBe(1);
+    expect(recordUsable(rec)).toBe(true);
+    expect(recordUsable({ ...rec, v: undefined })).toBe(true);
+    expect(recordUsable({ ...rec, v: 99 })).toBe(false);
+    expect(recordUsable(null)).toBe(false);
   });
 });

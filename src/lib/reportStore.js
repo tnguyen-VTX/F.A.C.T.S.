@@ -1,6 +1,9 @@
 // Parsed reports kept in the browser (IndexedDB) so a reload does not lose them.
 // Only parsed rows are stored, never the original file. Pure helpers; main.js does the I/O.
 export const RETAIN_DAYS = 30;
+// Layout version of a saved record. Records without `v` are version 1; newer ones are left alone.
+export const RECORD_VERSION = 1;
+export const recordUsable = (rec) => !!rec && (rec.v ?? 1) <= RECORD_VERSION;
 const DAY = 86400000;
 
 export const reportKey = (school, fy, kind, at) => `rpt:${school}:${fy}:${kind}:${at}`;
@@ -38,6 +41,7 @@ export const unpackASR = (a) => ({ ...a, funds: new Map(a.funds) });
 
 export function makeRecord(result, { school, fy, at }) {
   return {
+    v: RECORD_VERSION,
     kind: result.kind,
     name: result.name,
     school,
