@@ -64,12 +64,13 @@ Accepted reports are kept as parsed rows (not the original file) in IndexedDB un
 of each kind is restored on reload, and loads older than 30 days are pruned (`lib/reportStore.js`). Browsing older loads is not built yet.
 Real exports go in `fixtures/` (git-ignored: `*.xlsx`, `*.csv`); tests that use them are skipped when absent.
 
-## BAR logic (added after v0.1; no screens yet)
+## BAR logic (added after v0.1; screen: BAR builder)
 
 `barLogic.js` finds deficits (a function within a fund whose subtotal Available is negative) and builds a balanced transfer:
 over-budget lines first, then donors from other functions of the same fund. There is no object rule on Transfer and
 Maintenance BARs. A function never gives more than its Available. `bar.js` checks a BAR before download: balance by type,
-code layout, one fund, never over budget, flowthrough fields, justification and contact limits. Amounts are whole dollars.
+code layout, one fund, never over budget, flowthrough fields, justification and contact limits. Amounts are whole dollars. Saved BARs live in `S().bars` (school and year); a BAR is frozen once its status is Uploaded, Submitted or Approved.
+The backup file (profiles, saved BARs, drafts, settings only) restores with a per-BAR comparison; nothing is replaced silently.
 
 ## Hosting (ledgersandlearning.com)
 
@@ -115,6 +116,7 @@ src/lib/barLogic.js   Deficit finder, whole-dollar spreading, receiving lines an
 src/lib/bar.js        BAR model, totals and validation for T, M, I, IB, D (stop/warn checks before download) (pure)
 src/lib/justify.js    Rule-based justification wording per BAR type (no commas, quotes or pipes; max 255) (pure)
 src/lib/barCsv.js     OBMS BAR upload file (UBH 15 fields, UBL 9, CRLF); none is made while a check says stop (pure)
+src/lib/barLog.js     Saved BARs, status log, freeze/lock rules, backup export and restore planning (pure)
 src/lib/fte.js        FTE change for salary lines (proportional to dollars; assumption to confirm) (pure)
 src/lib/format.js     Formatting, math, and account-code helpers
 src/lib/idb.js        IndexedDB cache for the last workbook

@@ -31,8 +31,8 @@ Environment note: `cdn.sheetjs.com` is blocked in the cloud session, so `npm ins
 ## Milestone 4: BAR screens and output
 
 - [x] 4a. Fund picker, New BAR by type, deficit list (`src/views/barBuilder.js`; the working BAR is kept as a draft in `S().bbDraft`).
-- [x] 4b. OBMS-style view, justification template (`src/lib/justify.js`), validation panel. Browser check with the real fixtures still to do.
-- [ ] 4c. Saved BARs, status log, drafts per school, backup export/import.
+- [x] 4b. OBMS-style view, justification template (`src/lib/justify.js`), validation panel. Checked in the browser.
+- [x] 4c. Saved BARs with status log (`src/lib/barLog.js`; frozen from Uploaded on; prior year locks after 10/31 with an unlock), drafts per school and year, backup export and restore with a per-BAR comparison. Checked in Chromium with the real Cesar Chavez files: 10 over-budget functions listed, a transfer built, draft and saved BAR survive a reload, no CSP problems. The file stayed blocked because that profile has no district/parent code (the check works); a real OBMS upload is still the only proof of the file.
 - [x] 4d. CSV generator to spec v2.1.4 (`src/lib/barCsv.js`: UBH 15 fields, UBL 9 fields, CRLF, no BOM; never made while a check says stop). Tests: the accepted Maintenance BAR byte for byte (made-up contact), the PED spec's Increase example, and, with the real accepted file in git-ignored fixtures, the same lines apart from its padding commas. Still unproven until a real OBMS upload.
 
 ## Milestone 5: later
