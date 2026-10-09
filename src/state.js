@@ -1,6 +1,7 @@
 import * as XLSX from 'xlsx';
 
 import { currentFiscalYear } from './lib/importReport.js';
+import { migrate } from './lib/migrate.js';
 import { activeProfile, loadProfiles, setActive } from './lib/profileStore.js';
 import { checkFundAudit, fiscalYearOf } from './lib/reportCheck.js';
 import {
@@ -32,6 +33,8 @@ export const storage =
   typeof localStorage !== 'undefined' ? localStorage : { getItem: () => null, setItem: () => {} };
 export const STORE_KEY = 'facts.v1';
 export let STORE = {};
+// Data saved by a newer version of FACTS is shown but never overwritten.
+export const STORAGE = migrate(storage, STORE_KEY);
 try {
   STORE = JSON.parse(storage.getItem(STORE_KEY)) || {};
 } catch (e) {
@@ -86,6 +89,7 @@ export function S() {
   return STORE[k];
 }
 export function saveStore() {
+  if (STORAGE.newer || STORAGE.unreadable) return;
   try {
     localStorage.setItem(STORE_KEY, JSON.stringify(STORE));
   } catch (e) {}

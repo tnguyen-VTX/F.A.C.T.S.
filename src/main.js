@@ -17,6 +17,7 @@ import {
   D,
   FY,
   PF,
+  STORAGE,
   REP,
   S,
   UI,
@@ -94,6 +95,11 @@ export function render() {
     .querySelectorAll('.nav button')
     .forEach((b) => b.setAttribute('aria-current', b.dataset.v === UI.view ? 'page' : 'false'));
   VIEWS[UI.view]();
+  if (STORAGE.newer || STORAGE.unreadable)
+    $('#main')?.insertAdjacentHTML(
+      'afterbegin',
+      `<div class="warn">${STORAGE.newer ? 'This browser holds data saved by a newer version of FACTS. It is shown but not changed, and your changes here will not be saved. Open the newer version.' : 'The saved data in this browser could not be read, so nothing will be saved over it. Restore from a backup file.'}</div>`,
+    );
 }
 const schoolPicker = () =>
   `<label class="schoolpick"><span class="muted">School</span><select data-in="school" aria-label="School">${Object.values(
