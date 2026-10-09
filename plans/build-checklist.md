@@ -8,7 +8,7 @@ Environment note: `cdn.sheetjs.com` is blocked in the cloud session, so `npm ins
 ## Milestone 1: school profile
 
 - [x] 1a. Profile model (pure): segments, code pattern, split, 3-digit upload location, validation. Tests with made-up codes.
-- [ ] 1b. Profile storage in `localStorage` (per profile id), a built-in Gilbert L. Sena preset, active-profile state.
+- [x] 1b. Profile storage in `localStorage` (per profile id), a built-in Gilbert L. Sena preset, active-profile state.
 - [ ] 1c. Parsers take a profile (pattern and split) instead of the hard-coded 6-segment `ACCT_RE`; v0.1 results unchanged.
 - [ ] 1d. Settings screen: list, add, edit, delete profiles with live validation.
 - [ ] 1e. School and fiscal-year picker in the shell; every screen shows the school name.
