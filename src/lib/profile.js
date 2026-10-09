@@ -22,6 +22,7 @@ export function newProfile(over = {}) {
     id: '',
     name: '',
     entityName: '',
+    reportNames: [], // other spellings of the school name that its reports print
     districtCode: '',
     accountingSystem: 'aptafund',
     segments: [seg('fund', 5), seg('func', 4), seg('obj', 5), seg('prog', 4), seg('loc', 6), seg('job', 4)],

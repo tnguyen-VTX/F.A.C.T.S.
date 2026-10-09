@@ -356,6 +356,13 @@ const IN = {
     if (k !== 'n') scForm();
     else $('#scerr').innerHTML = scErrors();
   },
+  scNames: (t) => {
+    UI.sc.draft.reportNames = t.value
+      .split(/\r?\n/)
+      .map((x) => x.trim())
+      .filter(Boolean);
+    $('#scerr').innerHTML = scErrors();
+  },
   scFunds: (t) => {
     UI.sc.fundsText = t.value;
     UI.sc.draft.funds = parseFundLines(t.value);

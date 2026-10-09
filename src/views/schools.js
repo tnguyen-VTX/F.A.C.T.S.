@@ -71,6 +71,7 @@ export function scForm() {
   <div class="grid2">
   ${field('School name', `<input type="text" data-in="sc" data-k="name" value="${esc(d.name)}">`)}
   ${field('Entity name in OBMS', `<input type="text" data-in="sc" data-k="entityName" value="${esc(d.entityName)}">`, 'As the OBMS BAR screen shows it.')}
+  ${field('Names as reports print them', `<textarea rows="2" data-in="scNames" placeholder="One per line, if reports spell the school differently">${esc((d.reportNames || []).join('\n'))}</textarea>`, 'Reports are checked against this school name and the OBMS entity name too.')}
   ${field('District / parent code', `<input type="text" inputmode="numeric" size="5" data-in="sc" data-k="districtCode" value="${esc(d.districtCode)}">`, 'The code PED uses in the BAR upload header.')}
   </div>
   <h3>Account code segments</h3>

@@ -41,11 +41,14 @@ export const metaField = (meta, k) => {
 };
 
 export function parseASR(rows, profile = DEFAULT_PROFILE) {
-  const out = { funds: new Map(), funcNames: {}, meta: '', school: '' };
+  const out = { funds: new Map(), funcNames: {}, meta: '', school: '', grand: null, headerOk: true };
   if (!rows) return out;
   out.school = (rows[0] || []).find((v) => typeof v === 'string') || '';
   const hi = rows.findIndex((r) => r && r[0] === 'Account Code');
   if (hi < 0) return out;
+  // Amounts are read from columns 4-7 as in v0.1; flag it when the header text there is not what we expect.
+  const hd = rows[hi].map((v) => String(v ?? '').toLowerCase());
+  out.headerOk = /budget/.test(hd[3]) && /actual/.test(hd[4]) && /encumb/.test(hd[5]) && /avail/.test(hd[6]);
   out.meta =
     rows
       .slice(0, hi)
@@ -62,8 +65,11 @@ export function parseASR(rows, profile = DEFAULT_PROFILE) {
     if (!r) continue;
     const a = String(r[0] ?? '').trim();
     if (!a) continue;
-    if (/^Grand Total/i.test(a)) break;
     const v = { budget: num(r[3]), actual: num(r[4]), enc: num(r[5]), avail: num(r[6]) };
+    if (/^Grand Total/i.test(a)) {
+      out.grand = v;
+      break;
+    }
     let m;
     const s = splitWith(profile, a);
     if (s) {
