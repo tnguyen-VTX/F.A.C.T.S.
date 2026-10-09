@@ -712,3 +712,37 @@ tr.over > td {
     transition: none;
   }
 }
+
+/* School picker and school form */
+.schoolpick {
+  display: block;
+  margin: 10px 0 6px;
+}
+.schoolpick span {
+  display: block;
+  font-size: 12px;
+  font-weight: 600;
+  margin-bottom: 3px;
+}
+.schoolpick select {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  text-overflow: ellipsis;
+}
+.fld {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin: 0 0 12px;
+}
+.fld > span:first-child {
+  font-weight: 600;
+  font-size: 14px;
+}
+.fld .hint {
+  font-size: 13px;
+}
+.fld textarea {
+  width: 100%;
+}

@@ -41,6 +41,16 @@ The app reads only these five raw sheets. Every pivot, slicer, and formula in th
 - **Cash Receipts Pivot Table** (Fund > TransactionDate, sum of CreditAmount) → `views/cashReceipts.js`
 - **Capital Outlay Projects** → `views/capitalOutlay.js`
 
+## Schools and profiles (added after v0.1)
+
+Everything that varies by school lives in a profile (`src/lib/profile.js`), edited on the Schools screen. The active
+school is chosen in the sidebar. User entries (`S()`) are keyed `<school id>/<cycle>`; v0.1 data keyed by cycle alone is
+migrated to Gilbert on first read. The cached workbook is stored per school (`workbook:<id>` in IndexedDB), so switching
+schools never shows another school's file. Parsers take a profile; with none they use the Gilbert 6-segment default.
+The OBMS upload location is 3 digits (spec v2.1.4); each profile's `locationRule` says how to derive it and is marked
+unconfirmed until checked against an accepted upload. See `plans/` and `context/` for the approved plans, OBMS formats and
+business rules, and `plans/build-checklist.md` for build progress.
+
 ## Domain notes
 
 - Account code format: `FFFFF-NNNN-OOOOO-PPPP-LLLLLL-JJJJ` = Fund-Function-Object-Program-Location-JobClass,
@@ -65,11 +75,13 @@ The app reads only these five raw sheets. Every pivot, slicer, and formula in th
 ```
 index.html            Vite entry
 src/main.js           App shell, navigation, event delegation (data-act = clicks, data-in = inputs), file loading
-src/state.js          D (parsed data), UI (view state), S()/saveStore (localStorage), loadBuffer()
-src/lib/parse.js      Sheet parsers (pure; also run in Node tests)
+src/state.js          D (parsed data), UI (view state), PF (school profiles), S()/saveStore (localStorage), loadBuffer()
+src/lib/parse.js      Sheet parsers (pure; also run in Node tests). Account codes are read through a school profile
+src/lib/profile.js    School profile model: segments, code pattern, 3-digit OBMS upload location rule, validation (pure)
+src/lib/profileStore.js  Saves/loads profiles (localStorage key facts.profiles.v1); first run seeds the Gilbert preset
 src/lib/format.js     Formatting, math, and account-code helpers
 src/lib/idb.js        IndexedDB cache for the last workbook
-src/views/*.js        One module per screen; each renders HTML strings into #main
+src/views/*.js        One module per screen; each renders HTML strings into #main (schools.js is the profile editor)
 src/styles.css        Design tokens (light/dark), Public Sans, layout
 test/                 Vitest: parser checks against real totals + jsdom smoke test of every screen
 fixtures/             Put facts.xlsx here to run the data tests (git-ignored)

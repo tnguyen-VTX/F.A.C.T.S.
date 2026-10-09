@@ -2,10 +2,13 @@ import './styles.css';
 import { $, esc, money, num, sumBy } from './lib/format.js';
 import { IDB } from './lib/idb.js';
 import { SHEETS } from './lib/parse.js';
-import { D, S, UI, loadBuffer, saveStore } from './state.js';
+import { deleteProfile, makeProfileId, saveProfile } from './lib/profileStore.js';
+import { parseFundLines, parseList } from './lib/profile.js';
+import { D, PF, S, UI, loadBuffer, profile, saveStore, storage, switchSchool } from './state.js';
 import { barCompute, barResults, loadBarFund, viewBAR } from './views/bar.js';
 import { viewBudget } from './views/budget.js';
 import { viewCap } from './views/capitalOutlay.js';
+import { scDraftErrors, scErrors, scForm, scOpen, viewSchools } from './views/schools.js';
 import { crResults, viewCR } from './views/cashReceipts.js';
 import { jeList, jeResults, viewJE } from './views/journal.js';
 import { viewRfR } from './views/reimbursements.js';
@@ -19,30 +22,53 @@ const NAV = [
   ['rfr', 'Reimbursements'],
   ['cr', 'Cash receipts'],
   ['cap', 'Capital outlay'],
+  ['schools', 'Schools'],
 ];
+const wbKey = () => 'workbook:' + PF.active;
+const LEGACY_KEY = 'workbook';
 export function render() {
   const app = $('#app');
-  if (!D.loaded) {
+  if (!D.loaded && UI.view !== 'schools') {
+    app.dataset.mode = '';
     app.innerHTML = importHTML();
     return;
   }
-  if (!$('#main')) app.innerHTML = shellHTML();
+  // Without a workbook only the Schools screen is available.
+  const mode = D.loaded ? 'full' : 'lite';
+  if (!$('#main') || app.dataset.mode !== mode) {
+    app.innerHTML = shellHTML();
+    app.dataset.mode = mode;
+  }
   document
     .querySelectorAll('.nav button')
     .forEach((b) => b.setAttribute('aria-current', b.dataset.v === UI.view ? 'page' : 'false'));
   VIEWS[UI.view]();
 }
+const schoolPicker = () =>
+  `<label class="schoolpick"><span class="muted">School</span><select data-in="school" aria-label="School">${Object.values(
+    PF.profiles,
+  )
+    .map(
+      (p) => `<option value="${esc(p.id)}"${p.id === PF.active ? ' selected' : ''}>${esc(p.name)}</option>`,
+    )
+    .join('')}</select></label>`;
 function shellHTML() {
+  const nav = D.loaded ? NAV : NAV.filter(([k]) => k === 'schools');
   return `<div class="app"><aside class="side"><div class="brand"><div class="word">FACTS</div>
-  <div class="expand">Financial Analysis &amp; Control Tracking System</div><div class="school">${esc(D.school)}<br><span class="muted">${esc(D.cycle)}</span></div></div>
-  <nav class="nav" aria-label="Sections">${NAV.map(([k, l]) => `<button data-act="nav" data-v="${k}">${l}</button>`).join('')}</nav>
-  <div class="side-foot"><div class="file">${esc(D.fileName)}${D.asOf ? `<br>Run ${esc(D.asOf)}` : ''}</div>
+  <div class="expand">Financial Analysis &amp; Control Tracking System</div><div class="school">${schoolPicker()}${D.loaded ? `<span class="muted">${esc(D.school)} · ${esc(D.cycle)}</span>` : ''}</div></div>
+  <nav class="nav" aria-label="Sections">${nav.map(([k, l]) => `<button data-act="nav" data-v="${k}">${l}</button>`).join('')}</nav>
+  <div class="side-foot">${
+    D.loaded
+      ? `<div class="file">${esc(D.fileName)}${D.asOf ? `<br>Run ${esc(D.asOf)}` : ''}</div>
   <div><button class="linkbtn" data-act="replace">Load a newer workbook</button></div>
-  <div><button class="linkbtn" data-act="forget">Remove workbook from this browser</button></div></div></aside>
+  <div><button class="linkbtn" data-act="forget">Remove workbook from this browser</button></div>`
+      : `<div><button class="linkbtn" data-act="toImport">Back to loading a workbook</button></div>`
+  }</div></aside>
   <main id="main" tabindex="-1"></main></div>`;
 }
 function importHTML(msg, err) {
   return `<div class="import"><div class="imp-card"><div class="word">FACTS</div><div class="expand">Financial Analysis &amp; Control Tracking System</div>
+  <div class="school" style="margin:14px 0">${schoolPicker()} <button class="linkbtn" data-act="nav" data-v="schools">Manage schools</button></div>
   <label class="drop" id="drop"><input type="file" id="file" accept=".xlsx,.xlsm" data-in="file"><strong>Drop the FACTS workbook here, or choose a file</strong>
   <span class="muted">The file is read inside this browser and is never uploaded.</span></label>
   <div class="status${err ? ' err' : ''}" id="status" role="status">${esc(msg || '')}</div>
@@ -58,6 +84,7 @@ const VIEWS = {
   rfr: viewRfR,
   cr: viewCR,
   cap: viewCap,
+  schools: viewSchools,
 };
 async function copyText(t, btn) {
   try {
@@ -171,10 +198,54 @@ const ACT = {
   },
   forget: async () => {
     try {
-      await IDB.del('workbook');
+      await IDB.del(wbKey());
+      if (PF.active === 'gilbert-l-sena') await IDB.del(LEGACY_KEY);
     } catch (e) {}
     D.loaded = false;
     render();
+  },
+  toImport: () => {
+    UI.view = 'budget';
+    render();
+  },
+  scNew: () => {
+    scOpen();
+    scForm();
+  },
+  scEdit: (t) => {
+    scOpen(t.dataset.id);
+    scForm();
+  },
+  scCancel: () => {
+    UI.sc = null;
+    scForm();
+  },
+  scUse: (t) => useSchool(t.dataset.id),
+  scDelete: async (t) => {
+    const id = t.dataset.id,
+      p = PF.profiles[id];
+    if (!p || !confirm(`Remove ${p.name} from this browser? Its saved notes stay stored but are hidden.`))
+      return;
+    const wasActive = id === PF.active;
+    const r = deleteProfile(storage, PF, id);
+    if (!r.ok) return alert(r.errors.join('\n'));
+    if (wasActive) await useSchool(PF.active);
+    else viewSchools();
+  },
+  scSave: async () => {
+    const sc = UI.sc;
+    if (!sc) return;
+    const d = sc.draft;
+    if (sc.isNew) d.id = makeProfileId(d.name, PF.profiles);
+    const r = saveProfile(storage, PF, d);
+    if (!r.ok) {
+      $('#scerr').innerHTML = scErrors();
+      return;
+    }
+    UI.sc = null;
+    // The active school's reports were read with the old layout; read them again.
+    if (d.id === PF.active) await useSchool(d.id);
+    else viewSchools();
   },
 };
 const saveBar = () => {
@@ -253,6 +324,48 @@ const IN = {
     UI.cr.q = t.value;
     crResults();
   },
+  school: (t) => useSchool(t.value),
+  sc: (t) => {
+    const d = UI.sc.draft,
+      k = t.dataset.k;
+    if (k === 'cushion') d.defaultCushion = { type: 'amount', value: num(t.value) };
+    else d[k] = t.value;
+    $('#scerr').innerHTML = scErrors();
+  },
+  scSeg: (t) => {
+    const d = UI.sc.draft,
+      k = t.dataset.k,
+      n = parseInt(t.value, 10);
+    if (k === 'tail') {
+      d.segments = d.segments.filter((s) => s.key !== 'tail');
+      if (n > 0) d.segments.push({ key: 'tail', len: n, label: 'Extra' });
+    } else {
+      const s = d.segments.find((x) => x.key === k);
+      if (s) s.len = isNaN(n) ? 0 : n;
+    }
+    $('#scerr').innerHTML = scErrors();
+  },
+  scLoc: (t) => {
+    const r = UI.sc.draft.locationRule,
+      k = t.dataset.k;
+    if (k === 'type') {
+      r.type = t.value;
+      if (t.value === 'lastN' && !r.n) r.n = 3;
+    } else if (k === 'n') r.n = parseInt(t.value, 10);
+    else r.confirmed = t.checked;
+    if (k !== 'n') scForm();
+    else $('#scerr').innerHTML = scErrors();
+  },
+  scFunds: (t) => {
+    UI.sc.fundsText = t.value;
+    UI.sc.draft.funds = parseFundLines(t.value);
+    $('#scerr').innerHTML = scErrors();
+  },
+  scPriority: (t) => {
+    UI.sc.priorityText = t.value;
+    UI.sc.draft.donorPriority = parseList(t.value);
+    $('#scerr').innerHTML = scErrors();
+  },
 };
 document.addEventListener('click', (e) => {
   const t = e.target.closest('[data-act]');
@@ -301,31 +414,55 @@ async function handleFile(file) {
     await new Promise((r) => setTimeout(r, 30));
     loadBuffer(buf, file.name);
     try {
-      await IDB.put('workbook', { name: file.name, buf });
+      await IDB.put(wbKey(), { name: file.name, buf });
     } catch (e) {}
-    if (!$('#main')) render();
-    else {
-      $('#app').innerHTML = shellHTML();
-      render();
-    }
+    if (UI.view === 'schools') UI.view = 'budget';
+    render();
   } catch (err) {
     if (D.loaded) {
       alert(err.message);
       return;
     }
+    $('#app').dataset.mode = '';
     $('#app').innerHTML = importHTML(err.message || 'That file could not be read.', true);
+  }
+}
+// Open the active school's saved workbook, if this browser has one. Returns an error message or ''.
+async function loadSaved() {
+  let saved = null;
+  try {
+    saved = await IDB.get(wbKey());
+    if (!saved && PF.active === 'gilbert-l-sena') saved = await IDB.get(LEGACY_KEY);
+  } catch (e) {
+    return ''; // no browser file cache available: start from the import screen
+  }
+  if (!saved || !saved.buf) return '';
+  const st = $('#status');
+  if (st) st.textContent = `Opening ${saved.name}…`;
+  await new Promise((r) => setTimeout(r, 30));
+  try {
+    loadBuffer(saved.buf, saved.name);
+  } catch (e) {
+    return e.message || 'The saved workbook could not be read with this school layout.';
+  }
+  return '';
+}
+// Make a school the active one. Its own saved workbook opens; no other school's data is shown.
+async function useSchool(id) {
+  UI.sc = null;
+  if (!switchSchool(id)) return;
+  const err = await loadSaved();
+  render();
+  if (err && !D.loaded) {
+    const st = $('#status');
+    if (st) {
+      st.className = 'status err';
+      st.textContent = err;
+    }
   }
 }
 (async function init() {
   render();
-  try {
-    const saved = await IDB.get('workbook');
-    if (saved && saved.buf) {
-      const st = $('#status');
-      if (st) st.textContent = `Opening ${saved.name}…`;
-      await new Promise((r) => setTimeout(r, 30));
-      loadBuffer(saved.buf, saved.name);
-      render();
-    }
-  } catch (e) {}
+  await loadSaved();
+  render();
 })();

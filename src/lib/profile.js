@@ -115,6 +115,36 @@ export function looseSplit(p, code) {
   });
   return out;
 }
+// Funds are edited as text, one per line: "24101, Title I Part A, F" (F marks flowthrough, R reimbursable).
+export function parseFundLines(text) {
+  return String(text || '')
+    .split(/\r?\n/)
+    .map((l) => l.trim())
+    .filter(Boolean)
+    .map((l) => {
+      const [code = '', name = '', flags = ''] = l.split(',').map((x) => x.trim());
+      return {
+        code,
+        name,
+        flowthrough: /f/i.test(flags),
+        reimbursable: /r/i.test(flags),
+      };
+    });
+}
+export function fundLines(funds) {
+  return (funds || [])
+    .map((f) =>
+      [f.code, f.name, (f.flowthrough ? 'F' : '') + (f.reimbursable ? 'R' : '')]
+        .join(', ')
+        .replace(/,\s*$/, ''),
+    )
+    .join('\n');
+}
+export const parseList = (text) =>
+  String(text || '')
+    .split(/[,\s]+/)
+    .map((x) => x.trim())
+    .filter(Boolean);
 // The 3-digit Entity Location Code for the OBMS upload, or '' if it can't be derived.
 export function uploadLocation(p, locSegment) {
   const s = String(locSegment || '');
