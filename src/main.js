@@ -113,8 +113,8 @@ const schoolPicker = () =>
     .join('')}</select></label>`;
 function shellHTML() {
   const nav = D.loaded ? NAV : NAV.filter(([k]) => LITE.has(k));
-  return `<div class="app"><aside class="side"><div class="brand"><div class="word">FACTS</div>
-  <div class="expand">Financial Analysis &amp; Control Tracking System</div><div class="school">${schoolPicker()}${D.loaded ? `<span class="muted">${esc(D.school)} · ${esc(D.cycle)}</span>` : ''}</div></div>
+  return `<div class="app"><aside class="side"><div class="brand"><div class="band"><img class="logo" src="./brand/vertex-horizontal-white.png" width="800" height="173" alt="Vertex Education"><div class="word">FACTS</div>
+  <div class="expand">Financial Analysis &amp; Control Tracking System</div></div><div class="school">${schoolPicker()}${D.loaded ? `<span class="muted">${esc(D.school)} · ${esc(D.cycle)}</span>` : ''}</div></div>
   <nav class="nav" aria-label="Sections">${nav.map(([k, l]) => `<button data-act="nav" data-v="${k}">${l}</button>`).join('')}</nav>
   <div class="side-foot">${
     D.loaded

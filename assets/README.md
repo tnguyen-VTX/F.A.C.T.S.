@@ -1,11 +1,10 @@
 # Brand assets
 
-Put the Vertex Education logo files here, exactly as supplied (SVG or high-resolution PNG). Do not recolor, rotate, crop or squeeze them.
+Vertex Education logo files, exactly as supplied. Never recolor, rotate, crop or squeeze them. Only commit them while the repository is private. Rules: `context/style.md`.
 
-Expected files:
+Used by the app (resized copies live in `public/brand/`):
 
-- Horizontal full-color wordmark (for white or light areas only)
-- Reversed (white) wordmark and white mountain icon (approved on a Vertex Blue header)
-- Mountain icon (also used as the favicon)
+- `vertex - horizontal-white.png`: reversed wordmark, shown on the Vertex Blue header band.
+- `vertex - icon-square.png`: white mountain on Vertex Blue, resized for the favicon and the Apple touch icon.
 
-Only commit these files if the repository is private. Rules: `context/style.md`.
+Kept for later, not used yet: the full-color horizontal logos (white background, for light areas only), the circle and gradient icons, the black logo and the mountain marks.

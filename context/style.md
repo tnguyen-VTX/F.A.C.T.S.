@@ -31,7 +31,7 @@ Cautions: red already means over budget in FACTS and green means positive, so ke
 - The reversed (white) wordmark and the white-on-blue mountain icon are approved on a Vertex Blue header (confirmed by the user).
 - Use the full-color logo on white or light areas only.
 - The mountain icon is the favicon.
-- Original logo files (SVG or high-res PNG) still need to be copied into `assets/` by the user. Confirm the repository is private before committing any brand file.
+- Original logo files are in `assets/` (PNG and JPG, supplied by the user; see `assets/README.md`). The app uses the reversed wordmark on a Vertex Blue band at the top of the sidebar (same in light and dark themes) and the square mountain icon as the favicon, as resized copies in `public/brand/`. Confirm the repository is private before keeping brand files in it.
 - Do not copy NMPED or OBMS logos or imagery. The in-app BAR view mirrors OBMS's layout only and stays neutral.
 
 ## Tone for anything sent to the state
