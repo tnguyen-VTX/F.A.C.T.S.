@@ -24,7 +24,7 @@ Environment note: `cdn.sheetjs.com` is blocked in the cloud session, so `npm ins
 ## Milestone 3: BAR logic (pure first)
 
 - [x] 3a. Deficit finder (function subtotal Available < 0, per selected fund).
-- [ ] 3b. Receiving-line allocation and donor split (nets to exactly 0.00).
+- [x] 3b. Receiving-line allocation and donor split (`src/lib/barLogic.js`; nets to 0 or reports a shortfall). Finding on the real Cesar Chavez file: with the strict rule (same fund, same two-digit object group, donor function stays >= 0) only 1 of 10 over-budget functions can be fully covered. See the open question on what "object group" means.
 - [ ] 3c. BAR model and validation rules for T, T-flowthrough, I, D, M.
 - [ ] 3d. FTE proportional calculation.
 
