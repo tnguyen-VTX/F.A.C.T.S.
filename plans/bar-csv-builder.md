@@ -1,171 +1,109 @@
-# BAR CSV Builder — Plan
+# BAR Builder (OBMS view and upload CSV) — Plan
 
-**Status:** Draft, not approved. Resume by working through the open questions at the bottom.
-**First school:** Cesar Chavez Community School (district/parent code 512). Must work for every school through school profiles.
-
----
+**Status:** Draft, not approved. Build only after the user says "Plan approved."
+**Depends on:** `plans/report-import.md` (the Account Summary and Fund Audit slots, and the school profile).
+**Replaces** the earlier "BAR CSV Builder" draft, which assumed a paste box and a single school. The paste box stays as a fallback front door.
+**Context files:** `context/business-rules.md`, `context/obms-formats.md`, `context/glossary.md`, `context/style.md`, `context/schools/`.
 
 ## 1. The Why
 
-Preparing a BAR for OBMS means turning the BAR Worksheet into an upload file by hand or through a spreadsheet prototype. The OBMS format is strict (exact field counts, no trailing commas, a 255-character justification with forbidden characters), and Excel's Save As CSV can add trailing commas that break it. Mistakes mean a rejected upload or a BAR that doesn't net to zero. This repeats for every BAR at every school.
+Preparing a BAR means hand-building lines in a workbook, then turning them into an upload file OBMS accepts. OBMS is strict (exact field counts, no trailing commas, a 255-character justification with forbidden characters), and a rejected upload or an unbalanced BAR costs time at every school.
 
-**Success:** I paste the BAR lines, pick the school, and get a file OBMS accepts on the first try, plus a justification I can use as-is, in minutes instead of rebuilding the spreadsheet each time.
+**Success:** from loaded AptaFund reports, find what needs a BAR, build it, see it as OBMS shows it, and download a file OBMS accepts on the first try.
 
 ## 2. The What
 
-A web form where I paste BAR lines copied from Excel (e.g. BAR Worksheet!A71:P224) and get:
+1. **Choose the fund(s)** to work in (see section 7).
+2. Pick a BAR type; the screen adapts.
+3. Build the BAR from the loaded reports (or paste lines as a fallback).
+4. Review: an in-app OBMS-style view beside the validation panel.
+5. Export the upload CSV, enter the OBMS Document ID, and track status.
 
-- An OBMS-ready BAR upload CSV (per BAR Upload Guide §3.4.3)
-- A justification string (and optionally a longer narrative for the PED justification form)
-- Validation checks before I download anything
+Types in v1: Transfer (T), Transfer (Flowthrough), Increase (I/IB), Decrease (D), Maintenance (M). Rules per type are in `context/business-rules.md`.
 
-**Must-haves:** school selection, paste parsing, CSV generation matching the prototype exactly, validation panel, download and copy.
-**Nice-to-haves:** long narrative, filling the PED justification form (.docx), warning when a decrease exceeds available budget.
+## 3. Across schools and managers
 
-## 3. Across my schools
-
-These come from the school profile, not the code:
-
-| Setting | Cesar Chavez Community School | Other schools |
-|---|---|---|
-| District/Parent code | 512 (matches the 512 in RfR names) | Per profile |
-| Account code format | 7 segments: `FFFFF-FFFF-OOOOO-PPPP-LLLLLL-JJJJ-UUUUU` | Gilbert L. Sena's reports use 6 segments (no `UUUUU`); confirm each school |
-| Location rule | Last 3 digits of segment 5 (`512001` → `001`) | Per profile; confirm |
-| Contact names | Optional, per profile | Per profile |
-| Flowthrough funds | Which funds are flowthrough | Per profile |
-
-Switching schools must clear the pasted data so one school's lines never end up in another school's file.
+Everything school-specific comes from the profile: district code, code pattern, location rule, funds with flowthrough flags, donor function priority, default cushion, contacts. Each manager runs their own copy; data stays in the browser. See `plans/report-import.md`.
 
 ## 4. The Data
 
-**Input:** Excel copy of the BAR Worksheet, which arrives as tab-separated text. Layout of BAR Worksheet!A71:P224:
-
-- Fund header row: fund code alone in column B (e.g. 11000)
-- Column header row: Job | Account Code | Description | … | Transfer BAR | … | Increase BAR | NOTES
-- Decrease block: one account line with a negative amount in the Transfer BAR column
-- Increase block: many account lines with positive amounts; subtotal and total rows have no account code
-- Columns of interest: B = Account Code, L = Transfer BAR amount (O = Increase BAR amount for increase BARs)
-
-**Parsing rules:**
-
-- A row is a LINE only if column B matches the school's account code pattern (Cesar Chavez: `^\d{5}-\d{4}-\d{5}-\d{4}-\d{6}-\d{4}-\d{5}$`)
-- Find the amount column from the header cell (Transfer BAR / Increase BAR), not hard-coded L or O
-- Fund = first line's segment 1 (warn if lines have mixed funds)
-- Ignore blank, header, subtotal, and total rows
-- Strip `$` and commas; handle parentheses negatives
-- Treat every code as a STRING to preserve leading zeros
-
-**Output, header record (UBH), 15 comma-separated fields:**
-UBH, District/Parent Code, Budget Year, Fund, BAR Type, First, Middle, Last, From Date, To Date, Flowthrough Scope, Carryover, Current Yr Alloc, Total Approved Budget, Justification
-
-- District/Parent Code from the school profile
-- Budget Year = 4-digit END year (FY27 → 2027)
-- Fund = fund code from the pasted block (e.g. 11000)
-- BAR Type = T (also IB, M, I, D allowed)
-- Contact and flowthrough fields blank for non-flowthrough funds
-- Justification ≤ 255 characters, no double quotes or pipes, no commas in the amount
-
-**Output, line records (UBL), 9 fields:**
-UBL, Fund, Function, Object, Program, Location, Job Class, Adjustment Amount, Adjustment FTEs
-
-- Split the account code on the dash: fund = seg 1, function = seg 2, object = seg 3, program = seg 4, location = per the school's location rule, job class = seg 6; seg 7 (`00000`) unused
-- Amount = BAR amount column for that row (2 decimals, no `$`, no thousands separator)
-- FTEs = 0
-- Zero-dollar lines are omitted
-
-**File format:** CRLF line endings, no BOM, header exactly 15 fields, line rows exactly 9 fields, no trailing commas. Build the CSV string directly rather than relying on Excel.
-
-**Sensitive data:** BAR lines carry account codes and amounts, not employee names. Everything still runs in the browser with no backend, so data never leaves my computer.
+- Account Summary and Fund Audit from the import slots. Position/FTE optional, for FTE.
+- The paste box accepts BAR lines copied from Excel; find columns by header, never by letter.
+- Output header (UBH, 15 fields) and lines (UBL, 9 fields). Layouts for Increase, Decrease, Maintenance and Flowthrough come from the PED guide, not yet supplied.
+- Saved BARs (lines, type, justification, Document ID, dated status steps) are keyed by school and fiscal year.
 
 ## 5. Accuracy and tie-out
 
-The output must match the spreadsheet prototype exactly.
-
-**Test case (Cesar Chavez, from the prototype):**
-
-- Fund 11000, type T, district 512, year 2027
-- 134 UBL lines (12 zero-dollar rows omitted)
-- 1 decrease of −256,945.17 (function 2600 / object 57331); increases total 256,945.17; net 0.00
-- First line: `UBL,11000,2600,57331,0000,001,0000,-256945.17,0`
-
-The real proof is a test upload to OBMS (open question 7).
+Four accepted BARs as tests: the Gilbert Title I flowthrough transfer (16 lines, FTE on the 51100 line), the Cesar Chavez fund 11000 transfer (134 lines, net 0.00), an Increase, and a Decrease (plus a Maintenance if one exists). The in-app view and the CSV must both reproduce each BAR line for line. The CSV must match byte for byte. One real OBMS test upload per school before real use.
 
 ## 6. Fixed rules vs. AI
 
-The CSV is entirely fixed rules: parsing, splitting, formatting, and validation must be predictable and testable. No AI there.
-
-The justification starts from a template filled in by rules (usual wording, function-level only, no object):
-
-> Transfer of $X from the Operation & Maintenance of Plant (2600) function to Instruction (1000) and Support Services (2100-2600) functions to align with actual expenditures and encumbrances and ensure no function is over budget.
-
-AI could help draft the longer narrative for the PED justification form, but I review and edit it before it goes anywhere.
+- All amounts, donors, balancing, FTE and CSV output are fixed, testable rules.
+- The short justification is a rule-based template per BAR type, editable, with a 255-character counter.
+- The long PED narrative may be drafted by AI through a button that calls an AI API from the browser. Only fund, BAR type, function names and dollar amounts are sent, after a preview of the exact text. The result goes into an editable box labeled AI-drafted and never into the CSV or a record automatically. The key is stored in the browser (user's choice); the risk is recorded in the risks section.
 
 ## 7. The Experience
 
-Form fields:
-
-- School (from profiles; fills in the district/parent code)
-- Budget year (2027, editable)
-- BAR type (dropdown: IB, T, M, I, D)
-- Contact first/middle/last (optional)
-- Flowthrough fields (only if the fund is flowthrough)
-- Justification (auto-generated, editable, live counter, max 255)
-- Paste box
-
-Outputs: preview table of parsed lines, validation panel, download .csv, copy to clipboard, optional long narrative.
-
-**Decision to make:** a standalone paste tool, or an export button on FACTS's existing BAR builder (which already spreads amounts across a fund's lines)? See open question 8.
+- **Fund selection (new):** a fund picker at the top of the BAR screen lists the school's funds from the profile. The manager chooses one or more funds to work in. Everything on the screen (deficit list, donors, saved BARs) is limited to the selected funds. A remembered selection is kept per school and fiscal year. Because an OBMS BAR has one fund, FACTS builds one BAR per fund: with several funds selected, the deficit list is grouped by fund and each BAR is built and exported separately. Donors never cross funds.
+- "New BAR" asks for the type first. Transfer opens the deficit list; Maintenance filters to one function; Increase and Decrease open revenue and expense entry.
+- Deficit = a function within a fund whose subtotal Available is negative. Amount = function deficit + cushion, rounded up to a whole dollar (to confirm). Receiving lines: over-budget lines first, then the rest by budget share. Donors: same fund, function stays ≥ 0, lines with room, same object group, ranked by the profile's priority list, with a per-BAR mode (top-ranked first, or spread across all). The manager can change any donor.
+- FTE on salary lines (object 51100): proportional to dollars moved, editable.
+- In-app view: header, justification, totals, line table (negatives in parentheses), status history. Neutral styling, not state branding.
+- Switching schools auto-saves the working BAR as a draft under that school.
+- Branding per `context/style.md`.
 
 ## 8. Risks and controls
 
-Validation checklist:
-
-- [ ] Every line matches the school's account code pattern
-- [ ] All lines share the BAR's fund (or warn)
-- [ ] Transfer BARs net to 0.00 (to the cent)
-- [ ] Optional: warn if a decrease exceeds available budget
-- [ ] No negative values in flowthrough fields
-- [ ] Justification ≤ 255 characters; no double quote or pipe
-- [ ] Amounts have at most 2 decimals
-- [ ] Duplicate account lines flagged
-
-Other risks: wrong school selected (show the school name prominently on the preview and in the file name); a paste from the wrong fiscal year; a paste with a different column layout (find columns by header, warn when a header is missing); OBMS rejecting the file (record rejection messages in this plan).
+- Hard stops (download disabled): BAR doesn't balance; a line fails the code pattern or is in a different fund; a donor or line would go over budget.
+- Warnings: justification over 255 characters or with a double quote or pipe (opens the editor); mixed funds; duplicate lines; partial report range.
+- Every BAR is labeled with the report load and range it was built from. A newer report keeps the amounts and re-checks them, showing old and new figures. A BAR at Uploaded or later is frozen to the report it used.
+- Fund selection narrows what is shown; it never changes totals or what the validation checks.
+- AI key in localStorage is readable by anyone on that browser profile or any injected script: spend-limited key, "Clear key" button, first-use warning.
+- Backup file holds profiles, BARs, drafts and settings only. No raw reports, no Position/FTE data, no AI key. Restoring shows both versions of any BAR present in both and never overwrites silently.
+- Raw reports never go in the repo or in context files.
 
 ## 9. The Proof
 
-- Unit tests on the parser and CSV generator using the A71:P224 sample (expect 134 lines, net 0.00, 256,945.17 each way)
-- Byte-for-byte comparison with the prototype's output
-- A sample from a second school with a different account code format
-- One real OBMS test upload
+See section 5, plus unit tests on the deficit finder, donor split (nets to exactly 0.00), FTE calculation, validation rules, and CSV builder. Add made-up fixtures with round numbers.
 
 ## 10. Rollout
 
-Cesar Chavez first, then add a profile for each additional school and run its own sample through the tests before using it for real.
+Gilbert first, then Cesar Chavez. Run each school's own sample through the tests before real use. Prior-year BARs stay editable until 10/31, then read-only.
 
 ## 11. Explaining it
 
-Problem: preparing BAR uploads by hand is slow and error-prone at every school. Solution: paste, pick the school, download a validated file. Impact: fewer rejected uploads and less time per BAR, multiplied across schools.
+Problem: BARs are hand-built and fixed up until OBMS accepts them. Solution: pick the school and funds, build from the reports, check against OBMS's own layout, and download a validated file. Impact: fewer rejected uploads and less time per BAR at every school.
 
----
+## Assumptions to confirm
+
+1. Choosing several funds means several separate BARs (one fund per BAR). Alternatively the user may want the selection only as a filter.
+2. Transfer amounts round up to a whole dollar.
+3. Default donor mode.
+4. Whether a BAR with an invalid justification may still be downloaded.
+5. The proportional FTE formula.
+6. A BAR at Uploaded or later is frozen to its report.
+7. Position/FTE file is not kept after the load.
 
 ## Open questions
 
-1. Which BAR types besides Transfer? (Increase uses the Increase BAR column; any rounding-plug rules?)
-2. Should zero-dollar lines ever be kept?
-3. ~~Will district code / school ever vary?~~ Yes, it varies by school. Remaining: which settings go in each school's profile, and what is each school's district/parent code?
-4. Justification: one template per BAR type, or free text with a suggested default?
-5. Flowthrough funds: support header fields 9–14 in v1?
-6. Also fill the PED justification form (.docx)? Fields: District, Program, Fund Code, BAR #, narrative, use of funds, school sites.
-7. Does OBMS accept the file as-is, and is location 001 correct? Test one upload and record any rejection messages here.
-8. Standalone paste tool, or an export from FACTS's BAR builder, or both?
-9. What account code format and location rule does each school use? (Cesar Chavez: 7 segments, last 3 of segment 5. Gilbert L. Sena: 6 segments, rule unknown.)
+1. Location rule in the upload file, per school.
+2. Flowthrough header fields 9-14.
+3. How Increase and Decrease revenue lines appear in the upload.
+4. Rounding-plug rules; zero-dollar lines.
+5. Position/FTE report name and layout.
+6. Backup reminder cadence.
+7. Which funds are flowthrough at each school (profile).
 
 ## Milestones
 
-1. School profile for Cesar Chavez, plus parser and unit tests using the A71:P224 sample
-2. CSV generator matching the spreadsheet prototype exactly
-3. Form UI and validation panel
-4. Justification generator (plus narrative)
-5. Second school's profile and sample test
-6. (Optional) .docx justification form fill
-7. Test against a real OBMS upload
+1. School profile and Settings screen (shared with report import).
+2. Import slots for Account Summary and Fund Audit.
+3. Fund picker, deficit finder and donor suggestions.
+4. BAR model for the types, OBMS-style view, saved BARs with status log, backup export/import.
+5. CSV generator and validation panel, tested against the accepted BARs (needs the PED guide).
+6. Rule-based justification.
+7. Position/FTE slot and proportional FTE.
+8. Second school profile and sample test.
+9. AI narrative button.
+10. Real OBMS test uploads; record rejections here.
+11. Later, separate plans: PDF import, shared store with sign-in, .docx PED justification form.
