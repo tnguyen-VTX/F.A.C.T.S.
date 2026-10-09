@@ -351,3 +351,32 @@ describe('flowthrough fields, justification and contact', () => {
     );
   });
 });
+
+describe('award cap on Increase BARs', () => {
+  const inc = (award) =>
+    bar(
+      'I',
+      '21000',
+      [
+        ['21000-0000-41604-0000-000-0000', 2350],
+        ['21000-3100-56116-0000-033-0000', 2350],
+      ],
+      { award },
+    );
+  it('is optional: nothing is said when no award is typed', () => {
+    expect(msgs(validateBar(inc(''), { profile: P }))).not.toContain('award');
+  });
+  it('is quiet when the lines match the award', () => {
+    expect(msgs(validateBar(inc('$2,350'), { profile: P }))).not.toContain('award');
+  });
+  it('stops when the expenditure lines are more than the award', () => {
+    const c = validateBar(inc('2000'), { profile: P });
+    expect(msgs(c, 'stop')).toContain('more than the award');
+    expect(canDownload(c)).toBe(false);
+  });
+  it('warns, and says how much is left, when less is assigned', () => {
+    const c = validateBar(inc('3000'), { profile: P });
+    expect(msgs(c, 'warn')).toContain('650.00 is left');
+    expect(canDownload(c)).toBe(true);
+  });
+});

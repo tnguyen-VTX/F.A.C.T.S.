@@ -89,6 +89,24 @@ export function validateBar(bar, { profile, asr } = {}) {
         'stop',
         `Revenue (${tot.revenue.toFixed(2)}) must equal expenditure (${tot.expenditure.toFixed(2)}).`,
       );
+    // The award (typed by the user) caps what the expenditure lines may add up to.
+    const award = Math.abs(Number(String(bar.award ?? '').replace(/[$,\s]/g, '')));
+    if (String(bar.award ?? '').trim() !== '' && Number.isFinite(award)) {
+      const spent = Math.abs(tot.expenditure),
+        left = r2(award - spent);
+      if (left < -0.005)
+        add('stop', `Expenditure lines (${spent.toFixed(2)}) are more than the award (${award.toFixed(2)}).`);
+      else if (left > 0.005)
+        add(
+          'warn',
+          `${spent.toFixed(2)} of the ${award.toFixed(2)} award is assigned; ${left.toFixed(2)} is left.`,
+        );
+      if (hasRev && Math.abs(Math.abs(tot.revenue) - award) > 0.005)
+        add(
+          'warn',
+          `The revenue lines (${Math.abs(tot.revenue).toFixed(2)}) differ from the award (${award.toFixed(2)}).`,
+        );
+    }
     const wrongSign = bar.lines.some((l) => (t === 'D' ? l.amount > 0 : l.amount < 0));
     if (wrongSign)
       add(

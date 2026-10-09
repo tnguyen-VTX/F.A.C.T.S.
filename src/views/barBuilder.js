@@ -172,6 +172,7 @@ export function bbDraft() {
       ? `<h3>Flowthrough fund</h3><div class="grid2"><div>${fieldIn('Change scope (Y or N)', 'flowthrough.scope', bar.flowthrough.scope, 'size="3" maxlength="1"')}${fieldIn('Budget from (mm/dd/yyyy)', 'flowthrough.from', bar.flowthrough.from)}${fieldIn('Budget to (mm/dd/yyyy)', 'flowthrough.to', bar.flowthrough.to)}</div><div>${fieldIn('Approved carryover', 'flowthrough.carryover', bar.flowthrough.carryover)}${fieldIn('Current-year allocation', 'flowthrough.allocation', bar.flowthrough.allocation)}${fieldIn('Total approved budget', 'flowthrough.total', bar.flowthrough.total)}</div></div>`
       : ''
   }
+  ${['I', 'IB', 'D'].includes(bar.type) ? fieldIn(bar.type === 'D' ? 'Amount of the decrease (optional cap)' : 'Award amount (optional cap)', 'award', bar.award, 'inputmode="decimal" size="14"') : ''}
   <label class="fld"><span>Justification <span id="bbcount" class="muted"></span></span><textarea rows="3" data-in="bbField" data-k="justification">${esc(bar.justification)}</textarea></label>
   <div class="toolbar"><button class="btn" data-act="bbSuggest">Suggest wording</button></div>
   <div class="scroll"><table class="t"><thead><tr><th>Account</th><th>Type</th><th>Func</th><th>Object</th><th class="r">Adj amount</th><th class="r">FTE adj</th><th></th></tr></thead><tbody>${
