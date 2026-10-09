@@ -104,6 +104,17 @@ export function splitWith(p, code) {
   });
   return out;
 }
+// Position-based split with no length check, for sources (cash receipts) that were never
+// validated against the code pattern. Missing segments come back as ''.
+export function looseSplit(p, code) {
+  const parts = String(code).split('-');
+  const out = { extra: [] };
+  p.segments.forEach((s, i) => {
+    if (stdKeys.has(s.key)) out[s.key] = parts[i] || '';
+    else out.extra.push(parts[i] || '');
+  });
+  return out;
+}
 // The 3-digit Entity Location Code for the OBMS upload, or '' if it can't be derived.
 export function uploadLocation(p, locSegment) {
   const s = String(locSegment || '');

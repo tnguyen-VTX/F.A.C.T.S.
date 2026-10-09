@@ -1,5 +1,10 @@
 import * as XLSX from 'xlsx';
-import { $, ACCT_RE, T0, addT, num, serialToISO, splitCode } from './format.js';
+import { T0, addT, num, serialToISO } from './format.js';
+import { gilbertPreset, looseSplit, splitWith } from './profile.js';
+
+// Account codes are read through a school profile. Callers that pass none get the
+// v0.1 default (Gilbert L. Sena, 6 segments), so existing behavior is unchanged.
+const DEFAULT_PROFILE = gilbertPreset();
 
 export const SHEETS = [
   'Account Summary Report',
@@ -33,7 +38,7 @@ export const metaField = (meta, k) => {
   return m ? m[1].trim() : '';
 };
 
-export function parseASR(rows) {
+export function parseASR(rows, profile = DEFAULT_PROFILE) {
   const out = { funds: new Map(), funcNames: {}, meta: '', school: '' };
   if (!rows) return out;
   out.school = (rows[0] || []).find((v) => typeof v === 'string') || '';
@@ -58,8 +63,8 @@ export function parseASR(rows) {
     if (/^Grand Total/i.test(a)) break;
     const v = { budget: num(r[3]), actual: num(r[4]), enc: num(r[5]), avail: num(r[6]) };
     let m;
-    if (ACCT_RE.test(a)) {
-      const s = splitCode(a);
+    const s = splitWith(profile, a);
+    if (s) {
       getFund(s.fund).lines.push({ code: a, desc: String(r[1] ?? '').trim(), ...s, ...v });
     } else if ((m = a.match(/\[Fund\]\s*(\d+)\s*-\s*(.*)$/))) {
       getFund(m[1], m[2].trim()).sub = v;
@@ -72,15 +77,16 @@ export function parseASR(rows) {
   }
   return out;
 }
-export function parseFA(rows) {
+export function parseFA(rows, profile = DEFAULT_PROFILE) {
   if (!rows) return [];
   const out = [];
   for (const o of objectsFrom(rows, 'Account Code')) {
     const code = String(o['Account Code'] ?? '').trim();
-    if (!ACCT_RE.test(code)) continue;
+    const s = splitWith(profile, code);
+    if (!s) continue;
     out.push({
       code,
-      ...splitCode(code),
+      ...s,
       acctDesc: String(o['Acct. Desc.'] ?? '').trim(),
       date: serialToISO(o['Trans. Date']),
       tno: o['Trans. No.'] ?? '',
@@ -125,13 +131,13 @@ export function rfrState(s) {
   if (s.includes('approved')) return 'approved';
   return 'review';
 }
-export function parseCR(rows) {
+export function parseCR(rows, profile = DEFAULT_PROFILE) {
   if (!rows) return [];
   return objectsFrom(rows, 'BatchStatus')
     .filter((o) => o.AccountCode)
     .map((o) => {
       const code = String(o.AccountCode).trim();
-      const s = splitCode(code);
+      const s = looseSplit(profile, code);
       return {
         status: String(o.BatchStatus ?? ''),
         batch: String(o.BatchNumber ?? ''),
