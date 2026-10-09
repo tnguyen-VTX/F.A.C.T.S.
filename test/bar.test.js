@@ -332,8 +332,9 @@ describe('flowthrough fields, justification and contact', () => {
     b.justification = 'a'.repeat(256);
     expect(msgs(validateBar(b, { profile: P }), 'warn')).toContain('256 characters');
     b.justification = 'He said "yes" | then, no';
-    const w = msgs(validateBar(b, { profile: P }), 'warn');
-    for (const part of ['a double quote', 'a pipe', 'a comma']) expect(w).toContain(part);
+    const c = validateBar(b, { profile: P });
+    for (const part of ['a double quote', 'a pipe', 'a comma']) expect(msgs(c, 'stop')).toContain(part);
+    expect(canDownload(c)).toBe(false);
     b.justification = '';
     expect(msgs(validateBar(b, { profile: P }), 'warn')).toContain('No justification');
   });
@@ -378,5 +379,61 @@ describe('award cap on Increase BARs', () => {
     const c = validateBar(inc('3000'), { profile: P });
     expect(msgs(c, 'warn')).toContain('650.00 is left');
     expect(canDownload(c)).toBe(true);
+  });
+});
+
+describe('file-breaking input', () => {
+  const t = (over = {}) =>
+    Object.assign(
+      bar('T', '11000', [
+        [A, -5],
+        [B, 5],
+      ]),
+      over,
+    );
+  it('stops a contact name with a comma', () => {
+    const b = t({ contact: { first: 'Smith, Jr.', middle: '', last: 'X' } });
+    expect(msgs(validateBar(b, { profile: P }), 'stop')).toContain('breaks the BAR file');
+  });
+  it('stops a BAR whose lines are all zero', () => {
+    const b = t();
+    b.lines.forEach((l) => (l.amount = 0));
+    expect(msgs(validateBar(b, { profile: P }), 'stop')).toContain('zero amount');
+  });
+  it('stops an award that is not a number', () => {
+    const b = bar(
+      'I',
+      '21000',
+      [
+        ['21000-0000-41604-0000-000-0000', 100],
+        ['21000-3100-56116-0000-033-0000', 100],
+      ],
+      { award: '5k' },
+    );
+    expect(msgs(validateBar(b, { profile: P }), 'stop')).toContain('not a number');
+  });
+  it('checks a repeated code on its net change', () => {
+    const asr = makeAsr({
+      1000: [
+        ['51100', 1000, 0, 0],
+        ['56118', 1000, 0, 0],
+      ],
+    });
+    const six = newProfile({
+      id: 'six',
+      name: 'Six',
+      districtCode: '1',
+      locationRule: { type: 'lastN', n: 3 },
+    });
+    const a = '11000-1000-51100-0000-001707-1411',
+      o = '11000-1000-56118-0000-001707-1411';
+    const b = newBar('T', '11000');
+    b.lines = [
+      [a, -800],
+      [a, -800],
+      [o, 1600],
+    ].map(([c, x]) => barLine(six, c, x));
+    b.justification = 'x';
+    expect(msgs(validateBar(b, { profile: six, asr }), 'stop')).toContain('over budget');
   });
 });

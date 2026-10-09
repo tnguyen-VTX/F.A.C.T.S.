@@ -20,7 +20,7 @@ const STEPS = [
 export function migrate(storage, storeKey) {
   let found = 0;
   try {
-    found = parseInt(storage.getItem(VERSION_KEY), 10) || 0;
+    found = Math.max(0, parseInt(storage.getItem(VERSION_KEY), 10) || 0);
   } catch (e) {
     return { version: 0, newer: false, migrated: false };
   }

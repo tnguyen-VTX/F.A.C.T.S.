@@ -52,6 +52,8 @@ export function validateBar(bar, { profile, asr } = {}) {
   if (!BAR_TYPES[t]) add('stop', 'Choose a BAR type.');
   if (!/^\d{5}$/.test(String(bar.fund || ''))) add('stop', 'Choose the fund this BAR is for.');
   if (!bar.lines.length) add('stop', 'The BAR has no lines.');
+  else if (bar.lines.every((l) => !(Math.abs(l.amount) >= 0.005)))
+    add('stop', 'Every line has a zero amount, so the file would have no lines.');
 
   // Every line: fits the school's account code layout, is in the BAR's fund, has a clean amount.
   const seen = new Set();
@@ -106,7 +108,8 @@ export function validateBar(bar, { profile, asr } = {}) {
           'warn',
           `The revenue lines (${Math.abs(tot.revenue).toFixed(2)}) differ from the award (${award.toFixed(2)}).`,
         );
-    }
+    } else if (String(bar.award ?? '').trim() !== '')
+      add('stop', 'The award amount is not a number. Type digits only, like 12000.');
     const wrongSign = bar.lines.some((l) => (t === 'D' ? l.amount > 0 : l.amount < 0));
     if (wrongSign)
       add(
@@ -131,17 +134,23 @@ export function validateBar(bar, { profile, asr } = {}) {
     const f = asr.funds.get(bar.fund);
     if (f) for (const l of f.lines) lineIndex.set(l.code, l);
     const byFunc = new Map();
+    // A code listed twice is checked on its net change, so two small takes cannot hide a large one.
+    const byCode = new Map();
     for (const l of bar.lines) {
-      if (!(l.amount < 0) || isRevenueObject(l.obj)) continue;
-      const base = lineIndex.get(l.code);
+      if (isRevenueObject(l.obj)) continue;
+      byCode.set(l.code, (byCode.get(l.code) || 0) + (Number.isFinite(l.amount) ? l.amount : 0));
+    }
+    for (const [code, net] of byCode) {
+      if (!(net < 0)) continue;
+      const base = lineIndex.get(code);
       if (!base) {
-        add('warn', `${l.code} is not in the loaded Account Summary, so its budget could not be checked.`);
+        add('warn', `${code} is not in the loaded Account Summary, so its budget could not be checked.`);
         continue;
       }
-      if (r2(base.avail + l.amount) < 0)
+      if (r2(base.avail + net) < 0)
         add(
           'stop',
-          `${l.code}: taking ${(-l.amount).toFixed(2)} leaves it ${r2(base.avail + l.amount).toFixed(2)} available (over budget).`,
+          `${code}: taking ${(-net).toFixed(2)} leaves it ${r2(base.avail + net).toFixed(2)} available (over budget).`,
         );
     }
     for (const l of bar.lines) byFunc.set(l.func, (byFunc.get(l.func) || 0) + l.amount);
@@ -198,7 +207,11 @@ export function validateBar(bar, { profile, asr } = {}) {
     ['|', 'a pipe'],
     [',', 'a comma'],
   ])
-    if (j.includes(ch)) add('warn', `The justification contains ${name}, which the BAR file does not allow.`);
+    if (j.includes(ch))
+      add(
+        'stop',
+        `The justification contains ${name}, which breaks the BAR file. Edit the justification to remove it.`,
+      );
   for (const [k, label] of [
     ['first', 'first'],
     ['middle', 'middle'],
@@ -206,7 +219,10 @@ export function validateBar(bar, { profile, asr } = {}) {
   ]) {
     const v = bar.contact?.[k] || '';
     if (v.length > 20) add('warn', `The contact ${label} name is longer than 20 characters.`);
-    if (v && !/^[A-Za-z .'-]+$/.test(v)) add('warn', `The contact ${label} name should be letters only.`);
+    if (/[",|]/.test(v))
+      add('stop', `The contact ${label} name contains a comma, quote or pipe, which breaks the BAR file.`);
+    else if (v && !/^[A-Za-z .'-]+$/.test(v))
+      add('warn', `The contact ${label} name should be letters only.`);
   }
   return out;
 }

@@ -39,3 +39,11 @@ describe('migrate', () => {
     expect(s.m.k).toBe('{broken');
   });
 });
+
+describe('migrate with a damaged version key', () => {
+  it('treats a negative version as no version', () => {
+    const s = mem({ k: '{"a/FY2027":{}}', [VERSION_KEY]: '-1' });
+    expect(() => migrate(s, 'k')).not.toThrow();
+    expect(s.m[VERSION_KEY]).toBe(String(DATA_VERSION));
+  });
+});
