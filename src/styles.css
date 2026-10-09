@@ -16,6 +16,12 @@
 :root {
   --font-body: 'DM Sans', Arial, sans-serif;
   --font-head: 'Red Hat Display', Arial, sans-serif;
+  /* Vertex Education palette (context/style.md). Green stays out of status colors. */
+  --vx-blue: #003865;
+  --vx-gray: #707372;
+  --vx-gold: #cba052;
+  --vx-dark: #404342;
+  --vx-light: #c0c3c2;
 }
 :root {
   --bg: #edf0ef;
@@ -24,12 +30,13 @@
   --ink: #172130;
   --muted: #586677;
   --line: #d3dad7;
-  --spent: #2d5b8a;
+  --head: var(--vx-blue);
+  --spent: var(--vx-blue);
   --enc: #c4892a;
   --avail: #2e7650;
   --over: #b42318;
   --over-bg: #fbeae8;
-  --focus: #2d5b8a;
+  --focus: var(--vx-blue);
   --on-accent: #ffffff;
   color-scheme: light;
   box-sizing: border-box;
@@ -44,6 +51,7 @@
     --ink: #e4eaf0;
     --muted: #99a7b5;
     --line: #2a3642;
+    --head: #e4eaf0;
     --spent: #6ea2d5;
     --enc: #e1ae58;
     --avail: #5cbb88;
@@ -61,6 +69,7 @@
   --ink: #e4eaf0;
   --muted: #99a7b5;
   --line: #2a3642;
+  --head: #e4eaf0;
   --spent: #6ea2d5;
   --enc: #e1ae58;
   --avail: #5cbb88;
@@ -827,4 +836,9 @@ tr.give td {
 button:disabled {
   opacity: 0.5;
   cursor: not-allowed;
+}
+
+h1,
+h2 {
+  color: var(--head);
 }

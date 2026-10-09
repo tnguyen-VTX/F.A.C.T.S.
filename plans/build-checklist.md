@@ -37,7 +37,7 @@ Environment note: `cdn.sheetjs.com` is blocked in the cloud session, so `npm ins
 
 ## Milestone 5: later
 
-- [ ] Branding tokens, fonts and logos (needs logo files in the repo).
+- [x] Brand colors as tokens (Vertex Blue on primary buttons, focus, headings). [ ] Logos and favicon: need the files in the repo.
 - [ ] Position/FTE slot. Second school (Cesar Chavez) profile test.
 - [ ] AI narrative button. Real OBMS test uploads.
 

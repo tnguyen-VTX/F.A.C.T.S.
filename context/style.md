@@ -22,7 +22,8 @@ Cautions: red already means over budget in FACTS and green means positive, so ke
 
 - Headlines: Europa Bold (Adobe license). Use **Red Hat Display** instead (Bold for titles).
 - Body: **DM Sans**. Fallback: Arial.
-- Self-hosted in `src/fonts` (variable fonts, OFL licenses beside them); the app loads nothing from Google. The supplied zip also holds Arsenal, which the guide does not mention; it is not used. Done 10/9/2026; colors and logos are still to do.
+- Self-hosted in `src/fonts` (variable fonts, OFL licenses beside them); the app loads nothing from Google. The supplied zip also holds Arsenal, which the guide does not mention; it is not used. Done 10/9/2026.
+- Colors: the palette is in `src/styles.css` as `--vx-*` tokens. Vertex Blue drives primary buttons, focus rings and headings in the light theme; the dark theme keeps a lighter blue for contrast. Gold and gray are defined but not used yet. Logos are still to do (files not in the repo).
 
 ## Logos
 
