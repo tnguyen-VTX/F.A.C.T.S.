@@ -114,6 +114,15 @@ describe('BAR Builder screen', () => {
     click($('button[data-act="bbOpen"]'));
     expect(st.UI.bb.draft.lines.length).toBeGreaterThan(0);
   });
+  it('keeps a frozen BAR read-only and refuses to delete it', () => {
+    expect($('#bbdraft input[data-in="bbAmt"]').disabled).toBe(true);
+    expect($('#bbdraft textarea').disabled).toBe(true);
+    expect($('#bbdraft button[data-act="bbSave"]').disabled).toBe(true);
+    const before = st.S().bars.length;
+    click($('#bbsaved button[data-act="bbRemove"]'));
+    expect(st.S().bars).toHaveLength(before);
+    expect(st.UI.bb.note).toContain('cannot be deleted');
+  });
   it('backs up only BARs, drafts and settings', async () => {
     const { backupFile } = await import('../src/views/barBuilder.js');
     const f = backupFile();

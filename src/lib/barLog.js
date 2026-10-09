@@ -62,8 +62,17 @@ export function exportBackup({ profiles, store, now = Date.now() }) {
   };
 }
 
+// A saved BAR with the parts the screens read; anything else in a backup is ignored.
+export const validEntry = (e) =>
+  !!e &&
+  typeof e.id === 'string' &&
+  !!e.bar &&
+  Array.isArray(e.bar.lines) &&
+  Array.isArray(e.log) &&
+  STATUSES.includes(e.status);
+
 export function checkBackup(data) {
-  if (!data || data.app !== 'FACTS' || typeof data.schools !== 'object')
+  if (!data || data.app !== 'FACTS' || !data.schools || typeof data.schools !== 'object')
     return 'This is not a FACTS backup file.';
   if (data.version > BACKUP_VERSION) return 'This backup is from a newer version of FACTS.';
   return '';

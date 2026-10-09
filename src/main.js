@@ -41,6 +41,7 @@ import {
   bbStartEmpty,
   bbSummary,
   bbSave,
+  keep,
   bbOpen,
   bbRemove,
   bbAddStatus,
@@ -79,12 +80,7 @@ const NAV = [
 ];
 // Screens that work before any report is loaded.
 const LITE = new Set(['import', 'schools', 'about']);
-const keepBB = () => {
-  const b = bb();
-  S().bb = { funds: [...b.funds], type: b.type, mode: b.mode, cushion: b.cushion };
-  S().bbDraft = b.draft;
-  saveStore();
-};
+const keepBB = keep;
 const wbKey = () => 'workbook:' + PF.active;
 const LEGACY_KEY = 'workbook';
 export function render() {

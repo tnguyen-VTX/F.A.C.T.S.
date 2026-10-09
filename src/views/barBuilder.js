@@ -7,6 +7,7 @@ import {
   isFrozen,
   isLocked,
   newId,
+  validEntry,
   planRestore,
   saveBar,
 } from '../lib/barLog.js';
@@ -48,8 +49,9 @@ export function bb() {
   }
   return UI.bb;
 }
-const keep = () => {
+export const keep = () => {
   const b = bb();
+  b.dirty = true;
   S().bb = { funds: [...b.funds], type: b.type, mode: b.mode, cushion: b.cushion };
   S().bbDraft = b.draft;
   saveStore();
@@ -113,10 +115,20 @@ export function bbDeficits() {
 }
 
 // Build a balanced transfer for one deficit function and make it the working BAR.
+const replaceOk = () => {
+  const b = bb();
+  return (
+    !b.draft ||
+    !b.dirty ||
+    !b.draft.lines.length ||
+    confirm('Replace the BAR you are working on? Unsaved changes will be lost.')
+  );
+};
+
 export function bbBuildTransfer(fund, func) {
   const b = bb(),
     d = findDeficits(D.asr, [fund]).find((x) => x.func === func);
-  if (!d) return;
+  if (!d || !replaceOk()) return;
   const t = buildTransfer(D.asr, d, {
     cushion: num(b.cushion),
     mode: b.mode,
@@ -133,7 +145,7 @@ export function bbBuildTransfer(fund, func) {
 }
 export function bbStartEmpty() {
   const b = bb();
-  if (!b.startFund) return;
+  if (!b.startFund || !replaceOk()) return;
   b.draft = newBar(b.type, b.startFund);
   b.note = '';
   keep();
@@ -182,6 +194,13 @@ export function bbDraft() {
   <div class="filters"><label>Add a line: account code<input type="text" size="34" data-in="bbAddCode" value="${esc(b.add.code)}" placeholder="11000-1000-51100-0000-001707-1411"></label>
   <label>Amount<input type="number" step="1" data-in="bbAddAmt" value="${esc(b.add.amount)}"></label><button class="btn" data-act="bbAddLine">Add line</button></div>
   <div id="bbsum"></div></section>`;
+  const saved = entryOf(bar.savedId);
+  if (saved && isFrozen(saved)) {
+    el.querySelectorAll('input, textarea, select').forEach((x) => (x.disabled = true));
+    el.querySelectorAll(
+      '[data-act="bbDel"], [data-act="bbSuggest"], [data-act="bbAddLine"], [data-act="bbSave"]',
+    ).forEach((x) => (x.disabled = true));
+  }
   bbSummary();
 }
 
@@ -211,7 +230,10 @@ export function bbSummary() {
 }
 
 // ---- Saved BARs and their status log ----
-const today = () => new Date().toISOString().slice(0, 10);
+// Local calendar date (New Mexico), not the UTC date.
+const ymd = (d) =>
+  `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+const today = () => ymd(new Date());
 const locked = () => isLocked(FY.value, today()) && !bb().unlock;
 const basisNow = () => ({
   asrFile: REP.asr?.name || D.fileName || '',
@@ -235,6 +257,7 @@ export function bbSave() {
   b.draft.savedId = r.entry.id;
   b.note = '';
   keep();
+  b.dirty = false;
   bbDraft();
   bbSaved();
 }
@@ -242,14 +265,24 @@ export function bbOpen(id) {
   const b = bb(),
     e = (S().bars || []).find((x) => x.id === id);
   if (!e) return;
-  if (b.draft && !b.draft.savedId && b.draft.lines.length && !confirm('Replace the BAR you are working on?'))
-    return;
+  if (!replaceOk()) return;
   b.draft = JSON.parse(JSON.stringify(e.bar));
   b.note = isFrozen(e) ? `This BAR is ${e.status}: its lines are frozen. Make a new BAR to change them.` : '';
   keep();
+  b.dirty = false;
   bbDraft();
 }
+const entryOf = (id) => (S().bars || []).find((x) => x.id === id);
 export function bbRemove(id) {
+  const e = entryOf(id);
+  if (e && isFrozen(e)) {
+    bb().note = `A BAR that is ${e.status} cannot be deleted. Add the status Cancelled first if it was sent by mistake.`;
+    return bbDraft();
+  }
+  if (locked()) {
+    bb().note = `FY${FY.value} is locked. Unlock it to delete a BAR.`;
+    return bbDraft();
+  }
   if (!confirm('Delete this saved BAR and its status log?')) return;
   S().bars = (S().bars || []).filter((x) => x.id !== id);
   const b = bb();
@@ -258,6 +291,10 @@ export function bbRemove(id) {
   bbSaved();
 }
 export function bbAddStatus(id) {
+  if (locked()) {
+    bb().note = `FY${FY.value} is locked. Unlock it to change a BAR's status.`;
+    return bbDraft();
+  }
   const q = (k) => $(`[data-st="${k}"][data-id="${id}"]`)?.value || '';
   const bars = S().bars || [];
   const i = bars.findIndex((x) => x.id === id);
@@ -280,6 +317,8 @@ export function bbSaved() {
   );
   const lock = isLocked(FY.value, today());
   el.innerHTML = `<section class="panel"><h2>Saved BARs · ${esc(profile().name)} · FY${FY.value}</h2>${
+    bb().note && !bb().draft ? `<div class="warn">${esc(bb().note)}</div>` : ''
+  }${
     lock
       ? `<p class="warn">FY${FY.value} ended more than 4 months ago. ${bb().unlock ? 'Unlocked for this session.' : '<button class="btn" data-act="bbUnlock">Unlock to edit</button>'}</p>`
       : ''
@@ -326,7 +365,7 @@ export function bbRestoreRead(text) {
   const plans = Object.entries(data.schools).map(([key, v]) => ({
     key,
     data: v,
-    plan: planRestore(STORE[key]?.bars || [], v.bars || []),
+    plan: planRestore(STORE[key]?.bars || [], (v?.bars || []).filter(validEntry)),
   }));
   const newSchools = (data.profiles || []).filter((p) => p.id && !PF.profiles[p.id]);
   b.restore = { plans, newSchools };
@@ -346,8 +385,9 @@ export function bbRestoreApply() {
     st.bars.push(...plan.added);
     for (const c of plan.conflicts) {
       const pick = document.querySelector(`input[name="rs-${key}-${c.id}"]:checked`)?.value || 'keep';
-      if (pick === 'backup') st.bars = st.bars.map((e) => (e.id === c.id ? c.incoming : e));
-      else if (pick === 'both') {
+      const frozen = isFrozen(c.current);
+      if (pick === 'backup' && !frozen) st.bars = st.bars.map((e) => (e.id === c.id ? c.incoming : e));
+      else if (pick === 'both' || (pick === 'backup' && frozen)) {
         const id = newId(Date.now());
         st.bars.push({ ...c.incoming, id, bar: { ...c.incoming.bar, savedId: id } });
       }
@@ -362,7 +402,7 @@ export function bbRestoreApply() {
 }
 
 const logText = (e) => e.log.map((l) => `${esc(l.status)} ${esc(l.date)}`).join(', ');
-const when = (n) => (n ? new Date(n).toISOString().slice(0, 10) : '—');
+const when = (n) => (n ? ymd(new Date(n)) : '—');
 
 export function bbBackup() {
   const el = $('#bbbackup');

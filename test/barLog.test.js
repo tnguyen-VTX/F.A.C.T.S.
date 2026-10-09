@@ -77,3 +77,17 @@ describe('backup', () => {
     expect(p.added.map((e) => e.id)).toEqual(['c']);
   });
 });
+
+describe('backup content is checked', () => {
+  it('refuses schools: null', () => {
+    expect(checkBackup({ app: 'FACTS', version: 1, schools: null })).toContain('not a FACTS backup');
+  });
+  it('accepts only well-formed saved BARs', async () => {
+    const { validEntry } = await import('../src/lib/barLog.js');
+    const good = { id: 'a', bar: { lines: [] }, log: [], status: 'Built' };
+    expect(validEntry(good)).toBe(true);
+    expect(validEntry({ ...good, log: undefined })).toBe(false);
+    expect(validEntry({ id: 'a' })).toBe(false);
+    expect(validEntry(null)).toBe(false);
+  });
+});
