@@ -38,7 +38,7 @@ Environment note: `cdn.sheetjs.com` is blocked in the cloud session, so `npm ins
 ## Milestone 5: later
 
 - [x] Brand colors as tokens (Vertex Blue on primary buttons, focus, headings). [ ] Logos and favicon: need the files in the repo.
-- [ ] Position/FTE slot. Second school (Cesar Chavez) profile test.
+- [-] Position/FTE slot dropped (no such export exists; FTE stays manual). [ ] Second school (Cesar Chavez) profile test.
 - [ ] AI narrative button. Real OBMS test uploads.
 
 ## Hosting prep (ledgersandlearning.com)
@@ -46,6 +46,6 @@ Environment note: `cdn.sheetjs.com` is blocked in the cloud session, so `npm ins
 - [x] Fonts self-hosted (DM Sans body, Red Hat Display headlines), Google Fonts removed.
 - [x] Build-time Content-Security-Policy; relative base path; verified in a browser from a sub-folder with real files, no outside requests, no violations.
 - [ ] Confirm with the site owner: sign-in covers the app, own subdomain, no site-wide scripts, deploy path (see `context/hosting.md`).
-- [ ] An About, privacy and limits page inside the app.
-- [ ] Version the stored data formats and migrate on update (profiles, BARs, saved reports) before the first release.
+- [x] An About, privacy and limits page inside the app (`src/views/about.js`); the contact for reporting problems is still to be supplied.
+- [x] Stored data is versioned (`src/lib/migrate.js`, key `facts.dataVersion`); newer or unreadable data is never overwritten. Parsed-report records in IndexedDB are not versioned yet.
 

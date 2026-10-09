@@ -55,6 +55,7 @@ import { splitWith } from './lib/profile.js';
 import { viewBudget } from './views/budget.js';
 import { viewImport } from './views/import.js';
 import { viewCap } from './views/capitalOutlay.js';
+import { viewAbout } from './views/about.js';
 import { scDraftErrors, scErrors, scForm, scOpen, viewSchools } from './views/schools.js';
 import { crResults, viewCR } from './views/cashReceipts.js';
 import { jeList, jeResults, viewJE } from './views/journal.js';
@@ -72,9 +73,10 @@ const NAV = [
   ['cr', 'Cash receipts'],
   ['cap', 'Capital outlay'],
   ['schools', 'Schools'],
+  ['about', 'About and privacy'],
 ];
 // Screens that work before any report is loaded.
-const LITE = new Set(['import', 'schools']);
+const LITE = new Set(['import', 'schools', 'about']);
 const keepBB = () => {
   const b = bb();
   S().bb = { funds: [...b.funds], type: b.type, mode: b.mode, cushion: b.cushion };
@@ -134,6 +136,7 @@ const VIEWS = {
   cr: viewCR,
   cap: viewCap,
   schools: viewSchools,
+  about: viewAbout,
 };
 async function copyText(t, btn) {
   try {
