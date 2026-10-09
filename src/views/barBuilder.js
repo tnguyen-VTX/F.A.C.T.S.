@@ -68,11 +68,11 @@ export function viewBarBuilder() {
     .sort((a, b) => a.code.localeCompare(b.code));
   if (!funds.length) {
     main.innerHTML =
-      `<header class="ph"><h1>BAR builder</h1></header>` + missingMsg('Account Summary Report');
+      `<header class="ph"><h1>BAR Builder</h1></header>` + missingMsg('Account Summary Report');
     return;
   }
   const b = bb();
-  main.innerHTML = `<header class="ph"><h1>BAR builder</h1><p class="sub">Find what is over budget, build the BAR, check it, and download the OBMS upload file. Pick the funds to work in; each BAR is for one fund.</p></header>
+  main.innerHTML = `<header class="ph"><h1>BAR Builder</h1><p class="sub">Find what is over budget, build the BAR, check it, and download the OBMS upload file. Pick the funds to work in; each BAR is for one fund.</p></header>
   <section class="panel"><h2>Funds</h2><div class="fundpick">${funds
     .map(
       (f) =>

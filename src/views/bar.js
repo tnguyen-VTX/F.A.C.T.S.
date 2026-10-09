@@ -20,13 +20,13 @@ export function viewBAR() {
   const funds = barFunds();
   if (!funds.length) {
     main.innerHTML =
-      `<header class="ph"><h1>BAR builder</h1></header>` + missingMsg('Account Summary Report');
+      `<header class="ph"><h1>BAR spread (v0.1)</h1></header>` + missingMsg('Account Summary Report');
     return;
   }
   if (!UI.bar.fund || !D.asr.funds.has(UI.bar.fund)) loadBarFund(funds[0].code);
   const b = UI.bar,
     saved = S().bar[b.fund] || {};
-  main.innerHTML = `<header class="ph"><h1>BAR builder</h1><p class="sub">Spread a budget adjustment across a fund's lines in proportion to encumbrance, availability, spending, or budget. Allocations round to whole dollars, as on the BAR Worksheet. Settings and notes save per fund in this browser.</p></header>
+  main.innerHTML = `<header class="ph"><h1>BAR spread (v0.1)</h1><p class="sub">Spread a budget adjustment across a fund's lines in proportion to encumbrance, availability, spending, or budget. Allocations round to whole dollars, as on the BAR Worksheet. Settings and notes save per fund in this browser.</p></header>
   <div class="filters"><label>Fund<select data-in="barFund">${funds.map((f) => `<option value="${f.code}"${f.code === b.fund ? ' selected' : ''}>${esc(fundLabel(f.code))}</option>`).join('')}</select></label>
   <label>BAR type<select data-in="bar" data-k="mode">${['Increase', 'Transfer'].map((m) => `<option${b.mode === m ? ' selected' : ''}>${m}</option>`).join('')}</select></label>
   <label>Amount to spread<input type="number" step="1" data-in="bar" data-k="amount" value="${b.amount || ''}" placeholder="0"></label>

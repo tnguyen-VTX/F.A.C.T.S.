@@ -67,7 +67,7 @@ const NAV = [
   ['budget', 'Budget by fund'],
   ['tx', 'Transactions'],
   ['je', 'Journal entries'],
-  ['bars', 'BAR builder'],
+  ['bars', 'BAR Builder'],
   ['bar', 'BAR spread (v0.1)'],
   ['rfr', 'Reimbursements'],
   ['cr', 'Cash receipts'],

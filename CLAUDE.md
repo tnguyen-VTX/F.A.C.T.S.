@@ -25,7 +25,7 @@ The app reads only these five raw sheets. Every pivot, slicer, and formula in th
 
 | Sheet | Source system export | Parser | Used by |
 |---|---|---|---|
-| Account Summary Report | Account Summary, subtotaled by Fund, Function | `parseASR` | Budget by fund, BAR builder |
+| Account Summary Report | Account Summary, subtotaled by Fund, Function | `parseASR` | Budget by fund, BAR Builder |
 | Fund Audit Report | Fund audit / transaction detail (table `Fund`) | `parseFA` | Transactions, Journal entries |
 | RfR Summary Report | RfR summary (table `Table3`) | `parseRfR` | Reimbursements |
 | Cash Receipts Journal Report | Cash receipts journal (table `Table1`) | `parseCR` | Cash receipts, Reimbursements |
@@ -64,7 +64,7 @@ Accepted reports are kept as parsed rows (not the original file) in IndexedDB un
 of each kind is restored on reload, and loads older than 30 days are pruned (`lib/reportStore.js`). Browsing older loads is not built yet.
 Real exports go in `fixtures/` (git-ignored: `*.xlsx`, `*.csv`); tests that use them are skipped when absent.
 
-## BAR logic (added after v0.1; screen: BAR builder)
+## BAR logic (added after v0.1; screen: BAR Builder)
 
 `barLogic.js` finds deficits (a function within a fund whose subtotal Available is negative) and builds a balanced transfer:
 over-budget lines first, then donors from other functions of the same fund. There is no object rule on Transfer and
@@ -120,7 +120,7 @@ src/lib/barLog.js     Saved BARs, status log, freeze/lock rules, backup export a
 src/lib/fte.js        FTE change for salary lines (proportional to dollars; assumption to confirm) (pure)
 src/lib/format.js     Formatting, math, and account-code helpers
 src/lib/idb.js        IndexedDB cache for the last workbook
-src/views/*.js        One module per screen (barBuilder.js = BAR builder: fund picker, deficits, OBMS-style view, download); each renders HTML strings into #main (schools.js = profile editor, import.js = Load reports)
+src/views/*.js        One module per screen (barBuilder.js = BAR Builder: fund picker, deficits, OBMS-style view, download); each renders HTML strings into #main (schools.js = profile editor, import.js = Load reports)
 src/styles.css        Design tokens (light/dark), DM Sans and Red Hat Display (src/fonts), layout
 test/                 Vitest: parser checks against real totals + jsdom smoke test of every screen
 fixtures/             Put facts.xlsx here to run the data tests (git-ignored)

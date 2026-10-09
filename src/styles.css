@@ -827,7 +827,7 @@ h3,
   font-family: var(--font-head);
 }
 
-/* BAR builder */
+/* BAR Builder */
 .fundpick {
   display: flex;
   flex-wrap: wrap;

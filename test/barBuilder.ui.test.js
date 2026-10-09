@@ -1,5 +1,5 @@
 // @vitest-environment jsdom
-// The BAR builder screen, driven with a made-up Account Summary.
+// The BAR Builder screen, driven with a made-up Account Summary.
 import { describe, it, expect, beforeAll } from 'vitest';
 import * as XLSX from 'xlsx';
 
@@ -43,7 +43,7 @@ const xlsx = () => {
 };
 
 let st;
-describe('BAR builder screen', () => {
+describe('BAR Builder screen', () => {
   beforeAll(async () => {
     localStorage.clear();
     document.body.innerHTML = '<div id="app"></div>';
@@ -64,7 +64,7 @@ describe('BAR builder screen', () => {
   });
 
   it('lists the over-budget function', () => {
-    expect($('#main h1').textContent).toBe('BAR builder');
+    expect($('#main h1').textContent).toBe('BAR Builder');
     expect($('#bbdef').textContent).toContain('1000');
     expect($('button[data-act="bbBuild"]')).not.toBeNull();
   });

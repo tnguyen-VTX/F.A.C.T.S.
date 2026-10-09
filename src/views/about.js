@@ -8,7 +8,7 @@ export function viewAbout() {
   <ul><li>Reports are read <b>in your browser</b>. Nothing is uploaded, and the app makes no requests to other sites.</li>
   <li>The app keeps school profiles, saved BARs, drafts and the parsed rows of loaded reports in <b>this browser only</b>. Another computer or browser starts empty.</li>
   <li>Reports contain employee names and pay. Parsed rows older than 30 days are removed automatically. "Clear loaded reports" removes them at once.</li>
-  <li>Use <b>Download a backup</b> on the BAR builder regularly. It holds profiles, saved BARs, drafts and settings, never reports. Clearing the browser's site data erases everything else.</li></ul></section>
+  <li>Use <b>Download a backup</b> on the BAR Builder regularly. It holds profiles, saved BARs, drafts and settings, never reports. Clearing the browser's site data erases everything else.</li></ul></section>
   <section class="panel"><h2>What to check yourself</h2>
   <ul><li>Compare totals with the AptaFund reports and every BAR with OBMS before you submit. FACTS warns about problems it can see; it cannot see everything.</li>
   <li>The upload file follows the OBMS Import and Export File Specifications v2.1.4. Until a school's first upload has been accepted, its location rule and the FTE formula are unconfirmed.</li>
