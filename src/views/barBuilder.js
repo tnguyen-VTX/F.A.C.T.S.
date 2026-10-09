@@ -1,4 +1,5 @@
 import { makeBarFile } from '../lib/barCsv.js';
+import { STATUSES, addStatus, isFrozen, isLocked, saveBar } from '../lib/barLog.js';
 import {
   BAR_TYPES,
   JUSTIFICATION_MAX,
@@ -13,7 +14,7 @@ import { buildTransfer, findDeficits } from '../lib/barLogic.js';
 import { isSalaryObject } from '../lib/fte.js';
 import { $, esc, fmtM, missingMsg, num } from '../lib/format.js';
 import { suggestJustification } from '../lib/justify.js';
-import { D, FY, S, UI, fundLabel, profile, saveStore } from '../state.js';
+import { D, FY, REP, S, UI, fundLabel, profile, saveStore } from '../state.js';
 
 const TYPES = ['T', 'M', 'I', 'IB', 'D'];
 const LEVEL = { stop: 'Stop', warn: 'Check', info: 'Note' };
@@ -72,9 +73,10 @@ export function viewBarBuilder() {
   <label>BAR type<select data-in="bbType">${TYPES.map((t) => `<option value="${t}"${b.type === t ? ' selected' : ''}>${esc(BAR_TYPES[t])} (${t})</option>`).join('')}</select></label>
   <label>Fund<select data-in="bbStartFund"><option value="">Choose…</option>${funds.map((f) => `<option value="${esc(f.code)}"${b.startFund === f.code ? ' selected' : ''}>${esc(fundLabel(f.code))}</option>`).join('')}</select></label>
   <button class="btn" data-act="bbStart">Start an empty ${esc(BAR_TYPES[b.type])} BAR</button></div></section>
-  <div id="bbdef"></div><div id="bbdraft"></div>`;
+  <div id="bbdef"></div><div id="bbdraft"></div><div id="bbsaved"></div>`;
   bbDeficits();
   bbDraft();
+  bbSaved();
 }
 
 export function bbDeficits() {
@@ -145,7 +147,7 @@ export function bbDraft() {
     return;
   }
   const flow = (p.funds || []).find((f) => f.code === bar.fund)?.flowthrough;
-  el.innerHTML = `<section class="panel obms"><div class="toolbar"><h2 style="margin:0">${esc(BAR_TYPES[bar.type])} BAR · ${esc(p.name)} · fund ${esc(bar.fund)} · FY${FY.value}</h2><button class="btn" data-act="bbDiscard">Discard this BAR</button></div>
+  el.innerHTML = `<section class="panel obms"><div class="toolbar"><h2 style="margin:0">${esc(BAR_TYPES[bar.type])} BAR · ${esc(p.name)} · fund ${esc(bar.fund)} · FY${FY.value}</h2><span><button class="btn primary" data-act="bbSave">Save BAR</button> <button class="btn" data-act="bbDiscard">Discard this BAR</button></span></div>
   ${b.note ? `<div class="warn">${esc(b.note)}</div>` : ''}
   <div class="grid2"><div>
   <dl class="kv"><dt>Document ID</dt><dd><input type="text" data-in="bbField" data-k="docId" value="${esc(bar.docId || '')}" placeholder="Assigned by OBMS after upload"></dd>
@@ -192,4 +194,97 @@ export function bbSummary() {
   }
   <div class="toolbar"><button class="btn primary" data-act="bbDownload"${ok ? '' : ' disabled'}>Download the OBMS upload file</button><button class="btn" data-act="bbCopy"${ok ? '' : ' disabled'}>Copy the file text</button>
   <span class="muted">${ok ? esc(file.name) : 'Fix the items marked Stop to make the file.'}</span></div>`;
+}
+
+// ---- Saved BARs and their status log ----
+const today = () => new Date().toISOString().slice(0, 10);
+const locked = () => isLocked(FY.value, today()) && !bb().unlock;
+const basisNow = () => ({
+  asrFile: REP.asr?.name || D.fileName || '',
+  asOf: D.asOf || '',
+  begin: D.begin || '',
+});
+
+export function bbSave() {
+  const b = bb();
+  if (!b.draft) return;
+  if (locked()) {
+    b.note = `FY${FY.value} is locked (more than 4 months after the year ended). Unlock it to save.`;
+    return bbDraft();
+  }
+  const r = saveBar(S().bars || [], b.draft, basisNow());
+  if (r.error) {
+    b.note = r.error;
+    return bbDraft();
+  }
+  S().bars = r.list;
+  b.draft.savedId = r.entry.id;
+  b.note = '';
+  keep();
+  bbDraft();
+  bbSaved();
+}
+export function bbOpen(id) {
+  const b = bb(),
+    e = (S().bars || []).find((x) => x.id === id);
+  if (!e) return;
+  if (b.draft && !b.draft.savedId && b.draft.lines.length && !confirm('Replace the BAR you are working on?'))
+    return;
+  b.draft = JSON.parse(JSON.stringify(e.bar));
+  b.note = isFrozen(e) ? `This BAR is ${e.status}: its lines are frozen. Make a new BAR to change them.` : '';
+  keep();
+  bbDraft();
+}
+export function bbRemove(id) {
+  if (!confirm('Delete this saved BAR and its status log?')) return;
+  S().bars = (S().bars || []).filter((x) => x.id !== id);
+  const b = bb();
+  if (b.draft?.savedId === id) delete b.draft.savedId;
+  keep();
+  bbSaved();
+}
+export function bbAddStatus(id) {
+  const q = (k) => $(`[data-st="${k}"][data-id="${id}"]`)?.value || '';
+  const bars = S().bars || [];
+  const i = bars.findIndex((x) => x.id === id);
+  if (i < 0 || !q('status')) return;
+  bars[i] = addStatus(bars[i], q('status'), q('date') || today(), q('note'));
+  S().bars = bars;
+  keep();
+  bbSaved();
+}
+export function bbUnlock() {
+  bb().unlock = true;
+  bbSaved();
+}
+
+export function bbSaved() {
+  const el = $('#bbsaved');
+  if (!el) return;
+  const bars = [...(S().bars || [])].sort(
+    (a, b) => a.bar.fund.localeCompare(b.bar.fund) || a.createdAt - b.createdAt,
+  );
+  const lock = isLocked(FY.value, today());
+  el.innerHTML = `<section class="panel"><h2>Saved BARs · ${esc(profile().name)} · FY${FY.value}</h2>${
+    lock
+      ? `<p class="warn">FY${FY.value} ended more than 4 months ago. ${bb().unlock ? 'Unlocked for this session.' : '<button class="btn" data-act="bbUnlock">Unlock to edit</button>'}</p>`
+      : ''
+  }${
+    bars.length
+      ? bars
+          .map((e) => {
+            const t = barTotals(e.bar);
+            return `<div class="saved"><div class="toolbar"><b>${esc(BAR_TYPES[e.bar.type])} · fund ${esc(e.bar.fund)}</b>
+        <span>${e.bar.docId ? `Doc ${esc(e.bar.docId)} · ` : ''}${e.bar.lines.length} lines · ${fmtM(t.net)} · <b>${esc(e.status)}</b>${isFrozen(e) ? ' (frozen)' : ''}</span>
+        <span><button class="btn" data-act="bbOpen" data-id="${esc(e.id)}">Open</button> <button class="btn" data-act="bbRemove" data-id="${esc(e.id)}">Delete</button></span></div>
+        ${e.basis?.asrFile ? `<p class="muted">Built from ${esc(e.basis.asrFile)}${e.basis.asOf ? `, created ${esc(e.basis.asOf)}` : ''}</p>` : ''}
+        <table class="t"><thead><tr><th>Status</th><th>Date</th><th>Note</th></tr></thead><tbody>${e.log.map((l) => `<tr><td>${esc(l.status)}</td><td>${esc(l.date)}</td><td>${esc(l.note)}</td></tr>`).join('')}</tbody></table>
+        <div class="filters"><label>New status<select data-st="status" data-id="${esc(e.id)}">${STATUSES.map((s) => `<option>${s}</option>`).join('')}</select></label>
+        <label>Date<input type="date" data-st="date" data-id="${esc(e.id)}" value="${today()}"></label>
+        <label>Note<input type="text" data-st="note" data-id="${esc(e.id)}"></label>
+        <button class="btn" data-act="bbAddStatus" data-id="${esc(e.id)}">Add to log</button></div></div>`;
+          })
+          .join('')
+      : '<p class="muted">Nothing saved yet. Build a BAR and choose Save BAR.</p>'
+  }</section>`;
 }

@@ -37,6 +37,11 @@ import {
   bbFile,
   bbStartEmpty,
   bbSummary,
+  bbSave,
+  bbOpen,
+  bbRemove,
+  bbAddStatus,
+  bbUnlock,
   viewBarBuilder,
 } from './views/barBuilder.js';
 import { barLine } from './lib/bar.js';
@@ -261,6 +266,11 @@ const ACT = {
     keepBB();
     bbDraft();
   },
+  bbSave: () => bbSave(),
+  bbOpen: (t) => bbOpen(t.dataset.id),
+  bbRemove: (t) => bbRemove(t.dataset.id),
+  bbAddStatus: (t) => bbAddStatus(t.dataset.id),
+  bbUnlock: () => bbUnlock(),
   bbDiscard: () => {
     if (!confirm('Discard this BAR? Its lines and wording will be lost.')) return;
     bb().draft = null;

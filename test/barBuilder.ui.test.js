@@ -90,6 +90,30 @@ describe('BAR builder screen', () => {
     click($('button[data-act="bbAddLine"]'));
     expect(st.UI.bb.note).toContain('does not match');
   });
+  it('saves the BAR and lists it with a log', () => {
+    click($('button[data-act="bbSave"]'));
+    expect(st.S().bars).toHaveLength(1);
+    expect($('#bbsaved').textContent).toContain('Built');
+    expect(st.UI.bb.draft.savedId).toBe(st.S().bars[0].id);
+    click($('button[data-act="bbSave"]'));
+    expect(st.S().bars).toHaveLength(1);
+  });
+  it('adds a status and then freezes the lines', () => {
+    const id = st.S().bars[0].id;
+    const sel = $(`select[data-st="status"][data-id="${id}"]`);
+    sel.value = 'Uploaded';
+    $(`input[data-st="note"][data-id="${id}"]`).value = 'OBMS upload';
+    click($('button[data-act="bbAddStatus"]'));
+    expect(st.S().bars[0].status).toBe('Uploaded');
+    expect($('#bbsaved').textContent).toContain('OBMS upload');
+    click($('button[data-act="bbSave"]'));
+    expect(st.UI.bb.note).toContain('frozen');
+  });
+  it('reopens a saved BAR', () => {
+    st.UI.bb.draft = null;
+    click($('button[data-act="bbOpen"]'));
+    expect(st.UI.bb.draft.lines.length).toBeGreaterThan(0);
+  });
   it('switching schools clears the working BAR', () => {
     st.switchSchool(st.PF.active);
     expect(st.UI.bb).toBeNull();
