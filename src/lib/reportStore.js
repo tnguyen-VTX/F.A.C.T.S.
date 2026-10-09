@@ -23,6 +23,14 @@ export function latestKeys(keys, school, fy) {
   }
   return out;
 }
+// Every kept load of one school and year, newest first, for the "Earlier loads" list.
+export function earlierLoads(keys, school, fy) {
+  return keys
+    .map((k) => ({ key: k, ...parseReportKey(k) }))
+    .filter((x) => x.kind && x.school === school && x.fy === fy)
+    .sort((a, b) => b.at - a.at)
+    .map(({ key, kind, at }) => ({ key, kind, at }));
+}
 // Loads older than RETAIN_DAYS, except the newest of each kind per school and year.
 export function expiredKeys(keys, now = Date.now(), days = RETAIN_DAYS) {
   const parsed = keys.map((k) => ({ k, p: parseReportKey(k) })).filter((x) => x.p);

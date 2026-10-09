@@ -90,3 +90,17 @@ describe('saved report records', () => {
     expect(recordUsable(null)).toBe(false);
   });
 });
+
+describe('earlier loads', () => {
+  it('lists one school and year, newest first', async () => {
+    const { earlierLoads } = await import('../src/lib/reportStore.js');
+    const keys = [
+      reportKey('a', 2027, 'asr', 1),
+      reportKey('a', 2027, 'fa', 3),
+      reportKey('a', 2027, 'asr', 2),
+      reportKey('b', 2027, 'asr', 9),
+      reportKey('a', 2026, 'asr', 8),
+    ];
+    expect(earlierLoads(keys, 'a', 2027).map((x) => x.at)).toEqual([3, 2, 1]);
+  });
+});

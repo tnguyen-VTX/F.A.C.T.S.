@@ -4,6 +4,7 @@ import { IDB } from './lib/idb.js';
 import { readAccountSummary, readFundAudit } from './lib/importReport.js';
 import { hasStop } from './lib/reportCheck.js';
 import {
+  earlierLoads,
   expiredKeys,
   isReportKey,
   latestKeys,
@@ -98,6 +99,7 @@ export function render() {
     .querySelectorAll('.nav button')
     .forEach((b) => b.setAttribute('aria-current', b.dataset.v === UI.view ? 'page' : 'false'));
   VIEWS[UI.view]();
+  if (UI.view === 'import') fillEarlier();
   if (STORAGE.newer || STORAGE.unreadable)
     $('#main')?.insertAdjacentHTML(
       'afterbegin',
@@ -336,6 +338,14 @@ const ACT = {
     UI.imp[kind] = null;
     render();
     persistReport(kind);
+  },
+  loadEarlier: async (t) => {
+    try {
+      const rec = await IDB.get(t.dataset.key);
+      if (!recordUsable(rec)) return;
+      acceptReport(resultFromRecord(rec), rec.at);
+    } catch (e) {}
+    render();
   },
   impDiscard: (t) => {
     UI.imp[t.dataset.kind] = null;
@@ -668,6 +678,28 @@ async function persistReport(kind) {
   } catch (e) {}
 }
 // Bring back the newest saved reports for the active school and fiscal year. True if any came back.
+// "Earlier loads": every kept load for this school and year (30 days), each reloadable.
+async function fillEarlier() {
+  const el = $('#earlier');
+  if (!el) return;
+  let list = [];
+  try {
+    list = earlierLoads((await IDB.keys()).filter(isReportKey), PF.active, FY.value);
+  } catch (e) {}
+  const now = (k) => REP[k]?.at;
+  list = list.filter((x) => x.at !== now(x.kind));
+  if (!$('#earlier')) return;
+  el.hidden = !list.length;
+  if (!list.length) return;
+  const label = { asr: 'Account Summary', fa: 'Fund Audit' };
+  el.innerHTML = `<h2>Earlier loads</h2><p class="muted">Kept in this browser for 30 days. Choosing one makes it the report FACTS uses now.</p>
+  <ul class="plain">${list
+    .map(
+      (x) =>
+        `<li>${label[x.kind]} · loaded ${esc(new Date(x.at).toLocaleString())} <button class="btn" data-act="loadEarlier" data-key="${esc(x.key)}">Use this load</button></li>`,
+    )
+    .join('')}</ul>`;
+}
 async function restoreReports() {
   try {
     const latest = latestKeys((await IDB.keys()).filter(isReportKey), PF.active, FY.value);

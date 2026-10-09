@@ -61,7 +61,7 @@ available under "Or load the whole FACTS workbook". The Fund Audit CSV has no Sr
 Number prefix and Detail (`deriveSource` in `lib/parse.js`: Reg → PR payroll register, Inv → IN invoice, Rec → RF fee within
 a cash receipt, `J/E:` → JE, otherwise EN encumbrance). Report cycle `FY26-27` and `FY2027` both mean fiscal year 2027.
 Accepted reports are kept as parsed rows (not the original file) in IndexedDB under `rpt:<school>:<fy>:<kind>:<time>`; the newest
-of each kind is restored on reload, and loads older than 30 days are pruned (`lib/reportStore.js`). Browsing older loads is not built yet.
+of each kind is restored on reload, and loads older than 30 days are pruned (`lib/reportStore.js`). The Load reports screen lists earlier loads (30 days) for the school and year, and "Use this load" makes one current.
 Real exports go in `fixtures/` (git-ignored: `*.xlsx`, `*.csv`); tests that use them are skipped when absent.
 
 ## BAR logic (added after v0.1; screen: BAR Builder)
