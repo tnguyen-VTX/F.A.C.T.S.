@@ -22,7 +22,7 @@ Cautions: red already means over budget in FACTS and green means positive, so ke
 
 - Headlines: Europa Bold (Adobe license). Use **Red Hat Display** instead (Bold for titles).
 - Body: **DM Sans**. Fallback: Arial.
-- Self-host open-license files (OFL) in `assets/fonts`. The supplied zip also holds Arsenal, which the guide does not mention; ignore it.
+- Self-hosted in `src/fonts` (variable fonts, OFL licenses beside them); the app loads nothing from Google. The supplied zip also holds Arsenal, which the guide does not mention; it is not used. Done 10/9/2026; colors and logos are still to do.
 
 ## Logos
 

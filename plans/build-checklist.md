@@ -40,3 +40,12 @@ Environment note: `cdn.sheetjs.com` is blocked in the cloud session, so `npm ins
 - [ ] Branding tokens, fonts and logos (needs logo files in the repo).
 - [ ] Position/FTE slot. Second school (Cesar Chavez) profile test.
 - [ ] AI narrative button. Real OBMS test uploads.
+
+## Hosting prep (ledgersandlearning.com)
+
+- [x] Fonts self-hosted (DM Sans body, Red Hat Display headlines), Google Fonts removed.
+- [x] Build-time Content-Security-Policy; relative base path; verified in a browser from a sub-folder with real files, no outside requests, no violations.
+- [ ] Confirm with the site owner: sign-in covers the app, own subdomain, no site-wide scripts, deploy path (see `context/hosting.md`).
+- [ ] An About, privacy and limits page inside the app.
+- [ ] Version the stored data formats and migrate on update (profiles, BARs, saved reports) before the first release.
+

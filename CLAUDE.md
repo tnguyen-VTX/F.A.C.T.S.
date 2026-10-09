@@ -71,6 +71,12 @@ over-budget lines first, then donors from other functions of the same fund. Ther
 Maintenance BARs. A function never gives more than its Available. `bar.js` checks a BAR before download: balance by type,
 code layout, one fund, never over budget, flowthrough fields, justification and contact limits. Amounts are whole dollars.
 
+## Hosting (ledgersandlearning.com)
+
+The built app is static files for ledgersandlearning.com (sign-in with an internal work email is handled by the site, not by
+FACTS). It loads nothing from other hosts: fonts are in `src/fonts`, and `vite.config.js` adds a Content-Security-Policy to the
+built page and builds with relative paths. See `context/hosting.md` for the open items (sign-in covering the app, own subdomain).
+
 ## Domain notes
 
 - Account code format: `FFFFF-NNNN-OOOOO-PPPP-LLLLLL-JJJJ` = Fund-Function-Object-Program-Location-JobClass,
@@ -94,6 +100,7 @@ code layout, one fund, never over budget, flowthrough fields, justification and 
 
 ```
 index.html            Vite entry
+vite.config.js        Relative base path and the build-time Content-Security-Policy
 src/main.js           App shell, navigation, event delegation (data-act = clicks, data-in = inputs), file loading
 src/state.js          D (parsed data), UI (view state), PF (school profiles), S()/saveStore (localStorage), loadBuffer()
 src/lib/parse.js      Sheet parsers (pure; also run in Node tests). Account codes are read through a school profile
@@ -110,7 +117,7 @@ src/lib/fte.js        FTE change for salary lines (proportional to dollars; assu
 src/lib/format.js     Formatting, math, and account-code helpers
 src/lib/idb.js        IndexedDB cache for the last workbook
 src/views/*.js        One module per screen; each renders HTML strings into #main (schools.js = profile editor, import.js = Load reports)
-src/styles.css        Design tokens (light/dark), Public Sans, layout
+src/styles.css        Design tokens (light/dark), DM Sans and Red Hat Display (src/fonts), layout
 test/                 Vitest: parser checks against real totals + jsdom smoke test of every screen
 fixtures/             Put facts.xlsx here to run the data tests (git-ignored)
 ```

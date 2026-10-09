@@ -1,3 +1,22 @@
+/* Fonts are served from this site (OFL licenses in src/fonts); nothing loads from another host. */
+@font-face {
+  font-family: 'DM Sans';
+  src: url('./fonts/DMSans-Variable.ttf') format('truetype');
+  font-weight: 100 1000;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Red Hat Display';
+  src: url('./fonts/RedHatDisplay-Variable.ttf') format('truetype');
+  font-weight: 300 900;
+  font-style: normal;
+  font-display: swap;
+}
+:root {
+  --font-body: 'DM Sans', Arial, sans-serif;
+  --font-head: 'Red Hat Display', Arial, sans-serif;
+}
 :root {
   --bg: #edf0ef;
   --surface: #ffffff;
@@ -65,13 +84,7 @@ body {
   min-height: 100%;
   background: var(--bg);
   color: var(--ink);
-  font:
-    15px/1.5 'Public Sans',
-    system-ui,
-    -apple-system,
-    'Segoe UI',
-    Roboto,
-    sans-serif;
+  font: 15px/1.5 var(--font-body);
   -webkit-font-smoothing: antialiased;
 }
 button,
@@ -771,4 +784,13 @@ tr.over > td {
 }
 .loaded {
   margin: 8px 0;
+}
+
+/* Headlines use Red Hat Display (the brand's alternate for Europa Bold); body text uses DM Sans. */
+h1,
+h2,
+h3,
+.brand .word,
+.imp-card .word {
+  font-family: var(--font-head);
 }
