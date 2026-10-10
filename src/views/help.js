@@ -25,8 +25,8 @@ export function viewHelp() {
   <li>Optional: under "Longer narrative", pick a template and press "Fill from this BAR", then edit the wording. The narrative is for your records and the PED explanation; it is not part of the upload file.</li></ol></section>
   <section class="panel"><h2>5. Upload in OBMS</h2><ol>
   <li>In OBMS, open BAR Uploads and upload the file.</li>
-  <li>Back in FACTS, choose Save BAR, type the Document ID OBMS gives you, and add a status (Uploaded, Submitted, Approved).</li>
-  <li>From Uploaded on, the BAR's lines are frozen so they match what you sent. To change it, make a new BAR.</li></ol></section>
+  <li>Back in FACTS, choose Save BAR, type the Document ID OBMS gives you, and add statuses as it moves through OBMS (Uploaded - Staging Validated, Create Direct BAR, BM Approved ... BS Approval - PED Approval).</li>
+  <li>From Uploaded - Staging Validated on, the BAR's lines are frozen so they match what you sent. To change it, make a new BAR.</li></ol></section>
   <section class="panel"><h2>6. Back up</h2><ol>
   <li>Your BARs live only in this browser. Choose "Download a backup" on the BAR Builder regularly and keep the file safe.</li>
   <li>To restore, choose "Restore from a backup". If a BAR differs from the one here, you choose which to keep. Reports are not in the backup: load them again.</li></ol></section>

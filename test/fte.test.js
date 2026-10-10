@@ -46,3 +46,21 @@ describe('salary lines', () => {
     );
   });
 });
+
+describe('suggestFte from a line budget and the position FTE', () => {
+  const lines = [
+    { code: 'a-51100', obj: '51100', amount: -2073 },
+    { code: 'b-51100', obj: '51100', amount: 500, fteManual: true, fte: 0.01 },
+    { code: 'c-51300', obj: '51300', amount: 100 },
+    { code: 'd-51100', obj: '51100', amount: 10 },
+  ];
+  const lookup = (code) =>
+    ({ 'a-51100': { salary: 51825, fte: 1 }, 'b-51100': { salary: 1000, fte: 1 } })[code] || null;
+  it('fills salary lines by share of budget, keeps manual and unknown lines', () => {
+    const out = suggestFte(lines, lookup);
+    expect(out[0].fte).toBe(-0.04);
+    expect(out[1].fte).toBe(0.01);
+    expect(out[2].fte).toBeUndefined();
+    expect(out[3].fte).toBeUndefined();
+  });
+});

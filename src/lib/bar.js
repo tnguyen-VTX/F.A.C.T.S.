@@ -248,7 +248,7 @@ export function validateBar(bar, { profile, asr } = {}) {
         .map((l) => l.code)
         .join(
           ', ',
-        )}${noFte.length > 4 ? `, and ${noFte.length - 4} more` : ''}). OBMS has rejected salary lines with no FTE ("Missing projected FTE"). Enter the FTE change in each line's FTE box.`,
+        )}${noFte.length > 4 ? `, and ${noFte.length - 4} more` : ''}). OBMS has rejected salary lines with no FTE ("Missing projected FTE"). Type the position's current FTE in the line's Line FTE box (the FTE adj is then worked out from the amount's share of the line's budget), or enter the FTE adj yourself.`,
     );
 
   // Header fields.

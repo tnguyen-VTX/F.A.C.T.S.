@@ -25,7 +25,7 @@ import {
   validateBar,
 } from '../lib/bar.js';
 import { buildTransfer, findDeficits } from '../lib/barLogic.js';
-import { isSalaryObject } from '../lib/fte.js';
+import { isSalaryObject, suggestFte } from '../lib/fte.js';
 import { $, esc, fmtM, missingMsg, num } from '../lib/format.js';
 import { suggestJustification } from '../lib/justify.js';
 import { D, FY, PF, REP, S, STORE, UI, fundLabel, profile, saveStore, storage } from '../state.js';
@@ -49,6 +49,19 @@ export function bb() {
     };
   }
   return UI.bb;
+}
+// Budget of an account line in the loaded Account Summary (null when it is not there).
+const lineBudget = (code) => {
+  const f = D.asr?.funds.get(String(code).split('-')[0]);
+  return f?.lines.find((x) => x.code === code)?.budget ?? null;
+};
+// FTE adj of salary lines = amount moved / the line's budget x the line's current FTE (typed on the line).
+export function refreshFte(bar) {
+  bar.lines = suggestFte(
+    bar.lines,
+    (code, l) => ({ salary: lineBudget(code), fte: l.lineFte }),
+    profile().fteObjects,
+  );
 }
 export const keep = () => {
   const b = bb();
@@ -157,6 +170,7 @@ function lineRow(l, i, asrLine) {
   const salary = isSalaryObject(l.obj, profile().fteObjects) && !isRevenueObject(l.obj);
   return `<tr class="${l.amount < 0 ? 'give' : ''}"><td><span class="code">${esc(l.code)}</span><br><span class="muted">${esc(descOf(l.code))}</span></td>
   <td>${isRevenueObject(l.obj) ? 'REV' : 'EXP'}</td><td class="num">${esc(l.func)}</td><td class="num">${esc(l.obj)}</td><td class="r"><input type="number" step="1" class="amt" data-in="bbAmt" data-i="${i}" value="${l.amount}" aria-label="Amount for ${esc(l.code)}"></td>
+  <td class="r">${salary ? `<input type="number" step="0.01" min="0" class="lfte" data-in="bbLineFte" data-i="${i}" value="${l.lineFte || ''}" placeholder="FTE" title="This position's current FTE; the FTE adj is filled from the amount's share of the line's budget" aria-label="Current FTE for ${esc(l.code)}">` : '<span class="muted">N/A</span>'}</td>
   <td class="r">${salary ? `<input type="number" step="0.0001" class="fte" data-in="bbFte" data-i="${i}" value="${l.fte || 0}" aria-label="FTE for ${esc(l.code)}">` : '<span class="muted">N/A</span>'}</td>
   <td class="r"><button class="linkbtn" data-act="bbDel" data-i="${i}" aria-label="Remove ${esc(l.code)}">Remove</button></td></tr>`;
 }
@@ -190,9 +204,9 @@ export function bbDraft() {
   <label class="fld"><span>Justification <span id="bbcount" class="muted"></span></span><textarea rows="3" data-in="bbField" data-k="justification">${esc(bar.justification)}</textarea></label>
   <div class="toolbar"><button class="btn" data-act="bbSuggest">Suggest wording</button></div>
   ${narrativePanel(bar)}
-  <div class="scroll"><table class="t"><thead><tr><th>Account</th><th>Type</th><th>Func</th><th>Object</th><th class="r">Adj amount</th><th class="r">FTE adj</th><th></th></tr></thead><tbody>${
+  <div class="scroll"><table class="t"><thead><tr><th>Account</th><th>Type</th><th>Func</th><th>Object</th><th class="r">Adj amount</th><th class="r">Line FTE</th><th class="r">FTE adj</th><th></th></tr></thead><tbody>${
     bar.lines.map((l, i) => lineRow(l, i)).join('') ||
-    '<tr><td colspan="7" class="empty">No lines yet. Add one below.</td></tr>'
+    '<tr><td colspan="8" class="empty">No lines yet. Add one below.</td></tr>'
   }</tbody><tfoot id="bbfoot"></tfoot></table></div>
   <div class="filters"><label>Add a line: account code<input type="text" size="34" data-in="bbAddCode" value="${esc(b.add.code)}" placeholder="11000-1000-51100-0000-001707-1411"></label>
   <label>Amount<input type="number" step="1" data-in="bbAddAmt" value="${esc(b.add.amount)}"></label><button class="btn" data-act="bbAddLine">Add line</button></div>

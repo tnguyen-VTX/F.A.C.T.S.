@@ -14,7 +14,7 @@ export function viewAbout() {
   <h2>What to check yourself</h2>
   <ul><li>Compare totals with the AptaFund reports and every BAR with OBMS before you submit. FACTS warns about problems it can see; it cannot see everything.</li>
   <li>The upload file follows the OBMS Import and Export File Specifications v2.1.4. Until a school's first upload has been accepted, its location rule and the FTE formula are unconfirmed.</li>
-  <li>A BAR is frozen once its status is Uploaded, Submitted or Approved. Prior fiscal years lock after 10/31.</li></ul></section>
+  <li>A BAR is frozen once it reaches any OBMS step (Uploaded - Staging Validated or later). Prior fiscal years lock after 10/31.</li></ul></section>
   <section class="panel"><h2>Report a problem</h2>
   <p>Email <a href="mailto:tim.nguyen@vertexeducation.com">tim.nguyen@vertexeducation.com</a> with what you did and what you saw. Do not attach reports; they contain employee data.</p></section>
   <section class="panel"><h2>Limits</h2>

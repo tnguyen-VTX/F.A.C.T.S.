@@ -77,6 +77,18 @@ describe('BAR Builder screen', () => {
     expect(st.S().bbDraft.lines.length).toBe(d.lines.length);
     expect($('#bbdraft').textContent).toContain('11000');
   });
+  it('works out the FTE adj of a salary line from the Line FTE typed on it', () => {
+    const d = st.UI.bb.draft,
+      i = d.lines.findIndex((l) => l.amount < 0);
+    input($(`input[data-in="bbLineFte"][data-i="${i}"]`), '2');
+    expect(d.lines[i].lineFte).toBe(2);
+    // -300 of a 5000 budget x 2 FTE
+    expect(d.lines[i].fte).toBe(-0.12);
+    expect($(`input[data-in="bbFte"][data-i="${i}"]`).value).toBe('-0.12');
+    input($(`input[data-in="bbFte"][data-i="${i}"]`), '-0.1');
+    input($(`input[data-in="bbLineFte"][data-i="${i}"]`), '3');
+    expect(d.lines[i].fte).toBe(-0.18);
+  });
   it('blocks the download while the justification would break the file, then allows it', () => {
     const dl = () => $('button[data-act="bbDownload"]');
     const ta = $('textarea[data-k="justification"]');
@@ -125,10 +137,10 @@ describe('BAR Builder screen', () => {
   it('adds a status and then freezes the lines', () => {
     const id = st.S().bars[0].id;
     const sel = $(`select[data-st="status"][data-id="${id}"]`);
-    sel.value = 'Uploaded';
+    sel.value = 'Uploaded - Staging Validated';
     $(`input[data-st="note"][data-id="${id}"]`).value = 'OBMS upload';
     click($('button[data-act="bbAddStatus"]'));
-    expect(st.S().bars[0].status).toBe('Uploaded');
+    expect(st.S().bars[0].status).toBe('Uploaded - Staging Validated');
     expect($('#bbsaved').textContent).toContain('OBMS upload');
     click($('button[data-act="bbSave"]'));
     expect(st.UI.bb.note).toContain('frozen');

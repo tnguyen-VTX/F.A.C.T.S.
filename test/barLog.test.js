@@ -7,6 +7,7 @@ import {
   isLocked,
   planRestore,
   saveBar,
+  STATUSES,
 } from '../src/lib/barLog.js';
 
 const bar = (j = 'x') => ({ type: 'T', fund: '11000', justification: j, lines: [] });
@@ -89,5 +90,14 @@ describe('backup content is checked', () => {
     expect(validEntry({ ...good, log: undefined })).toBe(false);
     expect(validEntry({ id: 'a' })).toBe(false);
     expect(validEntry(null)).toBe(false);
+  });
+});
+
+describe('OBMS status names', () => {
+  it('freezes after every OBMS step, not after Built, Rejected or Cancelled, and keeps old names frozen', () => {
+    const base = { status: 'Built' };
+    for (const s of STATUSES)
+      expect(isFrozen({ ...base, status: s })).toBe(!['Built', 'Rejected', 'Cancelled'].includes(s));
+    for (const s of ['Uploaded', 'Submitted', 'Approved']) expect(isFrozen({ status: s })).toBe(true);
   });
 });

@@ -1,7 +1,26 @@
 // Saved BARs, their status log, and the backup file (pure: no DOM, no storage).
-export const STATUSES = ['Built', 'Uploaded', 'Submitted', 'Approved', 'Rejected', 'Cancelled'];
-// From Uploaded on, the lines are frozen: they match what OBMS received.
-const FROZEN = new Set(['Uploaded', 'Submitted', 'Approved']);
+// OBMS's own action names (from a BAR's action history), plus Built (FACTS) and the staging result.
+export const STATUSES = [
+  'Built',
+  'Uploaded - Staging Validated',
+  'Create Direct BAR',
+  'Direct BAR Submit to BM',
+  'BM Approved Direct BAR - Submitted to SP',
+  'SP Approved Direct BAR - Ready to submit to PED',
+  'BM submitted Direct BAR to PED',
+  'BA Approval - Submit to BS',
+  'BS Approval - PED Approval',
+  'Rejected',
+  'Cancelled',
+];
+// Names used before OBMS's own names were adopted; saved logs and backups keep them.
+export const LEGACY_STATUSES = ['Uploaded', 'Submitted', 'Approved'];
+const KNOWN = new Set([...STATUSES, ...LEGACY_STATUSES]);
+// From the first OBMS step on (anything but Built, Rejected, Cancelled) the lines are frozen: they match what OBMS received.
+const FROZEN = new Set([
+  ...STATUSES.filter((x) => !['Built', 'Rejected', 'Cancelled'].includes(x)),
+  ...LEGACY_STATUSES,
+]);
 export const BACKUP_VERSION = 1;
 
 const iso = (d) => (typeof d === 'string' ? d.slice(0, 10) : new Date(d).toISOString().slice(0, 10));
@@ -38,7 +57,7 @@ export function saveBar(list, bar, basis = null, now = Date.now()) {
 }
 
 export function addStatus(entry, status, date, note = '', now = Date.now()) {
-  if (!STATUSES.includes(status)) throw new Error(`Unknown status "${status}".`);
+  if (!KNOWN.has(status)) throw new Error(`Unknown status "${status}".`);
   return {
     ...entry,
     status,
@@ -69,7 +88,7 @@ export const validEntry = (e) =>
   !!e.bar &&
   Array.isArray(e.bar.lines) &&
   Array.isArray(e.log) &&
-  STATUSES.includes(e.status);
+  KNOWN.has(e.status);
 
 export function checkBackup(data) {
   if (!data || data.app !== 'FACTS' || !data.schools || typeof data.schools !== 'object')
