@@ -46,6 +46,7 @@ export function gilbertPreset() {
     id: 'gilbert-l-sena',
     name: 'Gilbert L. Sena Charter High School',
     entityName: 'Gilbert L Sena Charter Hs',
+    reportNames: ['Gilbert L. Sena High School'], // how Gilbert's own AptaFund reports print the name
     districtCode: '001',
     locationIds: ['707'],
   });

@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { newProfile } from '../src/lib/profile.js';
+import { gilbertPreset, newProfile } from '../src/lib/profile.js';
 import {
   PROFILES_KEY,
   activeProfile,
@@ -61,5 +61,25 @@ describe('profile storage', () => {
     expect(makeProfileId('Cesar Chavez Community School', {})).toBe('cesar-chavez-community-school');
     expect(makeProfileId('Cesar Chavez', { 'cesar-chavez': 1 })).toBe('cesar-chavez-2');
     expect(makeProfileId('!!!', {})).toBe('school');
+  });
+});
+
+describe("Gilbert's own report name", () => {
+  it('matches the name its AptaFund report prints', async () => {
+    const { gilbertPreset } = await import('../src/lib/profile.js');
+    const { schoolMatches } = await import('../src/lib/reportCheck.js');
+    expect(schoolMatches(gilbertPreset(), 'Gilbert L. Sena High School')).toBe(true);
+    expect(schoolMatches(gilbertPreset(), 'Cesar Chavez Community School')).toBe(false);
+  });
+  it('is added to a Gilbert profile saved before, keeping names the user typed', () => {
+    const old = { ...gilbertPreset(), reportNames: ['My own spelling'] };
+    const st = fake(JSON.stringify({ active: old.id, profiles: { [old.id]: old } }));
+    const loaded = loadProfiles(st).profiles[old.id];
+    expect(loaded.reportNames).toEqual(['My own spelling', 'Gilbert L. Sena High School']);
+    expect(loadProfiles(st).profiles[old.id].reportNames).toHaveLength(2);
+  });
+  it('is not forced onto other schools', () => {
+    const st = fake(JSON.stringify({ active: 'cesar', profiles: { cesar: school('cesar', 'Cesar') } }));
+    expect(loadProfiles(st).profiles.cesar.reportNames).toEqual([]);
   });
 });

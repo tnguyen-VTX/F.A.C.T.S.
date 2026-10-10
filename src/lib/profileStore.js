@@ -26,6 +26,10 @@ export function loadProfiles(storage) {
   if (s) {
     // Fill in fields added in later versions without changing what the user saved.
     for (const id of Object.keys(s.profiles)) s.profiles[id] = newProfile(s.profiles[id]);
+    // The built-in Gilbert profile gains the report name it was missing; names the user typed are kept.
+    const g = gilbertPreset();
+    const saved = s.profiles[g.id];
+    if (saved) saved.reportNames = [...new Set([...(saved.reportNames || []), ...g.reportNames])];
     if (!s.profiles[s.active]) s.active = Object.keys(s.profiles)[0] || '';
     if (s.active) return s;
   }
