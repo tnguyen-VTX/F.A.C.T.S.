@@ -41,6 +41,7 @@ import {
   bbStartEmpty,
   bbSummary,
   bbSave,
+  bbNarrFill,
   keep,
   bbOpen,
   bbRemove,
@@ -312,6 +313,11 @@ const ACT = {
     bb().restore = null;
     bbBackup();
   },
+  bbNarrFill: () => bbNarrFill(),
+  bbNarrCopy: (t) => {
+    const x = bb().draft?.narrative;
+    if (x) copyText(x, t);
+  },
   bbSave: () => bbSave(),
   bbOpen: (t) => bbOpen(t.dataset.id),
   bbRemove: (t) => bbRemove(t.dataset.id),
@@ -487,6 +493,10 @@ const IN = {
     const f = t.files?.[0];
     if (f) bbRestoreRead(await f.text());
     t.value = '';
+  },
+  bbNarrTpl: (t) => {
+    bb().tpl = t.value;
+    bb().narrMsg = '';
   },
   bbFund: (t) => {
     const b = bb();

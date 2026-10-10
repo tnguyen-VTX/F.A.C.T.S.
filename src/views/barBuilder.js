@@ -1,4 +1,5 @@
 import { makeBarFile } from '../lib/barCsv.js';
+import { fillTemplate, templatesFor } from '../lib/narrativeTemplates.js';
 import {
   STATUSES,
   addStatus,
@@ -187,6 +188,7 @@ export function bbDraft() {
   ${['I', 'IB', 'D'].includes(bar.type) ? fieldIn(bar.type === 'D' ? 'Amount of the decrease (optional cap)' : 'Award amount (optional cap)', 'award', bar.award, 'inputmode="decimal" size="14"') : ''}
   <label class="fld"><span>Justification <span id="bbcount" class="muted"></span></span><textarea rows="3" data-in="bbField" data-k="justification">${esc(bar.justification)}</textarea></label>
   <div class="toolbar"><button class="btn" data-act="bbSuggest">Suggest wording</button></div>
+  ${narrativePanel(bar)}
   <div class="scroll"><table class="t"><thead><tr><th>Account</th><th>Type</th><th>Func</th><th>Object</th><th class="r">Adj amount</th><th class="r">FTE adj</th><th></th></tr></thead><tbody>${
     bar.lines.map((l, i) => lineRow(l, i)).join('') ||
     '<tr><td colspan="7" class="empty">No lines yet. Add one below.</td></tr>'
@@ -198,7 +200,7 @@ export function bbDraft() {
   if (saved && isFrozen(saved)) {
     el.querySelectorAll('input, textarea, select').forEach((x) => (x.disabled = true));
     el.querySelectorAll(
-      '[data-act="bbDel"], [data-act="bbSuggest"], [data-act="bbAddLine"], [data-act="bbSave"]',
+      '[data-act="bbDel"], [data-act="bbSuggest"], [data-act="bbAddLine"], [data-act="bbSave"], [data-act="bbNarrFill"]',
     ).forEach((x) => (x.disabled = true));
   }
   bbSummary();
@@ -442,4 +444,38 @@ export function bbBackup() {
   el.innerHTML = `<section class="panel"><h2>Backup</h2><p class="muted">The backup file holds school profiles, saved BARs with their status logs, drafts and settings. It never holds reports, position data or keys. Restoring on a new browser means loading the reports again.</p>
   <div class="toolbar"><button class="btn" data-act="bbBackupDownload">Download a backup</button>
   <label class="btn">Restore from a backup…<input type="file" accept=".json,application/json" data-in="bbRestoreFile" hidden></label></div>${panel}</section>`;
+}
+
+// ---- Longer narrative: templates ----
+function narrativePanel(bar) {
+  const list = templatesFor(bar.type),
+    b = bb();
+  if (!list.length)
+    return `<section class="ai"><h3>Longer narrative</h3><p class="muted">No template for this BAR type yet. Write it below if you need one. It is not part of the upload file.</p>
+  <label class="fld"><span>Narrative</span><textarea rows="6" data-in="bbField" data-k="narrative">${esc(bar.narrative || '')}</textarea></label></section>`;
+  const sel = list.find((t) => t.id === b.tpl)?.id || list[0].id;
+  return `<section class="ai"><h3>Longer narrative</h3>
+  <p class="muted">Pick a template and fill it from this BAR, then edit it. It is for your records and the PED explanation; it is not part of the upload file.</p>
+  <div class="filters"><label>Template<select data-in="bbNarrTpl">${list.map((t) => `<option value="${esc(t.id)}"${t.id === sel ? ' selected' : ''}>${esc(t.title)}</option>`).join('')}</select></label>
+  <button class="btn" data-act="bbNarrFill">Fill from this BAR</button> <span class="muted" id="bbnarrmsg">${esc(b.narrMsg || '')}</span></div>
+  <label class="fld"><span>Narrative</span><textarea rows="7" data-in="bbField" data-k="narrative">${esc(bar.narrative || '')}</textarea></label>
+  <div class="toolbar"><button class="btn" data-act="bbNarrCopy">Copy narrative</button></div></section>`;
+}
+export function bbNarrFill() {
+  const b = bb(),
+    bar = b.draft;
+  if (!bar) return;
+  const list = templatesFor(bar.type),
+    id = list.find((t) => t.id === b.tpl)?.id || list[0]?.id;
+  const r = fillTemplate(id, bar, { school: profile().name, funcNames: D.asr.funcNames });
+  if (r.error) {
+    b.narrMsg = r.error;
+    return bbDraft();
+  }
+  if (bar.narrative && bar.narrative !== r.text && !confirm('Replace the narrative you have written?'))
+    return;
+  bar.narrative = r.text;
+  b.narrMsg = 'Filled from this BAR. Check the wording and edit it.';
+  keep();
+  bbDraft();
 }

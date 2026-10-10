@@ -87,6 +87,17 @@ describe('BAR Builder screen', () => {
     expect(st.UI.bb.draft.justification).not.toMatch(/[",|]/);
     expect(dl().disabled).toBe(false);
   });
+  it('fills the longer narrative from the chosen template', () => {
+    expect($('select[data-in="bbNarrTpl"]').textContent).toContain('Transfer (negative function)');
+    click($('button[data-act="bbNarrFill"]'));
+    const t = $('textarea[data-k="narrative"]').value;
+    expect(t).toContain(
+      'Gilbert L. Sena Charter High School is requesting a transfer from the Operations (2600) function in the amount of $300 to Instruction (1000) function',
+    );
+    expect(st.UI.bb.draft.narrative).toBe(t);
+    input($('textarea[data-k="narrative"]'), t + ' Edited.');
+    expect(st.UI.bb.draft.narrative.endsWith('Edited.')).toBe(true);
+  });
   it('rejects an added line that does not fit the code layout', () => {
     input($('[data-in="bbAddCode"]'), '123');
     input($('[data-in="bbAddAmt"]'), '5');

@@ -31,6 +31,7 @@ Environment note: `cdn.sheetjs.com` is blocked in the cloud session, so `npm ins
 ## Milestone 4: BAR screens and output
 
 - [x] 4a. Fund picker, New BAR by type, deficit list (`src/views/barBuilder.js`; the working BAR is kept as a draft in `S().bbDraft`).
+- [x] Longer narrative templates (`src/lib/narrativeTemplates.js`): first template is Transfer (negative function), wording from the user. More templates are added as the user supplies wording.
 - [x] Award cap: Increase, Initial Budget and Decrease BARs take an optional award amount; expenditure above it stops the file, less than it warns with the amount left.
 - [x] 4b. OBMS-style view, justification template (`src/lib/justify.js`), validation panel. Checked in the browser.
 - [x] 4c. Saved BARs with status log (`src/lib/barLog.js`; frozen from Uploaded on; prior year locks after 10/31 with an unlock), drafts per school and year, backup export and restore with a per-BAR comparison. Checked in Chromium with the real Cesar Chavez files: 10 over-budget functions listed, a transfer built, draft and saved BAR survive a reload, no CSP problems. The file stayed blocked because that profile has no district/parent code (the check works); a real OBMS upload is still the only proof of the file.

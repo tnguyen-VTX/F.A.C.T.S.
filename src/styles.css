@@ -871,3 +871,9 @@ h2 {
   font-size: 26px;
   margin-bottom: 14px;
 }
+
+.ai {
+  border-top: 1px solid var(--line);
+  margin-top: 14px;
+  padding-top: 6px;
+}
