@@ -32,6 +32,7 @@ Environment note: `cdn.sheetjs.com` is blocked in the cloud session, so `npm ins
 
 - [x] 4a. Fund picker, New BAR by type, deficit list (`src/views/barBuilder.js`; the working BAR is kept as a draft in `S().bbDraft`).
 - [x] First real OBMS upload (Gilbert, T): file, district 001 and location 707 imported fine; OBMS flagged `Missing projected FTE` (now a warning in the BAR Builder) and `Same Func Xfer` (not understood yet; see `context/obms-formats.md` rejection log).
+- [x] Same-series Transfer warning (OBMS `Same Func Xfer`; BAR Entry offers no 2000-series destination for a 2500 source). Warning only until the rule is confirmed for other series and for Maintenance.
 - [x] Upload file name in the accepted example's style, editable per BAR; short school name on the Schools screen.
 - [x] Longer narrative templates (`src/lib/narrativeTemplates.js`): first template is Transfer (negative function), wording from the user. More templates are added as the user supplies wording.
 - [x] Award cap: Increase, Initial Budget and Decrease BARs take an optional award amount; expenditure above it stops the file, less than it warns with the amount left.

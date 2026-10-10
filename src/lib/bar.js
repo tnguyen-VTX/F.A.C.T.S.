@@ -93,6 +93,24 @@ export function validateBar(bar, { profile, asr } = {}) {
     if (Math.abs(tot.net) > 0.005)
       add('stop', `The BAR does not balance: lines net to ${tot.net.toFixed(2)}, not 0.00.`);
   }
+  // OBMS refused a Transfer between two functions of the same series ("Same Func Xfer"; 2500 to 2100), and
+  // its BAR Entry screen lists no 2000-series destination for a 2000-series source. A warning until the
+  // rule is confirmed for other series.
+  if (t === 'T') {
+    const nets = new Map();
+    for (const l of bar.lines) {
+      if (isRevenueObject(l.obj) || !l.func || !Number.isFinite(l.amount)) continue;
+      nets.set(l.func, (nets.get(l.func) || 0) + l.amount);
+    }
+    const give = [...nets].filter(([, v]) => Math.round(v) < 0).map(([f]) => f);
+    const get = [...nets].filter(([, v]) => Math.round(v) > 0).map(([f]) => f);
+    const pairs = give.flatMap((g) => get.filter((r) => r[0] === g[0]).map((r) => `${g} to ${r}`));
+    if (pairs.length)
+      add(
+        'warn',
+        `OBMS rejected a Transfer between functions of the same series ("Same Func Xfer"): ${pairs.slice(0, 3).join(', ')}${pairs.length > 3 ? ', ...' : ''}. In OBMS's own BAR Entry the destination list leaves out 2000-series functions when the source is 2500. Try a Maintenance BAR for these, or move from a function in another series.`,
+      );
+  }
   if (t === 'I' || t === 'IB' || t === 'D') {
     if (!hasRev) add('stop', `${BAR_TYPES[t]} BARs need the revenue line for the award.`);
     if (Math.abs(r2(tot.revenue - tot.expenditure)) > 0.005)

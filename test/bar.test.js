@@ -485,3 +485,33 @@ describe('salary lines without an FTE (OBMS: "Missing projected FTE")', () => {
     expect(msgs(validateBar(salary(0), { profile: none }), 'warn')).not.toContain('no FTE');
   });
 });
+
+describe('Transfer between functions of the same series (OBMS: "Same Func Xfer")', () => {
+  const tr = (lines) => {
+    const b = newBar('T', '11000');
+    b.lines = lines.map(([c, a]) => barLine(P, c, a));
+    b.justification = 'x';
+    return b;
+  };
+  it('warns for 2500 to 2100 and names the pair', () => {
+    const c = validateBar(
+      tr([
+        ['11000-2500-57331-0000-001-0000', -1000],
+        ['11000-2100-55915-0000-001-0000', 1000],
+      ]),
+      { profile: P },
+    );
+    expect(msgs(c, 'warn')).toContain('2500 to 2100');
+    expect(canDownload(c)).toBe(true);
+  });
+  it('is quiet when the functions are in different series', () => {
+    const c = validateBar(
+      tr([
+        ['11000-2500-57331-0000-001-0000', -1000],
+        ['11000-1000-56118-0000-001-0000', 1000],
+      ]),
+      { profile: P },
+    );
+    expect(msgs(c, 'warn')).not.toContain('Same Func Xfer');
+  });
+});
