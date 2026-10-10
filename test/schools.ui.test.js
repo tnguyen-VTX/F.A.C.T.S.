@@ -30,7 +30,7 @@ describe('schools', () => {
   beforeAll(async () => {
     // v0.1 saved data, keyed by fiscal year alone.
     localStorage.setItem(
-      'facts.v1',
+      'barbuilder.v1',
       JSON.stringify({ FY2027: { je: [{ id: 'old', note: 'legacy' }], bar: {} } }),
     );
     document.body.innerHTML = '<div id="app"></div>';

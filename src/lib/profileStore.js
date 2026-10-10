@@ -2,7 +2,7 @@
 // (localStorage in the app, a fake in tests) so it runs in Node.
 import { gilbertPreset, newProfile, validateProfile } from './profile.js';
 
-export const PROFILES_KEY = 'facts.profiles.v1';
+export const PROFILES_KEY = 'barbuilder.profiles.v1';
 
 function read(storage) {
   try {

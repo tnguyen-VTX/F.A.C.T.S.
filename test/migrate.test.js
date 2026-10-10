@@ -3,7 +3,12 @@ import { DATA_VERSION, VERSION_KEY, migrate } from '../src/lib/migrate.js';
 
 const mem = (init = {}) => {
   const m = { ...init };
-  return { m, getItem: (k) => (k in m ? m[k] : null), setItem: (k, v) => (m[k] = String(v)) };
+  return {
+    m,
+    getItem: (k) => (k in m ? m[k] : null),
+    setItem: (k, v) => (m[k] = String(v)),
+    removeItem: (k) => delete m[k],
+  };
 };
 
 describe('migrate', () => {
@@ -45,5 +50,19 @@ describe('migrate with a damaged version key', () => {
     const s = mem({ k: '{"a/FY2027":{}}', [VERSION_KEY]: '-1' });
     expect(() => migrate(s, 'k')).not.toThrow();
     expect(s.m[VERSION_KEY]).toBe(String(DATA_VERSION));
+  });
+});
+
+describe('moving facts.* names to barbuilder.*', () => {
+  it('moves each value once and keeps what is already under the new name', async () => {
+    const { moveLegacyKeys } = await import('../src/lib/migrate.js');
+    const s = mem({ 'facts.v1': '{"a":1}', 'facts.fy': '2027', 'barbuilder.fy': '2028' });
+    moveLegacyKeys(s);
+    expect(s.m['barbuilder.v1']).toBe('{"a":1}');
+    expect(s.m['barbuilder.fy']).toBe('2028');
+    expect('facts.v1' in s.m).toBe(false);
+    moveLegacyKeys(s);
+    expect(s.m['barbuilder.v1']).toBe('{"a":1}');
+    expect(() => moveLegacyKeys(null)).not.toThrow();
   });
 });

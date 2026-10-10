@@ -764,6 +764,7 @@ async function useSchool(id) {
 }
 (async function init() {
   render();
+  await IDB.moveLegacy();
   await loadSaved();
   render();
 })();

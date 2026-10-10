@@ -1,9 +1,9 @@
 // Versioned browser storage. The version lives under its own key so the data keys keep their shape.
 // A migration never drops data; data from a newer version is left untouched and read-only.
 export const DATA_VERSION = 1;
-export const VERSION_KEY = 'facts.dataVersion';
+export const VERSION_KEY = 'barbuilder.dataVersion';
 
-// Each step upgrades the user-data store (`facts.v1`) from version n to n+1, in place.
+// Each step upgrades the user-data store (`barbuilder.v1`) from version n to n+1, in place.
 const STEPS = [
   // 0 -> 1: every school/year entry has the arrays and objects the screens expect, including saved BARs.
   (store) => {
@@ -41,4 +41,23 @@ export function migrate(storage, storeKey) {
     return { version: found, newer: false, migrated: false };
   }
   return { version: DATA_VERSION, newer: false, migrated: true };
+}
+
+// Earlier builds saved under facts.* names. Move each value to its barbuilder.* name, once, keeping data.
+export const LEGACY_KEYS = [
+  ['facts.v1', 'barbuilder.v1'],
+  ['facts.profiles.v1', 'barbuilder.profiles.v1'],
+  ['facts.fy', 'barbuilder.fy'],
+  ['facts.dataVersion', 'barbuilder.dataVersion'],
+];
+export function moveLegacyKeys(storage) {
+  if (!storage) return;
+  for (const [from, to] of LEGACY_KEYS) {
+    try {
+      const v = storage.getItem(from);
+      if (v == null) continue;
+      if (storage.getItem(to) == null) storage.setItem(to, v);
+      storage.removeItem(from);
+    } catch (e) {}
+  }
 }
