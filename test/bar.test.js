@@ -515,3 +515,27 @@ describe('Transfer between functions of the same series (OBMS: "Same Func Xfer")
     expect(msgs(c, 'warn')).not.toContain('Same Func Xfer');
   });
 });
+
+describe('an approved OBMS Transfer (Gilbert, FY2025-26, document 001-707-2526-0033-T)', () => {
+  const six = newProfile({
+    id: 'six',
+    name: 'Six',
+    districtCode: '001',
+    locationRule: { type: 'lastN', n: 3 },
+  });
+  it('moves money from function 2100 to 3100 and passes every check with no series warning', () => {
+    const b = newBar('T', '11000');
+    b.lines = [
+      ['11000-2100-55915-0000-001707-0000', -6700],
+      ['11000-3100-55915-0000-001707-0000', 5900],
+      ['11000-3100-56116-0000-001707-0000', 800],
+    ].map(([c, a]) => barLine(six, c, a));
+    b.justification =
+      'The transfer is needed to ensure the function is not over budget by any of its functions';
+    b.contact = { first: 'Pat', middle: '', last: 'Example' };
+    const c = validateBar(b, { profile: six });
+    expect(canDownload(c)).toBe(true);
+    expect(msgs(c, 'warn')).not.toContain('Same Func Xfer');
+    expect(barTotals(b).net).toBe(0);
+  });
+});
