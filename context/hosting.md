@@ -14,9 +14,9 @@ FACTS is static files only (no server code, nothing uploaded). It will be publis
 2. **Own subdomain is safer** (for example `facts.ledgersandlearning.com`). Browser storage is shared by every page on one origin, and FACTS stores school profiles, BARs and parsed reports with employee data. A separate origin keeps other pages and plugins from reading it. The sign-in has to protect that subdomain too.
 3. **No site-wide scripts** (analytics, chat widgets, plugins) on the app's pages. They would sit in the same origin as the data.
 4. **Who deploys, to where, and the final URL.** `npm run build` writes `dist/`; copy it to the site.
-5. **Repo visibility.** Fonts are open-licensed; logos and real data must not go into a public repo.
+5. **Repo visibility.** The repository is public (user decision 10/10/2026). The Vertex logo files are in it knowingly. No real data is tracked: reports and exports are git-ignored and none is committed.
 
-## Things users should be told (About page, still to write)
+## Things users are told (About page, written; contact: tim.nguyen@vertexeducation.com)
 
 - Everything runs in your browser; reports are not uploaded. Browser storage can be cleared, so use the backup file.
 - Check numbers against the state's reports before submitting anything to OBMS. No warranty.

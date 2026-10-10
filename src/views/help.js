@@ -32,5 +32,5 @@ export function viewHelp() {
   <section class="panel"><h2>7. If OBMS rejects a file</h2><ol>
   <li>Write down OBMS's message word for word.</li>
   <li>Fix the BAR in FACTS, download again and upload again.</li>
-  <li>Tell the person who runs FACTS what the message said, so the check can be added. See ${go('about', 'About and privacy')} for what FACTS cannot promise.</li></ol></section>`;
+  <li>Email the message to <a href="mailto:tim.nguyen@vertexeducation.com">tim.nguyen@vertexeducation.com</a>, so the check can be added. See ${go('about', 'About and privacy')} for what FACTS cannot promise.</li></ol></section>`;
 }

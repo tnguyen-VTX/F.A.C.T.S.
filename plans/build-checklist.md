@@ -38,7 +38,7 @@ Environment note: `cdn.sheetjs.com` is blocked in the cloud session, so `npm ins
 
 ## Milestone 5: later
 
-- [x] Brand colors as tokens (Vertex Blue on primary buttons, focus, headings). [x] Logos and favicon: reversed wordmark on a Vertex Blue band, mountain icon favicon (checked in Chromium, light and dark, no outside requests). Repository visibility still to confirm.
+- [x] Brand colors as tokens (Vertex Blue on primary buttons, focus, headings). [x] Logos and favicon: reversed wordmark on a Vertex Blue band, mountain icon favicon (checked in Chromium, light and dark, no outside requests). Repository is public; user accepted the logos in it.
 - [-] Position/FTE slot dropped (no such export exists; FTE stays manual). [x] Second school: a 7-segment profile test with made-up data (location 3 digits, nothing from Gilbert).
 - [ ] AI narrative button. Real OBMS test uploads.
 
@@ -50,6 +50,6 @@ Environment note: `cdn.sheetjs.com` is blocked in the cloud session, so `npm ins
 - [x] Build-time Content-Security-Policy; relative base path; verified in a browser from a sub-folder with real files, no outside requests, no violations.
 - [ ] Confirm with the site owner: sign-in covers the app, own subdomain, no site-wide scripts, deploy path (see `context/hosting.md`).
 - [x] A How to use screen (`src/views/help.js`, seven steps for business managers).
-- [x] An About, privacy and limits page inside the app (`src/views/about.js`); the contact for reporting problems is still to be supplied.
+- [x] An About, privacy and limits page inside the app (`src/views/about.js`); contact for reporting problems: tim.nguyen@vertexeducation.com.
 - [x] Stored data is versioned (`src/lib/migrate.js`, key `facts.dataVersion`); newer or unreadable data is never overwritten. Saved report records carry a version too and newer ones are skipped, not deleted.
 

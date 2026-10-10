@@ -15,4 +15,7 @@ describe('About screen', () => {
     expect($('#main h1').textContent).toContain('About');
     expect($('#main').textContent).toContain('Nothing is uploaded');
   });
+  it('says how to report a problem', () => {
+    expect($('#main a[href^="mailto:"]').textContent).toContain('@vertexeducation.com');
+  });
 });

@@ -30,4 +30,7 @@ describe('Help screen', () => {
     // Screens that need a loaded report are not in the menu yet; the menu holds the rest.
     for (const v of links) expect(['bars', ...known]).toContain(v);
   });
+  it('gives a contact for OBMS rejections', () => {
+    expect($('#main a[href="mailto:tim.nguyen@vertexeducation.com"]')).not.toBeNull();
+  });
 });
