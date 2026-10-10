@@ -871,19 +871,3 @@ h2 {
   font-size: 26px;
   margin-bottom: 14px;
 }
-
-.ai {
-  border-top: 1px solid var(--line);
-  margin-top: 14px;
-  padding-top: 6px;
-}
-pre.sent {
-  white-space: pre-wrap;
-  background: var(--sunk);
-  border: 1px solid var(--line);
-  border-radius: 8px;
-  padding: 10px;
-  font-size: 13px;
-  max-height: 260px;
-  overflow: auto;
-}

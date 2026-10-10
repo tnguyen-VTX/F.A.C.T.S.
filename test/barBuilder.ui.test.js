@@ -87,39 +87,6 @@ describe('BAR Builder screen', () => {
     expect(st.UI.bb.draft.justification).not.toMatch(/[",|]/);
     expect(dl().disabled).toBe(false);
   });
-  it('drafts a narrative only after a key is saved and the exact text is previewed', async () => {
-    const { AI } = await import('../src/lib/narrative.js');
-    let sent = null;
-    AI.makeClient = async () => ({
-      beta: {
-        messages: {
-          create: async (p) => (
-            (sent = p),
-            { stop_reason: 'end_turn', content: [{ type: 'text', text: 'Drafted narrative.' }] }
-          ),
-        },
-      },
-    });
-    click($('button[data-act="bbNarrPreview"]'));
-    expect($('#bbnarrmsg').textContent).toContain('Save your API key');
-    expect(sent).toBeNull();
-    input($('#aikey'), 'sk-ant-abcdefghij1234');
-    click($('button[data-act="bbKeySave"]'));
-    click($('button[data-act="bbNarrPreview"]'));
-    expect($('#bbnarrprev').textContent).toContain('This exact text will be sent');
-    expect($('#bbnarrprev pre').textContent).toContain('BAR type:');
-    expect(sent).toBeNull();
-    click($('button[data-act="bbNarrCancel"]'));
-    expect($('#bbnarrprev').textContent).toBe('');
-    click($('button[data-act="bbNarrPreview"]'));
-    click($('button[data-act="bbNarrSend"]'));
-    await new Promise((r) => setTimeout(r, 50));
-    expect(sent.messages[0].content).toContain('Fund: 11000');
-    expect($('textarea[data-k="narrative"]').value).toBe('Drafted narrative.');
-    expect(st.UI.bb.draft.narrative).toBe('Drafted narrative.');
-    click($('button[data-act="bbKeyClear"]'));
-    expect(sessionStorage.getItem('barbuilder.aikey')).toBeNull();
-  });
   it('rejects an added line that does not fit the code layout', () => {
     input($('[data-in="bbAddCode"]'), '123');
     input($('[data-in="bbAddAmt"]'), '5');

@@ -49,11 +49,6 @@ import {
   backupFile,
   bbRestoreRead,
   bbRestoreApply,
-  bbKeyClear,
-  bbKeySave,
-  bbNarrCancel,
-  bbNarrPreview,
-  bbNarrSend,
   bbBackup,
   viewBarBuilder,
 } from './views/barBuilder.js';
@@ -316,15 +311,6 @@ const ACT = {
   bbRestoreCancel: () => {
     bb().restore = null;
     bbBackup();
-  },
-  bbKeySave: () => bbKeySave(),
-  bbKeyClear: () => bbKeyClear(),
-  bbNarrPreview: () => bbNarrPreview(),
-  bbNarrCancel: () => bbNarrCancel(),
-  bbNarrSend: () => bbNarrSend(),
-  bbNarrCopy: (t) => {
-    const x = bb().draft?.narrative;
-    if (x) copyText(x, t);
   },
   bbSave: () => bbSave(),
   bbOpen: (t) => bbOpen(t.dataset.id),

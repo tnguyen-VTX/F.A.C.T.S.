@@ -66,3 +66,15 @@ describe('moving facts.* names to barbuilder.*', () => {
     expect(() => moveLegacyKeys(null)).not.toThrow();
   });
 });
+
+describe('retired AI key', () => {
+  it('is deleted from both storages', async () => {
+    const { clearRetiredKeys } = await import('../src/lib/migrate.js');
+    const a = mem({ 'barbuilder.aikey': 'k', other: '1' }),
+      b = mem({ 'barbuilder.aikey': 'k' });
+    clearRetiredKeys(a, b, null);
+    expect('barbuilder.aikey' in a.m).toBe(false);
+    expect('barbuilder.aikey' in b.m).toBe(false);
+    expect(a.m.other).toBe('1');
+  });
+});

@@ -1,6 +1,4 @@
-import { clearKey, getKey, keyWhere, looksLikeKey, saveKey } from '../lib/aiKey.js';
 import { makeBarFile } from '../lib/barCsv.js';
-import { AI, API_HOST, draftNarrative, narrativeRequest } from '../lib/narrative.js';
 import {
   STATUSES,
   addStatus,
@@ -189,7 +187,6 @@ export function bbDraft() {
   ${['I', 'IB', 'D'].includes(bar.type) ? fieldIn(bar.type === 'D' ? 'Amount of the decrease (optional cap)' : 'Award amount (optional cap)', 'award', bar.award, 'inputmode="decimal" size="14"') : ''}
   <label class="fld"><span>Justification <span id="bbcount" class="muted"></span></span><textarea rows="3" data-in="bbField" data-k="justification">${esc(bar.justification)}</textarea></label>
   <div class="toolbar"><button class="btn" data-act="bbSuggest">Suggest wording</button></div>
-  ${narrativePanel(bar)}
   <div class="scroll"><table class="t"><thead><tr><th>Account</th><th>Type</th><th>Func</th><th>Object</th><th class="r">Adj amount</th><th class="r">FTE adj</th><th></th></tr></thead><tbody>${
     bar.lines.map((l, i) => lineRow(l, i)).join('') ||
     '<tr><td colspan="7" class="empty">No lines yet. Add one below.</td></tr>'
@@ -201,7 +198,7 @@ export function bbDraft() {
   if (saved && isFrozen(saved)) {
     el.querySelectorAll('input, textarea, select').forEach((x) => (x.disabled = true));
     el.querySelectorAll(
-      '[data-act="bbDel"], [data-act="bbSuggest"], [data-act="bbAddLine"], [data-act="bbSave"], [data-act="bbNarrPreview"], [data-act="bbNarrSend"]',
+      '[data-act="bbDel"], [data-act="bbSuggest"], [data-act="bbAddLine"], [data-act="bbSave"]',
     ).forEach((x) => (x.disabled = true));
   }
   bbSummary();
@@ -445,97 +442,4 @@ export function bbBackup() {
   el.innerHTML = `<section class="panel"><h2>Backup</h2><p class="muted">The backup file holds school profiles, saved BARs with their status logs, drafts and settings. It never holds reports, position data or keys. Restoring on a new browser means loading the reports again.</p>
   <div class="toolbar"><button class="btn" data-act="bbBackupDownload">Download a backup</button>
   <label class="btn">Restore from a backup…<input type="file" accept=".json,application/json" data-in="bbRestoreFile" hidden></label></div>${panel}</section>`;
-}
-
-// ---- Optional AI-drafted narrative ----
-const ls = () => (typeof localStorage !== 'undefined' ? localStorage : null);
-const ss = () => (typeof sessionStorage !== 'undefined' ? sessionStorage : null);
-const narr = () => (bb().narr ??= { preview: null, busy: false, msg: '' });
-const names = () => ({ funcNames: D.asr.funcNames, fundNames: D.fundNames });
-
-function narrativePanel(bar) {
-  const n = narr(),
-    where = keyWhere(ls(), ss());
-  return `<section class="ai"><h3>Longer narrative (AI-drafted, optional)</h3>
-  <p class="muted">For the PED's longer explanation. It is not part of the upload file. When you choose Draft, FACTS shows the exact text first, and only sends it to Anthropic (${esc(API_HOST)}) after you press Send. It holds fund, BAR type, function names and whole-dollar totals; never names, FTE, account descriptions or your justification.</p>
-  <div class="filters"><label>Your Anthropic API key<input type="password" id="aikey" autocomplete="off" size="30" placeholder="${where ? 'A key is saved' : 'sk-ant-...'}"></label>
-  <label class="chk"><input type="checkbox" id="airemember"${where === 'browser' ? ' checked' : ''}> Remember on this computer</label>
-  <button class="btn" data-act="bbKeySave">Save key</button><button class="btn" data-act="bbKeyClear">Clear key</button></div>
-  <p class="muted">${where === 'browser' ? 'The key is saved in this browser.' : where === 'tab' ? 'The key is kept until you close this tab.' : 'No key saved.'} Other tools on this site share this browser's storage, so use a key with a low spending limit, and clear it when you are done.</p>
-  <div class="toolbar"><button class="btn" data-act="bbNarrPreview"${n.busy ? ' disabled' : ''}>Draft with AI…</button> <span class="muted" id="bbnarrmsg">${esc(n.msg)}</span></div>
-  <div id="bbnarrprev">${previewHTML()}</div>
-  <label class="fld"><span>Narrative (AI-drafted: check every sentence before you use it)</span><textarea rows="8" data-in="bbField" data-k="narrative">${esc(bar.narrative || '')}</textarea></label>
-  <div class="toolbar"><button class="btn" data-act="bbNarrCopy">Copy narrative</button></div></section>`;
-}
-function previewHTML() {
-  const p = narr().preview;
-  if (!p) return '';
-  return `<div class="panel"><h4>This exact text will be sent to ${esc(API_HOST)} (model ${esc(p.model)})</h4>
-  <pre class="sent">${esc(p.system)}\n\n${esc(p.user)}</pre>
-  <div class="toolbar"><button class="btn primary" data-act="bbNarrSend">Send</button> <button class="btn" data-act="bbNarrCancel">Cancel</button></div></div>`;
-}
-const refreshNarr = () => {
-  const m = $('#bbnarrmsg'),
-    pv = $('#bbnarrprev');
-  if (m) m.textContent = narr().msg;
-  if (pv) pv.innerHTML = previewHTML();
-};
-
-export function bbKeySave() {
-  const k = ($('#aikey')?.value || '').trim();
-  if (!looksLikeKey(k)) {
-    narr().msg = 'That does not look like an Anthropic API key (it starts with sk-ant-).';
-    return refreshNarr();
-  }
-  saveKey(k, !!$('#airemember')?.checked, ls(), ss());
-  narr().msg = 'Key saved.';
-  bbDraft();
-}
-export function bbKeyClear() {
-  clearKey(ls(), ss());
-  narr().msg = 'Key cleared.';
-  bbDraft();
-}
-export function bbNarrPreview() {
-  const b = bb(),
-    n = narr();
-  if (!getKey(ls(), ss())) {
-    n.msg = 'Save your API key first.';
-    return refreshNarr();
-  }
-  if (!b.draft?.lines.length) {
-    n.msg = 'Add the BAR lines first.';
-    return refreshNarr();
-  }
-  n.preview = narrativeRequest(b.draft, names());
-  n.msg = '';
-  refreshNarr();
-}
-export function bbNarrCancel() {
-  narr().preview = null;
-  refreshNarr();
-}
-export async function bbNarrSend() {
-  const b = bb(),
-    n = narr(),
-    req = n.preview,
-    key = getKey(ls(), ss());
-  if (!req || !key || !b.draft || n.busy) return;
-  n.busy = true;
-  n.msg = 'Drafting…';
-  refreshNarr();
-  const target = b.draft;
-  const r = await draftNarrative(await AI.makeClient(key), req);
-  n.busy = false;
-  n.preview = null;
-  if (r.error) n.msg = r.error;
-  else {
-    target.narrative = r.text;
-    n.msg = r.cut
-      ? 'Drafted, but the text was cut off. Add what is missing.'
-      : 'Drafted. Check every sentence.';
-    keep();
-  }
-  if (b.draft === target) bbDraft();
-  else refreshNarr();
 }

@@ -21,8 +21,7 @@ export function viewHelp() {
   <section class="panel"><h2>4. Check and download</h2><ol>
   <li>Read the checks under the lines. Every item marked Stop must be fixed before the file can be made.</li>
   <li>Add the contact name and the justification (the Suggest wording button gives a start). Use plain words: no commas, quotes or pipes, 255 characters at most.</li>
-  <li>Choose "Download the OBMS upload file".</li>
-  <li>Optional: for the PED's longer explanation, use "Draft with AI" on the BAR. You enter your own Anthropic API key, see the exact text first, and press Send. Check every sentence of the draft; it is not part of the upload file.</li></ol></section>
+  <li>Choose "Download the OBMS upload file".</li></ol></section>
   <section class="panel"><h2>5. Upload in OBMS</h2><ol>
   <li>In OBMS, open BAR Uploads and upload the file.</li>
   <li>Back in FACTS, choose Save BAR, type the Document ID OBMS gives you, and add a status (Uploaded, Submitted, Approved).</li>

@@ -5,7 +5,7 @@ export function viewAbout() {
   $('#main').innerHTML =
     `<header class="ph"><h1>About, privacy and limits</h1><p class="sub">What FACTS does with your files, and what it cannot promise.</p></header>
   <section class="panel"><h2>Where your data goes</h2>
-  <ul><li>Reports are read <b>in your browser</b>. Nothing is uploaded. The one exception is the optional AI narrative on a BAR: only after you enter your own API key, read the exact text shown and press Send does a short summary go to Anthropic. It holds fund, BAR type, function names and dollar totals, never names or reports.</li>
+  <ul><li>Reports are read <b>in your browser</b>. Nothing is uploaded, and the app makes no requests to other sites.</li>
   <li>The app keeps school profiles, saved BARs, drafts and the parsed rows of loaded reports in <b>this browser only</b>. Another computer or browser starts empty.</li>
   <li>This site's other tools share this browser storage address, so they could read what is saved here. Do not use a shared or public computer.</li>
   <li>Reports contain employee names and pay. Parsed rows older than 30 days are removed automatically. "Clear loaded reports" removes them at once.</li>

@@ -40,7 +40,7 @@ Environment note: `cdn.sheetjs.com` is blocked in the cloud session, so `npm ins
 
 - [x] Brand colors as tokens (Vertex Blue on primary buttons, focus, headings). [x] Logos and favicon: reversed wordmark on a Vertex Blue band, mountain icon favicon (checked in Chromium, light and dark, no outside requests). Repository is public; user accepted the logos in it.
 - [-] Position/FTE slot dropped (no such export exists; FTE stays manual). [x] Second school: a 7-segment profile test with made-up data (location 3 digits, nothing from Gilbert).
-- [x] AI narrative button (`src/lib/narrative.js`; tested with a stand-in client, not against the live API). [ ] Real OBMS test uploads.
+- [-] AI narrative button: built, then removed at the user's request (needed personal API keys). [ ] Real OBMS test uploads.
 
 - [x] Fund Audit with no budget amounts (Gilbert): tie-out compares actuals and encumbrances only and says so; Transactions hides Budget and Available.
 - [x] PED school directory: `src/data/nm-schools.json` (from the user's export), search on the Schools screen fills district code and location IDs, BAR warning for other locations. Gilbert preset now has district 001, location 707.

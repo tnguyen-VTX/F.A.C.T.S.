@@ -1,7 +1,7 @@
 import * as XLSX from 'xlsx';
 
 import { currentFiscalYear } from './lib/importReport.js';
-import { migrate, moveLegacyKeys } from './lib/migrate.js';
+import { clearRetiredKeys, migrate, moveLegacyKeys } from './lib/migrate.js';
 import { activeProfile, loadProfiles, setActive } from './lib/profileStore.js';
 import { checkFundAudit, fiscalYearOf } from './lib/reportCheck.js';
 import {
@@ -34,6 +34,10 @@ export const storage =
 // Names start with barbuilder so other tools on the same site cannot clash with them.
 // Data saved under the earlier facts.* names is moved over once.
 moveLegacyKeys(typeof localStorage !== 'undefined' ? localStorage : null);
+clearRetiredKeys(
+  typeof localStorage !== 'undefined' ? localStorage : null,
+  typeof sessionStorage !== 'undefined' ? sessionStorage : null,
+);
 export const STORE_KEY = 'barbuilder.v1';
 export let STORE = {};
 // Data saved by a newer version of FACTS is shown but never overwritten.

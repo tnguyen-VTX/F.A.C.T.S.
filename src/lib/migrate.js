@@ -61,3 +61,11 @@ export function moveLegacyKeys(storage) {
     } catch (e) {}
   }
 }
+
+// The AI narrative feature was removed. Delete any API key it left in this browser.
+export function clearRetiredKeys(...storages) {
+  for (const st of storages)
+    try {
+      st?.removeItem('barbuilder.aikey');
+    } catch (e) {}
+}
