@@ -56,7 +56,7 @@ business rules, and `plans/build-checklist.md` for build progress.
 The Load reports screen takes the AptaFund Account Summary (.xlsx) and Fund Audit (.csv) one file at a time, for the
 selected school and fiscal year. Each file is checked before it loads (`lib/reportCheck.js`): a wrong school or a layout
 that does not fit the school's account code stops it; a wrong year, a short date range, a filtered report or a Fund Audit
-that does not tie to the Account Summary (fund by fund) asks the user to confirm. The v0.1 whole-workbook import is still
+that does not tie to the Account Summary (fund by fund) asks the user to confirm. Some Fund Audit exports (Gilbert's) have zero in every Budget row: then only actuals and encumbrances are tied out and the Transactions screen hides Budget and Available. The v0.1 whole-workbook import is still
 available under "Or load the whole FACTS workbook". The Fund Audit CSV has no Src column, so Source is derived from the
 Number prefix and Detail (`deriveSource` in `lib/parse.js`: Reg → PR payroll register, Inv → IN invoice, Rec → RF fee within
 a cash receipt, `J/E:` → JE, otherwise EN encumbrance). Report cycle `FY26-27` and `FY2027` both mean fiscal year 2027.

@@ -105,6 +105,12 @@ const allZero = (x) => KEYS.every((k) => r2(x[k]) === 0);
 export function tieOut(asr, fa) {
   const fx = totalsByFund(fa);
   const diffs = [];
+  // Some AptaFund Fund Audit exports carry no budget amounts at all (zero in every row). Then budget and
+  // available cannot tie to the Account Summary, so only actuals and encumbrances are compared.
+  const auditHasBudget = fa.some((r) => r.budget);
+  const summaryHasBudget = [...asr.funds.values()].some((f) => f.tot && r2(f.tot.budget) !== 0);
+  const noBudget = !auditHasBudget && summaryHasBudget;
+  const keys = noBudget ? ['actual', 'enc'] : KEYS;
   const funds = new Set([...asr.funds.keys(), ...fx.keys()]);
   for (const f of [...funds].sort()) {
     const a = asr.funds.get(f)?.tot,
@@ -112,10 +118,10 @@ export function tieOut(asr, fa) {
     if ((!a || allZero(a)) && (!b || allZero(b))) continue;
     const x = a || ZERO(),
       y = b || ZERO();
-    const off = KEYS.filter((k) => Math.abs(r2(x[k]) - r2(y[k])) > 0.005);
+    const off = keys.filter((k) => Math.abs(r2(x[k]) - r2(y[k])) > 0.005);
     if (off.length) diffs.push({ fund: f, columns: off, summary: a ? x : null, audit: b ? y : null });
   }
-  return { ok: diffs.length === 0, diffs };
+  return { ok: diffs.length === 0, diffs, noBudget };
 }
 
 export function checkFundAudit(fa, { profile, fiscalYear, asr }) {
@@ -153,7 +159,12 @@ export function checkFundAudit(fa, { profile, fiscalYear, asr }) {
         level: 'warn',
         msg: `The Fund Audit does not match the Account Summary for ${t.diffs.length} fund${t.diffs.length === 1 ? '' : 's'}: ${list}${t.diffs.length > 6 ? '; …' : ''}. They may cover different periods, or come from different schools.`,
       });
-    } else out.push({ level: 'info', msg: 'The Fund Audit ties to the Account Summary for every fund.' });
+    } else if (t.noBudget)
+      out.push({
+        level: 'info',
+        msg: 'The Fund Audit ties to the Account Summary on actuals and encumbrances for every fund. It has no budget amounts (zero in every row), so budget and available were not compared.',
+      });
+    else out.push({ level: 'info', msg: 'The Fund Audit ties to the Account Summary for every fund.' });
   }
   return out;
 }

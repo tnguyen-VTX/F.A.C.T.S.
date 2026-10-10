@@ -42,6 +42,7 @@ Environment note: `cdn.sheetjs.com` is blocked in the cloud session, so `npm ins
 - [-] Position/FTE slot dropped (no such export exists; FTE stays manual). [x] Second school: a 7-segment profile test with made-up data (location 3 digits, nothing from Gilbert).
 - [x] AI narrative button (`src/lib/narrative.js`; tested with a stand-in client, not against the live API). [ ] Real OBMS test uploads.
 
+- [x] Fund Audit with no budget amounts (Gilbert): tie-out compares actuals and encumbrances only and says so; Transactions hides Budget and Available.
 - [x] PED school directory: `src/data/nm-schools.json` (from the user's export), search on the Schools screen fills district code and location IDs, BAR warning for other locations. Gilbert preset now has district 001, location 707.
 
 ## Hosting prep (ledgersandlearning.com)

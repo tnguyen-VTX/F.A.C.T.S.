@@ -121,6 +121,29 @@ describe('Fund Audit checks and tie-out', () => {
     fa.push({ ...fa[0], fund: '27901', budget: 0, actual: 0, enc: 0, avail: 0 });
     expect(tieOut(asr, fa).ok).toBe(true);
   });
+  it('compares only actuals and encumbrances when the Fund Audit has no budget amounts', () => {
+    const fa = parseFACSV(faCsv(), cesar);
+    fa.forEach((r) => {
+      r.budget = 0;
+      r.avail = -(r.actual + r.enc);
+    });
+    const t = tieOut(asr, fa);
+    expect(t.ok).toBe(true);
+    expect(t.noBudget).toBe(true);
+    const c = checkFundAudit(fa, { ...ctx, asr });
+    expect(c.some((x) => x.level === 'warn')).toBe(false);
+    expect(c.find((x) => x.level === 'info').msg).toContain('no budget amounts');
+  });
+  it('still warns about actuals when a budget-less Fund Audit differs, without naming budget', () => {
+    const fa = parseFACSV(faCsv(9), cesar);
+    fa.forEach((r) => {
+      r.budget = 0;
+      r.avail = -(r.actual + r.enc);
+    });
+    const w = checkFundAudit(fa, { ...ctx, asr }).find((x) => x.level === 'warn').msg;
+    expect(w).toContain('11000 (actual)');
+    expect(w).not.toContain('budget');
+  });
   it('stops when no line fits the school layout', () => {
     expect(hasStop(checkFundAudit([], ctx))).toBe(true);
   });
