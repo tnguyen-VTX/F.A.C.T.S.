@@ -2,15 +2,15 @@ import { defineConfig } from 'vite';
 
 // The app is static files only. It must not load anything from another host, so the built page
 // carries a Content-Security-Policy that allows only its own files. (Dev keeps the default, because
-// Vite's hot reload needs a websocket.) When the AI narrative feature is added, add its API host
-// to connect-src and nothing else.
+// Vite's hot reload needs a websocket.) The one outside host is the AI service, used only when the user
+// previews and sends a narrative request (src/lib/narrative.js).
 const CSP = [
   "default-src 'self'",
   "script-src 'self'",
   "style-src 'self' 'unsafe-inline'", // screens set inline style attributes
   "img-src 'self' data: blob:",
   "font-src 'self'",
-  "connect-src 'self'",
+  "connect-src 'self' https://api.anthropic.com",
   "object-src 'none'",
   "base-uri 'self'",
   "form-action 'self'",

@@ -21,4 +21,7 @@ describe('About screen', () => {
   it('tells users that other tools on the site share the browser storage', () => {
     expect($('#main').textContent).toContain('share this browser storage');
   });
+  it('names the one outside connection', () => {
+    expect($('#main').textContent).toContain('optional AI narrative');
+  });
 });

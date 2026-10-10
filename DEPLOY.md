@@ -24,8 +24,8 @@ If `npm install` cannot reach `cdn.sheetjs.com` (the spreadsheet reader is downl
 
 - **Sign-in:** none is planned (owner's decision). The page is public and holds no data until a user loads reports in their own browser. If sign-in is added later, it must cover this folder's files too.
 - **Browser storage:** the page saves school profiles, BARs and the parsed rows of loaded reports (employee names and pay) in the user's browser, under names starting with `barbuilder`. Every tool on the same subdomain shares one browser origin and could read them; no separate subdomain is planned (owner's decision), so keep analytics, chat and other third-party scripts off this site.
-- **Content-Security-Policy:** the build adds this as a meta tag: `default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'`. If the server can send headers, send the same policy as a header and add `frame-ancestors 'self'`.
-- Nothing needs to be allowed to reach other sites; the page makes no outside requests.
+- **Content-Security-Policy:** the build adds this as a meta tag: `default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self'; connect-src 'self' https://api.anthropic.com; object-src 'none'; base-uri 'self'; form-action 'self'`. If the server can send headers, send the same policy as a header and add `frame-ancestors 'self'`.
+- The page makes no outside requests, with one exception: the optional AI narrative. Only after a user previews the text, enters their own Anthropic API key and presses Send does the browser contact `https://api.anthropic.com` (that is the only extra host in the policy above). If you do not want that, remove the host from the policy and the button will simply report that it could not reach the service.
 
 ## Check after deploying
 

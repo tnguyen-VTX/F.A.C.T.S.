@@ -76,7 +76,7 @@ The backup file (profiles, saved BARs, drafts, settings only) restores with a pe
 
 The built app is static files for the ledgerandlearning.com suite (facts.ledgerandlearning.com). Decisions: no sign-in and no
 separate subdomain, so the page is public and shares a browser origin with the site's other tools (storage names start with
-`barbuilder`; nothing is stored on a server). It loads nothing from other hosts: fonts are in `src/fonts`, and `vite.config.js` adds a Content-Security-Policy to the
+`barbuilder`; nothing is stored on a server). It loads nothing from other hosts, except that the optional AI narrative button sends a short summary to api.anthropic.com after a preview and the user's own key: fonts are in `src/fonts`, and `vite.config.js` adds a Content-Security-Policy to the
 built page and builds with relative paths. See `context/hosting.md` and `DEPLOY.md`.
 
 ## Domain notes
@@ -119,6 +119,8 @@ src/lib/bar.js        BAR model, totals and validation for T, M, I, IB, D (stop/
 src/lib/justify.js    Rule-based justification wording per BAR type (no commas, quotes or pipes; max 255) (pure)
 src/lib/barCsv.js     OBMS BAR upload file (UBH 15 fields, UBL 9, CRLF); none is made while a check says stop (pure)
 src/lib/barLog.js     Saved BARs, status log, freeze/lock rules, backup export and restore planning (pure)
+src/lib/narrative.js  Optional AI-drafted narrative: exact text sent, one Anthropic call, plain errors (pure; client injectable)
+src/lib/aiKey.js      User's own API key: tab-only by default, optional remember (never backed up)
 src/lib/fte.js        FTE change for salary lines (proportional to dollars; assumption to confirm) (pure)
 src/lib/format.js     Formatting, math, and account-code helpers
 src/lib/idb.js        IndexedDB cache for the last workbook

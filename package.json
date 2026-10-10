@@ -14,7 +14,8 @@
     "format": "prettier --write \"src/**/*.{js,css}\" \"test/**/*.js\" index.html"
   },
   "dependencies": {
-    "xlsx": "https://cdn.sheetjs.com/xlsx-0.20.3/xlsx-0.20.3.tgz"
+    "xlsx": "https://cdn.sheetjs.com/xlsx-0.20.3/xlsx-0.20.3.tgz",
+    "@anthropic-ai/sdk": "^0.133.0"
   },
   "devDependencies": {
     "jsdom": "^25.0.0",
