@@ -48,7 +48,7 @@ Environment note: `cdn.sheetjs.com` is blocked in the cloud session, so `npm ins
 
 - [x] Fonts self-hosted (DM Sans body, Red Hat Display headlines), Google Fonts removed.
 - [x] Build-time Content-Security-Policy; relative base path; verified in a browser from a sub-folder with real files, no outside requests, no violations.
-- [x] Site facts from the user: suite on facts.ledgerandlearning.com (shared origin), no sign-in yet, no site-wide scripts, site owner deploys. Done: BAR Builder-only build (`npm run build:bar`), storage names prefixed `barbuilder`. Still open: sign-in, own subdomain (user chose prefix only), final path.
+- [x] Site facts from the user: suite on facts.ledgerandlearning.com (shared origin), no sign-in yet, no site-wide scripts, site owner deploys. Done: BAR Builder-only build (`npm run build:bar`), storage names prefixed `barbuilder`. User decided: no sign-in and no separate subdomain. Still open: the final path (site owner).
 - [x] A How to use screen (`src/views/help.js`, seven steps for business managers).
 - [x] An About, privacy and limits page inside the app (`src/views/about.js`); contact for reporting problems: tim.nguyen@vertexeducation.com.
 - [x] Stored data is versioned (`src/lib/migrate.js`, key `facts.dataVersion`); newer or unreadable data is never overwritten. Saved report records carry a version too and newer ones are skipped, not deleted.

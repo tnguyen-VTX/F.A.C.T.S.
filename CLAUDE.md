@@ -74,9 +74,10 @@ The backup file (profiles, saved BARs, drafts, settings only) restores with a pe
 
 ## Hosting (ledgersandlearning.com)
 
-The built app is static files for ledgersandlearning.com (sign-in with an internal work email is handled by the site, not by
-FACTS). It loads nothing from other hosts: fonts are in `src/fonts`, and `vite.config.js` adds a Content-Security-Policy to the
-built page and builds with relative paths. See `context/hosting.md` for the open items (sign-in covering the app, own subdomain).
+The built app is static files for the ledgerandlearning.com suite (facts.ledgerandlearning.com). Decisions: no sign-in and no
+separate subdomain, so the page is public and shares a browser origin with the site's other tools (storage names start with
+`barbuilder`; nothing is stored on a server). It loads nothing from other hosts: fonts are in `src/fonts`, and `vite.config.js` adds a Content-Security-Policy to the
+built page and builds with relative paths. See `context/hosting.md` and `DEPLOY.md`.
 
 ## Domain notes
 

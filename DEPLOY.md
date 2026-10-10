@@ -22,8 +22,8 @@ If `npm install` cannot reach `cdn.sheetjs.com` (the spreadsheet reader is downl
 
 ## Security notes
 
-- **Sign-in:** none is set up yet. When it is, it must cover this folder's files too: open the direct link signed out and confirm it asks for sign-in. The page itself holds no data until a user loads reports in their own browser.
-- **Browser storage:** the page saves school profiles, BARs and the parsed rows of loaded reports (employee names and pay) in the user's browser, under names starting with `barbuilder`. Every tool on the same subdomain shares one browser origin and could read them. A separate subdomain (for example `bars.ledgerandlearning.com`) would stop that. No analytics, chat or other scripts should run on this page.
+- **Sign-in:** none is planned (owner's decision). The page is public and holds no data until a user loads reports in their own browser. If sign-in is added later, it must cover this folder's files too.
+- **Browser storage:** the page saves school profiles, BARs and the parsed rows of loaded reports (employee names and pay) in the user's browser, under names starting with `barbuilder`. Every tool on the same subdomain shares one browser origin and could read them; no separate subdomain is planned (owner's decision), so keep analytics, chat and other third-party scripts off this site.
 - **Content-Security-Policy:** the build adds this as a meta tag: `default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'`. If the server can send headers, send the same policy as a header and add `frame-ancestors 'self'`.
 - Nothing needs to be allowed to reach other sites; the page makes no outside requests.
 

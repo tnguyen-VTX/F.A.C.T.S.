@@ -18,4 +18,7 @@ describe('About screen', () => {
   it('says how to report a problem', () => {
     expect($('#main a[href^="mailto:"]').textContent).toContain('@vertexeducation.com');
   });
+  it('tells users that other tools on the site share the browser storage', () => {
+    expect($('#main').textContent).toContain('share this browser storage');
+  });
 });
