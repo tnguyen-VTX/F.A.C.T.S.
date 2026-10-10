@@ -59,6 +59,7 @@ import { viewBudget } from './views/budget.js';
 import { viewImport } from './views/import.js';
 import { viewCap } from './views/capitalOutlay.js';
 import { viewAbout } from './views/about.js';
+import { viewHelp } from './views/help.js';
 import { scDraftErrors, scErrors, scForm, scOpen, viewSchools } from './views/schools.js';
 import { crResults, viewCR } from './views/cashReceipts.js';
 import { jeList, jeResults, viewJE } from './views/journal.js';
@@ -76,10 +77,11 @@ const NAV = [
   ['cr', 'Cash receipts'],
   ['cap', 'Capital outlay'],
   ['schools', 'Schools'],
+  ['help', 'How to use'],
   ['about', 'About and privacy'],
 ];
 // Screens that work before any report is loaded.
-const LITE = new Set(['import', 'schools', 'about']);
+const LITE = new Set(['import', 'schools', 'about', 'help']);
 const keepBB = keep;
 const wbKey = () => 'workbook:' + PF.active;
 const LEGACY_KEY = 'workbook';
@@ -136,6 +138,7 @@ const VIEWS = {
   cap: viewCap,
   schools: viewSchools,
   about: viewAbout,
+  help: viewHelp,
 };
 async function copyText(t, btn) {
   try {

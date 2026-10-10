@@ -120,7 +120,7 @@ src/lib/barLog.js     Saved BARs, status log, freeze/lock rules, backup export a
 src/lib/fte.js        FTE change for salary lines (proportional to dollars; assumption to confirm) (pure)
 src/lib/format.js     Formatting, math, and account-code helpers
 src/lib/idb.js        IndexedDB cache for the last workbook
-src/views/*.js        One module per screen (barBuilder.js = BAR Builder: fund picker, deficits, OBMS-style view, download); each renders HTML strings into #main (schools.js = profile editor, import.js = Load reports)
+src/views/*.js        One module per screen (help.js = How to use, about.js = About and privacy) (barBuilder.js = BAR Builder: fund picker, deficits, OBMS-style view, download); each renders HTML strings into #main (schools.js = profile editor, import.js = Load reports)
 src/styles.css        Design tokens (light/dark), DM Sans and Red Hat Display (src/fonts), layout
 test/                 Vitest: parser checks against real totals + jsdom smoke test of every screen
 fixtures/             Put facts.xlsx here to run the data tests (git-ignored)

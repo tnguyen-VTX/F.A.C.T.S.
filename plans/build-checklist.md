@@ -47,6 +47,7 @@ Environment note: `cdn.sheetjs.com` is blocked in the cloud session, so `npm ins
 - [x] Fonts self-hosted (DM Sans body, Red Hat Display headlines), Google Fonts removed.
 - [x] Build-time Content-Security-Policy; relative base path; verified in a browser from a sub-folder with real files, no outside requests, no violations.
 - [ ] Confirm with the site owner: sign-in covers the app, own subdomain, no site-wide scripts, deploy path (see `context/hosting.md`).
+- [x] A How to use screen (`src/views/help.js`, seven steps for business managers).
 - [x] An About, privacy and limits page inside the app (`src/views/about.js`); the contact for reporting problems is still to be supplied.
 - [x] Stored data is versioned (`src/lib/migrate.js`, key `facts.dataVersion`); newer or unreadable data is never overwritten. Saved report records carry a version too and newer ones are skipped, not deleted.
 
