@@ -108,10 +108,14 @@ export function allocateReceiving(deficit, T) {
 // other (no object rule for Transfer and Maintenance BARs). A line gives at most its own Available, and a
 // function at most its subtotal Available, so no function ends below zero. mode: 'rank' (the profile's
 // function order first, then most room) or 'spread' (every function with room gives by share of its room).
+// kind 'T' takes only from other function series (OBMS rejects a Transfer within a series, "Same Func Xfer"); 'M' only from the same series.
 // Returns the negative lines and the shortfall (dollars the donors could not cover; 0 if none).
-export function allocateDonors(asr, { fund, excludeFunc, need, mode = 'rank', priority = [] }) {
+const seriesOk = (kind, a, b) => (kind === 'T' ? a[0] !== b[0] : kind === 'M' ? a[0] === b[0] : true);
+export function allocateDonors(asr, { fund, excludeFunc, need, mode = 'rank', priority = [], kind }) {
   const f = asr.funds.get(fund);
-  const fns = f ? fundFunctions(f).filter((x) => x.code !== excludeFunc) : [];
+  const fns = f
+    ? fundFunctions(f).filter((x) => x.code !== excludeFunc && seriesOk(kind, x.code, excludeFunc))
+    : [];
   const rank = (code) => {
     const i = priority.indexOf(code);
     return i < 0 ? Infinity : i;
@@ -163,12 +167,17 @@ export function allocateDonors(asr, { fund, excludeFunc, need, mode = 'rank', pr
 
 // A whole transfer for one deficit function. amount defaults to the deficit plus the cushion,
 // rounded up to whole dollars. Returns signed lines; net is 0 unless a donor group falls short.
-export function buildTransfer(asr, deficit, { amount, cushion = 0, mode = 'rank', priority = [] } = {}) {
+export function buildTransfer(
+  asr,
+  deficit,
+  { amount, cushion = 0, mode = 'rank', priority = [], kind } = {},
+) {
   const T = amount != null ? Math.round(amount) : up(deficit.deficit + cushion);
   const receiving = allocateReceiving(deficit, T);
   const donors = allocateDonors(asr, {
     fund: deficit.fund,
     excludeFunc: deficit.func,
+    kind,
     need: sumBy(receiving, (l) => l.amount),
     mode,
     priority,

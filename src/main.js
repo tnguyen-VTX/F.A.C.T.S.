@@ -272,7 +272,7 @@ const ACT = {
     render();
   },
   bbBuild: (t) => {
-    bbBuildTransfer(t.dataset.fund, t.dataset.func);
+    bbBuildTransfer(t.dataset.fund, t.dataset.func, t.dataset.kind || 'T');
     bbDraft();
     $('#bbdraft')?.scrollIntoView?.({ behavior: 'smooth', block: 'start' });
   },

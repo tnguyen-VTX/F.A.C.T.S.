@@ -93,10 +93,10 @@ export function validateBar(bar, { profile, asr } = {}) {
     if (Math.abs(tot.net) > 0.005)
       add('stop', `The BAR does not balance: lines net to ${tot.net.toFixed(2)}, not 0.00.`);
   }
-  // OBMS refused a Transfer between two functions of the same series ("Same Func Xfer"; 2500 to 2100), and
-  // its BAR Entry screen lists no 2000-series destination for a 2000-series source. A warning until the
-  // rule is confirmed for other series.
-  if (t === 'T') {
+  // OBMS refuses a Transfer between two functions of the same series ("Same Func Xfer"; 2500 to 2100) but
+  // accepts the same move as a Maintenance BAR. Seen on 2000-series functions only: a stop there, a warning
+  // for other series until the rule is confirmed.
+  if (t === 'T' || t === 'M') {
     const nets = new Map();
     for (const l of bar.lines) {
       if (isRevenueObject(l.obj) || !l.func || !Number.isFinite(l.amount)) continue;
@@ -104,12 +104,25 @@ export function validateBar(bar, { profile, asr } = {}) {
     }
     const give = [...nets].filter(([, v]) => Math.round(v) < 0).map(([f]) => f);
     const get = [...nets].filter(([, v]) => Math.round(v) > 0).map(([f]) => f);
-    const pairs = give.flatMap((g) => get.filter((r) => r[0] === g[0]).map((r) => `${g} to ${r}`));
-    if (pairs.length)
-      add(
-        'warn',
-        `OBMS rejected a Transfer between functions of the same series ("Same Func Xfer"): ${pairs.slice(0, 3).join(', ')}${pairs.length > 3 ? ', ...' : ''}. In OBMS's own BAR Entry the destination list leaves out 2000-series functions when the source is 2500. Try a Maintenance BAR for these, or move from a function in another series.`,
-      );
+    if (t === 'T') {
+      const pairs = give.flatMap((g) => get.filter((r) => r[0] === g[0]).map((r) => [g, r]));
+      if (pairs.length) {
+        const text =
+          pairs
+            .slice(0, 3)
+            .map(([g, r]) => `${g} to ${r}`)
+            .join(', ') + (pairs.length > 3 ? ', ...' : '');
+        const msg = `OBMS rejects a Transfer between functions of the same series ("Same Func Xfer"): ${text}. Make it a Maintenance BAR, or move from a function in another series.`;
+        add(pairs.some(([g]) => g[0] === '2') ? 'stop' : 'warn', msg);
+      }
+    } else {
+      const pairs = give.flatMap((g) => get.filter((r) => r[0] !== g[0]).map((r) => `${g} to ${r}`));
+      if (pairs.length)
+        add(
+          'warn',
+          `This Maintenance BAR moves money between function series (${pairs.slice(0, 3).join(', ')}). OBMS accepted Maintenance within one series; across series is untested. Use a Transfer for these.`,
+        );
+    }
   }
   if (t === 'I' || t === 'IB' || t === 'D') {
     if (!hasRev) add('stop', `${BAR_TYPES[t]} BARs need the revenue line for the award.`);
@@ -148,11 +161,6 @@ export function validateBar(bar, { profile, asr } = {}) {
     for (const l of bar.lines.filter((x) => isRevenueObject(x.obj)))
       if (l.func !== '0000' || l.prog !== '0000' || l.job !== '0000')
         add('warn', `${l.code}: revenue lines normally use function 0000, program 0000 and job class 0000.`);
-  }
-  if (t === 'M') {
-    const funcs = new Set(bar.lines.map((l) => l.func));
-    if (funcs.size > 1)
-      add('stop', 'A Maintenance BAR moves money within one function; these lines are in more than one.');
   }
 
   // Never take a line or a function below zero (Transfer, Maintenance, Decrease).

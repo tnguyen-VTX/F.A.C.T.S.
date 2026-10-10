@@ -100,7 +100,7 @@ export function bbDeficits() {
   if (!el) return;
   const b = bb(),
     list = findDeficits(D.asr, [...b.funds]);
-  el.innerHTML = `<section class="panel"><h2>Over budget</h2><p class="muted">Functions whose Available is below zero. A transfer adds the deficit plus a cushion and takes it from other functions of the same fund that have room.</p>
+  el.innerHTML = `<section class="panel"><h2>Over budget</h2><p class="muted">Functions whose Available is below zero. A transfer adds the deficit plus a cushion and takes it from functions in other series (the first digit of the function) of the same fund. OBMS rejects a Transfer within one series; a maintenance BAR takes it from other functions of the same series instead.</p>
   <div class="filters"><label>Cushion ($)<input type="number" min="0" step="1" data-in="bbCushion" value="${b.cushion || 0}"></label>
   <label>Take from<select data-in="bbMode"><option value="rank"${b.mode === 'rank' ? ' selected' : ''}>Functions in my order first</option><option value="spread"${b.mode === 'spread' ? ' selected' : ''}>Spread across all with room</option></select></label></div>
   ${
@@ -108,7 +108,7 @@ export function bbDeficits() {
       ? `<div class="scroll"><table class="t"><thead><tr><th>Fund</th><th>Function</th><th class="r">Available</th><th class="r">Deficit</th><th></th></tr></thead><tbody>${list
           .map(
             (d) =>
-              `<tr><td>${esc(fundLabel(d.fund))}</td><td>${esc(d.func)} ${esc(d.funcName)}</td><td class="r"><span class="num neg">${fmtM(d.avail)}</span></td><td class="r num">${fmtM(d.deficit)}</td><td class="r"><button class="btn" data-act="bbBuild" data-fund="${esc(d.fund)}" data-func="${esc(d.func)}">Build a transfer</button></td></tr>`,
+              `<tr><td>${esc(fundLabel(d.fund))}</td><td>${esc(d.func)} ${esc(d.funcName)}</td><td class="r"><span class="num neg">${fmtM(d.avail)}</span></td><td class="r num">${fmtM(d.deficit)}</td><td class="r"><button class="btn" data-act="bbBuild" data-fund="${esc(d.fund)}" data-func="${esc(d.func)}">Build a transfer</button> <button class="btn" data-act="bbBuild" data-kind="M" data-fund="${esc(d.fund)}" data-func="${esc(d.func)}">Build a maintenance BAR</button></td></tr>`,
           )
           .join('')}</tbody></table></div>`
       : '<p>Nothing is over budget in the funds shown.</p>'
@@ -126,7 +126,7 @@ const replaceOk = () => {
   );
 };
 
-export function bbBuildTransfer(fund, func) {
+export function bbBuildTransfer(fund, func, kind = 'T') {
   const b = bb(),
     d = findDeficits(D.asr, [fund]).find((x) => x.func === func);
   if (!d || !replaceOk()) return;
@@ -134,13 +134,14 @@ export function bbBuildTransfer(fund, func) {
     cushion: num(b.cushion),
     mode: b.mode,
     priority: profile().donorPriority || [],
+    kind,
   });
-  const bar = newBar('T', fund);
+  const bar = newBar(kind, fund);
   bar.lines = t.lines.map((l) => barLine(profile(), l.code, l.amount));
   bar.justification = suggestJustification(bar, { funcNames: D.asr.funcNames, fundNames: D.fundNames });
   b.draft = bar;
   b.note = t.shortfall
-    ? `The other functions in this fund can cover only $${(t.amount - t.shortfall).toLocaleString()} of the $${t.amount.toLocaleString()} needed; $${t.shortfall.toLocaleString()} is short. Add lines, lower the amount, or reduce the cushion, or the BAR will not balance.`
+    ? `${kind === 'M' ? 'The other functions of the same series' : 'The functions of other series'} in this fund can cover only $${(t.amount - t.shortfall).toLocaleString()} of the $${t.amount.toLocaleString()} needed; $${t.shortfall.toLocaleString()} is short. Add lines, lower the amount, or reduce the cushion, or the BAR will not balance.`
     : '';
   keep();
 }

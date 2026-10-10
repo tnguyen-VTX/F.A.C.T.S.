@@ -53,7 +53,7 @@ export function suggestJustification(bar, { funcNames = {}, fundNames = {} } = {
       )} to ensure no function is over budget.`;
   } else if (bar.type === 'M') {
     if (!get.length) return '';
-    t = `Maintenance transfer of ${dollarsText(moved)} within ${names(
+    t = `Maintenance transfer of ${dollarsText(moved)} ${new Set(ex.map((l) => l.func)).size > 1 ? 'between' : 'within'} ${names(
       ex.map((l) => l.func),
       funcNames,
     )} to align the budget with actual expenditures.`;

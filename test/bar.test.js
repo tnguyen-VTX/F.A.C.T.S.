@@ -148,15 +148,24 @@ describe('balance by type', () => {
       ),
     ).toContain('expenditure budget only');
   });
-  it('Maintenance stays in one function', () => {
-    const c = validateBar(
+  it('Maintenance may span functions of one series but warns across series', () => {
+    const ok = validateBar(
+      bar('M', '11000', [
+        [A, -10],
+        ['11000-1100-51100-4010-028-1416', 10],
+      ]),
+      { profile: P },
+    );
+    expect(msgs(ok, 'stop')).not.toContain('Maintenance');
+    expect(msgs(ok, 'warn')).not.toContain('Maintenance BAR moves money between');
+    const x = validateBar(
       bar('M', '11000', [
         [A, -10],
         ['11000-2100-51100-4010-028-1416', 10],
       ]),
       { profile: P },
     );
-    expect(msgs(c, 'stop')).toContain('within one function');
+    expect(msgs(x, 'warn')).toContain('between function series');
   });
   it('Increase needs revenue equal to expenditure, with the right sign', () => {
     const rev = '21000-0000-41604-0000-000-0000',
@@ -463,7 +472,7 @@ describe('salary lines without an FTE (OBMS: "Missing projected FTE")', () => {
   const salary = (fte) => {
     const b = newBar('T', '11000');
     b.lines = [
-      ['11000-2500-56113-0000-001-0000', -1000, 0],
+      ['11000-1000-56113-0000-001-0000', -1000, 0],
       ['11000-2100-51100-0000-001-1211', 600, fte],
       ['11000-2100-51300-0000-001-1214', 400, 0],
     ].map(([c, a, f]) => barLine(P, c, a, f));
@@ -493,7 +502,7 @@ describe('Transfer between functions of the same series (OBMS: "Same Func Xfer")
     b.justification = 'x';
     return b;
   };
-  it('warns for 2500 to 2100 and names the pair', () => {
+  it('stops 2500 to 2100 and names the pair', () => {
     const c = validateBar(
       tr([
         ['11000-2500-57331-0000-001-0000', -1000],
@@ -501,8 +510,28 @@ describe('Transfer between functions of the same series (OBMS: "Same Func Xfer")
       ]),
       { profile: P },
     );
-    expect(msgs(c, 'warn')).toContain('2500 to 2100');
+    expect(msgs(c, 'stop')).toContain('2500 to 2100');
+    expect(canDownload(c)).toBe(false);
+  });
+  it('only warns outside the 2000 series', () => {
+    const c = validateBar(
+      tr([
+        ['11000-3300-57331-0000-001-0000', -1000],
+        ['11000-3100-55915-0000-001-0000', 1000],
+      ]),
+      { profile: P },
+    );
+    expect(msgs(c, 'warn')).toContain('3300 to 3100');
     expect(canDownload(c)).toBe(true);
+  });
+  it('accepts the same move as a Maintenance BAR', () => {
+    const b = newBar('M', '11000');
+    b.lines = [
+      ['11000-2500-57331-0000-001-0000', -1000],
+      ['11000-2100-55915-0000-001-0000', 1000],
+    ].map(([c, a]) => barLine(P, c, a));
+    b.justification = 'x';
+    expect(canDownload(validateBar(b, { profile: P }))).toBe(true);
   });
   it('is quiet when the functions are in different series', () => {
     const c = validateBar(

@@ -207,7 +207,7 @@ describe.skipIf(!existsSync(XL))('real Cesar Chavez deficits', () => {
     let passed = 0,
       stopped = 0;
     for (const d of deficits) {
-      const t = buildTransfer(asr, d, { mode: 'rank' });
+      const t = buildTransfer(asr, d, { mode: 'rank', kind: 'T' });
       const b = newBar('T', d.fund);
       b.justification = 'Aligning budget with actual expenditures';
       b.lines = t.lines.map((l) => barLine(prof, l.code, l.amount));
