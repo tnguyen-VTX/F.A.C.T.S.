@@ -29,4 +29,35 @@ Blanks: `[School Name]` (profile name), `[Function Title (function code)]`, `[Fu
 - Done: the short justification for a Decrease no longer says "to reduce the budget to the award" (now "Decrease of $X in fund N.").
 - Decided: the same wording for every school; only the school name is filled in. No profile override. The user can still edit the text on a BAR.
 - Decided: a stale narrative only warns (never stops the download; the narrative is not in the upload file). Method: save the template id and the text as generated at fill time (`narrativeFill`); warn when filling the same template again from the current lines gives different text. Hand edits do not trigger it, only changed lines do.
-- Still to plan: which Transfer template applies, tie-out/proof, tests, build order, how to explain it.
+- Decided: for a Transfer the list opens on a suggested template and the user can pick the other. Rule: if any receiving function is over budget (subtotal Available below zero in the loaded Account Summary), suggest "Transfer (negative function)"; otherwise "Transfer (positive function)". With no Account Summary loaded, no suggestion (first in the list).
+
+## Who, where, data
+- The business manager, on the BAR draft in the BAR Builder (the existing template list and "Fill from this BAR" button; no new screen).
+- Data: only the BAR's own lines, the school profile name, the fund and function names from the loaded Account Summary. No report is needed to fill Maintenance, Increase, Initial Budget or Decrease; the suggestion for Transfers needs the Account Summary. Nothing new is stored except `narrativeFill` (template id and generated text) on the BAR, kept in saved BARs and the backup.
+- Amounts are whole dollars, as everywhere else. Increase and Decrease use the revenue total (equal to the expenditure total on a balanced BAR).
+
+## What varies by school
+Only the school name (profile). Same wording for every school; no profile field.
+
+## Rules, not AI
+Fixed wording filled from the BAR. No AI. A person reads and can edit the text before it is used.
+
+## Risks and how we handle them
+- Stale text after the lines change: warning only (above).
+- Wrong template for the BAR type: `fillTemplate` already refuses a template for another type; each template lists the types it fits.
+- Missing function or fund title: shows the code alone, as the first template does.
+- Several functions on one side: listed ("A and B", "A, B, and C").
+- Narrative never goes in the OBMS file (unchanged).
+
+## Proof
+Unit tests in `test/narrativeTemplates.test.js` that compare the filled text to the exact wording above, for: each of the five templates; two giving and one receiving function; a single-function Maintenance ("within"); Initial Budget versus Increase; Decrease; the Transfer suggestion (over-budget receiver, not over budget, no report loaded); the stale check (lines changed warns, hand edit does not); a template refused for the wrong BAR type. A screen test in `test/barBuilder.ui.test.js` for the suggested template and the warning. Chromium look at the panel.
+
+## Build steps (smallest first, tests after each)
+1. Add the four templates to `src/lib/narrativeTemplates.js` (types `T`, `M`, `I`/`IB`, `D`) with tests.
+2. `suggestTemplate(bar, asr)` for Transfers, with tests.
+3. Save `narrativeFill` when filling; `narrativeStale(bar, ctx)` check, with tests.
+4. Barbuilder panel: preselect the suggestion, show the stale warning, add the fund name to the template context; screen tests.
+5. Docs: `CLAUDE.md`, `plans/build-checklist.md`, How to use (one sentence), `context/style.md` (the approved wording).
+
+## How to explain it
+Problem: each BAR needs a written explanation, and typing it by hand invites wrong amounts and wording that differs between schools. Solution: standard wording for each BAR type, filled from the BAR's own lines, with a warning if the lines change afterward. Impact: faster BARs, consistent wording, and no number in the text that disagrees with the BAR.

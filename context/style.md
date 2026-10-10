@@ -37,3 +37,6 @@ Cautions: red already means over budget in FACTS and green means positive, so ke
 ## Tone for anything sent to the state
 
 Plain, factual, one sentence of purpose. Justifications are rule-based templates the user can edit. Max 255 characters, no double quotes or pipes.
+
+## BAR narrative wording (approved 10/10/2026)
+Five standard narratives (Transfer negative function, Transfer positive function, Maintenance, Increase/Initial Budget, Decrease) are listed with their exact wording in `plans/narrative-templates.md`. Same wording for every school. A Decrease narrative does not say why (a decrease is not always an award decrease).
