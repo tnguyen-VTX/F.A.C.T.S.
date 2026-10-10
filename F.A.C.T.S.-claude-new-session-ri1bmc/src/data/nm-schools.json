@@ -1,0 +1,6077 @@
+[
+  {
+    "dn": "21ST CENTURY PUBLIC ACADEMY",
+    "dc": "580",
+    "dt": "State Charter",
+    "ln": "21ST CENTURY PUBLIC ACADEMY",
+    "li": "001",
+    "st": "CHANGED AGENCY"
+  },
+  {
+    "dn": "ABQ SCHOOL OF EXCELLENCE",
+    "dc": "516",
+    "dt": "State Charter",
+    "ln": "ABQ SCHOOL OF EXCELLENCE",
+    "li": "001",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ABQ SIGN LANGUAGE ACADEMY",
+    "dc": "517",
+    "dt": "State Charter",
+    "ln": "ABQ SIGN LANGUAGE ACADEMY",
+    "li": "001",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ACES TECHNICAL CHARTER SCHOOL",
+    "dc": "579",
+    "dt": "State Charter",
+    "ln": "ACES TECHNICAL HIGH SCHOOL",
+    "li": "001",
+    "st": "NEW"
+  },
+  {
+    "dn": "ALAMOGORDO",
+    "dc": "046",
+    "dt": "State District",
+    "ln": "ACADEMY DEL SOL ALT.",
+    "li": "004",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ALAMOGORDO",
+    "dc": "046",
+    "dt": "State District",
+    "ln": "ALAMOGORDO HIGH",
+    "li": "015",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ALAMOGORDO",
+    "dc": "046",
+    "dt": "State District",
+    "ln": "BUENA VISTA ELEMENTARY",
+    "li": "028",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ALAMOGORDO",
+    "dc": "046",
+    "dt": "State District",
+    "ln": "CHAPARRAL MIDDLE",
+    "li": "033",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ALAMOGORDO",
+    "dc": "046",
+    "dt": "State District",
+    "ln": "DESERT STAR ELEMENTARY",
+    "li": "144",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ALAMOGORDO",
+    "dc": "046",
+    "dt": "State District",
+    "ln": "HIGH ROLLS MOUNTAIN PARK ELEMENTARY",
+    "li": "057",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ALAMOGORDO",
+    "dc": "046",
+    "dt": "State District",
+    "ln": "HOLLOMAN ELEMENTARY",
+    "li": "058",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ALAMOGORDO",
+    "dc": "046",
+    "dt": "State District",
+    "ln": "HOLLOMAN MIDDLE",
+    "li": "037",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ALAMOGORDO",
+    "dc": "046",
+    "dt": "State District",
+    "ln": "LA LUZ ELEMENTARY",
+    "li": "072",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ALAMOGORDO",
+    "dc": "046",
+    "dt": "State District",
+    "ln": "MOUNTAIN VIEW MIDDLE",
+    "li": "003",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ALAMOGORDO",
+    "dc": "046",
+    "dt": "State District",
+    "ln": "NORTH ELEMENTARY",
+    "li": "114",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ALAMOGORDO",
+    "dc": "046",
+    "dt": "State District",
+    "ln": "SIERRA ELEMENTARY",
+    "li": "150",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ALAMOGORDO",
+    "dc": "046",
+    "dt": "State District",
+    "ln": "STEPPING STONES PRESCHOOL",
+    "li": "182",
+    "st": "NEW"
+  },
+  {
+    "dn": "ALAMOGORDO",
+    "dc": "046",
+    "dt": "State District",
+    "ln": "SUNSET HILLS ELEMENTARY",
+    "li": "056",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ALAMOGORDO",
+    "dc": "046",
+    "dt": "State District",
+    "ln": "YUCCA ELEMENTARY",
+    "li": "181",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ALBUQUERQUE",
+    "dc": "001",
+    "dt": "State District",
+    "ln": "A. MONTOYA ELEMENTARY",
+    "li": "321",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ALBUQUERQUE",
+    "dc": "001",
+    "dt": "State District",
+    "ln": "ABQ CHARTER ACADEMY",
+    "li": "090",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ALBUQUERQUE",
+    "dc": "001",
+    "dt": "State District",
+    "ln": "ACE LEADERSHIP HIGH SCHOOL",
+    "li": "749",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ALBUQUERQUE",
+    "dc": "001",
+    "dt": "State District",
+    "ln": "ADOBE ACRES ELEMENTARY",
+    "li": "206",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ALBUQUERQUE",
+    "dc": "001",
+    "dt": "State District",
+    "ln": "ALAMEDA ELEMENTARY",
+    "li": "207",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ALBUQUERQUE",
+    "dc": "001",
+    "dt": "State District",
+    "ln": "ALAMOSA ELEMENTARY",
+    "li": "210",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ALBUQUERQUE",
+    "dc": "001",
+    "dt": "State District",
+    "ln": "ALBUQUERQUE HIGH",
+    "li": "590",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ALBUQUERQUE",
+    "dc": "001",
+    "dt": "State District",
+    "ln": "ALICE KING COMMUNITY SCHOOL",
+    "li": "116",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ALBUQUERQUE",
+    "dc": "001",
+    "dt": "State District",
+    "ln": "ALVARADO ELEMENTARY",
+    "li": "213",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ALBUQUERQUE",
+    "dc": "001",
+    "dt": "State District",
+    "ln": "APACHE ELEMENTARY",
+    "li": "214",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ALBUQUERQUE",
+    "dc": "001",
+    "dt": "State District",
+    "ln": "ARMIJO ELEMENTARY",
+    "li": "215",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ALBUQUERQUE",
+    "dc": "001",
+    "dt": "State District",
+    "ln": "ARROYO DEL OSO ELEMENTARY",
+    "li": "329",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ALBUQUERQUE",
+    "dc": "001",
+    "dt": "State District",
+    "ln": "ATRISCO ELEMENTARY",
+    "li": "216",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ALBUQUERQUE",
+    "dc": "001",
+    "dt": "State District",
+    "ln": "ATRISCO HERITAGE ACADEMY HS",
+    "li": "576",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ALBUQUERQUE",
+    "dc": "001",
+    "dt": "State District",
+    "ln": "BANDELIER ELEMENTARY",
+    "li": "222",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ALBUQUERQUE",
+    "dc": "001",
+    "dt": "State District",
+    "ln": "BARCELONA ELEMENTARY",
+    "li": "225",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ALBUQUERQUE",
+    "dc": "001",
+    "dt": "State District",
+    "ln": "BEL-AIR ELEMENTARY",
+    "li": "228",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ALBUQUERQUE",
+    "dc": "001",
+    "dt": "State District",
+    "ln": "BELLEHAVEN ELEMENTARY",
+    "li": "229",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ALBUQUERQUE",
+    "dc": "001",
+    "dt": "State District",
+    "ln": "CAREER ENRICHMENT",
+    "li": "592",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ALBUQUERQUE",
+    "dc": "001",
+    "dt": "State District",
+    "ln": "CARLOS REY ELEMENTARY",
+    "li": "339",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ALBUQUERQUE",
+    "dc": "001",
+    "dt": "State District",
+    "ln": "CHAMIZA ELEMENTARY",
+    "li": "295",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ALBUQUERQUE",
+    "dc": "001",
+    "dt": "State District",
+    "ln": "CHAPARRAL ELEMENTARY",
+    "li": "234",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ALBUQUERQUE",
+    "dc": "001",
+    "dt": "State District",
+    "ln": "CHELWOOD ELEMENTARY",
+    "li": "236",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ALBUQUERQUE",
+    "dc": "001",
+    "dt": "State District",
+    "ln": "CHRISTINE DUNCAN HERITAGE ACADEMY",
+    "li": "118",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ALBUQUERQUE",
+    "dc": "001",
+    "dt": "State District",
+    "ln": "CIBOLA HIGH",
+    "li": "580",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ALBUQUERQUE",
+    "dc": "001",
+    "dt": "State District",
+    "ln": "CIEN AGUAS INTERNATIONAL",
+    "li": "780",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ALBUQUERQUE",
+    "dc": "001",
+    "dt": "State District",
+    "ln": "CLEVELAND MIDDLE",
+    "li": "407",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ALBUQUERQUE",
+    "dc": "001",
+    "dt": "State District",
+    "ln": "COCHITI ELEMENTARY",
+    "li": "237",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ALBUQUERQUE",
+    "dc": "001",
+    "dt": "State District",
+    "ln": "COLLEGE AND CAREER HIGH SCHOOL",
+    "li": "591",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ALBUQUERQUE",
+    "dc": "001",
+    "dt": "State District",
+    "ln": "COLLET PARK ELEMENTARY",
+    "li": "240",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ALBUQUERQUE",
+    "dc": "001",
+    "dt": "State District",
+    "ln": "COMANCHE ELEMENTARY",
+    "li": "241",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ALBUQUERQUE",
+    "dc": "001",
+    "dt": "State District",
+    "ln": "CONTINUATION SCHOOL",
+    "li": "035",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ALBUQUERQUE",
+    "dc": "001",
+    "dt": "State District",
+    "ln": "CORAL COMMUNITY CHARTER",
+    "li": "706",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ALBUQUERQUE",
+    "dc": "001",
+    "dt": "State District",
+    "ln": "CORONADO ELEMENTARY",
+    "li": "243",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ALBUQUERQUE",
+    "dc": "001",
+    "dt": "State District",
+    "ln": "CORRALES ELEMENTARY",
+    "li": "351",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ALBUQUERQUE",
+    "dc": "001",
+    "dt": "State District",
+    "ln": "CORRALES INTERNATIONAL",
+    "li": "028",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ALBUQUERQUE",
+    "dc": "001",
+    "dt": "State District",
+    "ln": "COTTONWOOD CLASSICAL PREP",
+    "li": "769",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ALBUQUERQUE",
+    "dc": "001",
+    "dt": "State District",
+    "ln": "COYOTE WILLOW FAMILY SCHOOL",
+    "li": "952",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ALBUQUERQUE",
+    "dc": "001",
+    "dt": "State District",
+    "ln": "DEL NORTE HIGH",
+    "li": "514",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ALBUQUERQUE",
+    "dc": "001",
+    "dt": "State District",
+    "ln": "DENNIS CHAVEZ ELEMENTARY",
+    "li": "203",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ALBUQUERQUE",
+    "dc": "001",
+    "dt": "State District",
+    "ln": "DESERT RIDGE MIDDLE",
+    "li": "430",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ALBUQUERQUE",
+    "dc": "001",
+    "dt": "State District",
+    "ln": "DESERT WILLOW FAMILY SCHOOL",
+    "li": "900",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ALBUQUERQUE",
+    "dc": "001",
+    "dt": "State District",
+    "ln": "DIGITAL ARTS AND TECHNOLOGY ACADEMY",
+    "li": "063",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ALBUQUERQUE",
+    "dc": "001",
+    "dt": "State District",
+    "ln": "DOLORES GONZALES ELEMENTARY",
+    "li": "244",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ALBUQUERQUE",
+    "dc": "001",
+    "dt": "State District",
+    "ln": "DOUBLE EAGLE ELEMENTARY",
+    "li": "350",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ALBUQUERQUE",
+    "dc": "001",
+    "dt": "State District",
+    "ln": "DURANES ELEMENTARY",
+    "li": "249",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ALBUQUERQUE",
+    "dc": "001",
+    "dt": "State District",
+    "ln": "EARLY COLLEGE ACADEMY",
+    "li": "593",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ALBUQUERQUE",
+    "dc": "001",
+    "dt": "State District",
+    "ln": "EAST MOUNTAIN HIGH SCHOOL",
+    "li": "024",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ALBUQUERQUE",
+    "dc": "001",
+    "dt": "State District",
+    "ln": "EAST SAN JOSE ELEMENTARY",
+    "li": "252",
+    "st": "OPEN"
+  },
+  { "dn": "ALBUQUERQUE", "dc": "001", "dt": "State District", "ln": "ECADEMY", "li": "517", "st": "OPEN" },
+  {
+    "dn": "ALBUQUERQUE",
+    "dc": "001",
+    "dt": "State District",
+    "ln": "EDMUND G ROSS ELEMENTARY",
+    "li": "219",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ALBUQUERQUE",
+    "dc": "001",
+    "dt": "State District",
+    "ln": "EDWARD GONZALES ELEMENTARY",
+    "li": "262",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ALBUQUERQUE",
+    "dc": "001",
+    "dt": "State District",
+    "ln": "EISENHOWER MIDDLE",
+    "li": "480",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ALBUQUERQUE",
+    "dc": "001",
+    "dt": "State District",
+    "ln": "EL CAMINO REAL ACADEMY",
+    "li": "069",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ALBUQUERQUE",
+    "dc": "001",
+    "dt": "State District",
+    "ln": "ELDORADO HIGH",
+    "li": "515",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ALBUQUERQUE",
+    "dc": "001",
+    "dt": "State District",
+    "ln": "EMERSON ELEMENTARY",
+    "li": "255",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ALBUQUERQUE",
+    "dc": "001",
+    "dt": "State District",
+    "ln": "ERNIE PYLE MIDDLE",
+    "li": "450",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ALBUQUERQUE",
+    "dc": "001",
+    "dt": "State District",
+    "ln": "EUGENE FIELD ELEMENTARY",
+    "li": "261",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ALBUQUERQUE",
+    "dc": "001",
+    "dt": "State District",
+    "ln": "FREEDOM HIGH",
+    "li": "596",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ALBUQUERQUE",
+    "dc": "001",
+    "dt": "State District",
+    "ln": "GARFIELD MIDDLE",
+    "li": "410",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ALBUQUERQUE",
+    "dc": "001",
+    "dt": "State District",
+    "ln": "GEORGE I SANCHEZ",
+    "li": "496",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ALBUQUERQUE",
+    "dc": "001",
+    "dt": "State District",
+    "ln": "GEORGIA O'KEEFFE ELEMENTARY",
+    "li": "328",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ALBUQUERQUE",
+    "dc": "001",
+    "dt": "State District",
+    "ln": "GILBERT L SENA CHARTER HS",
+    "li": "707",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ALBUQUERQUE",
+    "dc": "001",
+    "dt": "State District",
+    "ln": "GORDON BERNELL CHARTER",
+    "li": "030",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ALBUQUERQUE",
+    "dc": "001",
+    "dt": "State District",
+    "ln": "GOV BENT ELEMENTARY",
+    "li": "230",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ALBUQUERQUE",
+    "dc": "001",
+    "dt": "State District",
+    "ln": "GRANT MIDDLE",
+    "li": "413",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ALBUQUERQUE",
+    "dc": "001",
+    "dt": "State District",
+    "ln": "GRIEGOS ELEMENTARY",
+    "li": "267",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ALBUQUERQUE",
+    "dc": "001",
+    "dt": "State District",
+    "ln": "HARRISON MIDDLE",
+    "li": "415",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ALBUQUERQUE",
+    "dc": "001",
+    "dt": "State District",
+    "ln": "HAWTHORNE ELEMENTARY",
+    "li": "270",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ALBUQUERQUE",
+    "dc": "001",
+    "dt": "State District",
+    "ln": "HAYES MIDDLE",
+    "li": "416",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ALBUQUERQUE",
+    "dc": "001",
+    "dt": "State District",
+    "ln": "HEALTH LEADERSHIP HIGH SCHOOL",
+    "li": "752",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ALBUQUERQUE",
+    "dc": "001",
+    "dt": "State District",
+    "ln": "HELEN CORDERO PRIMARY",
+    "li": "395",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ALBUQUERQUE",
+    "dc": "001",
+    "dt": "State District",
+    "ln": "HIGHLAND AUTISM CENTER",
+    "li": "611",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ALBUQUERQUE",
+    "dc": "001",
+    "dt": "State District",
+    "ln": "HIGHLAND HIGH",
+    "li": "520",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ALBUQUERQUE",
+    "dc": "001",
+    "dt": "State District",
+    "ln": "HODGIN ELEMENTARY",
+    "li": "273",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ALBUQUERQUE",
+    "dc": "001",
+    "dt": "State District",
+    "ln": "HOOVER MIDDLE",
+    "li": "418",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ALBUQUERQUE",
+    "dc": "001",
+    "dt": "State District",
+    "ln": "HUBERT H HUMPHREY ELEMENTARY",
+    "li": "221",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ALBUQUERQUE",
+    "dc": "001",
+    "dt": "State District",
+    "ln": "INEZ ELEMENTARY",
+    "li": "276",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ALBUQUERQUE",
+    "dc": "001",
+    "dt": "State District",
+    "ln": "INTERNATIONAL SCHOOL AT MESA DEL SOL",
+    "li": "781",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ALBUQUERQUE",
+    "dc": "001",
+    "dt": "State District",
+    "ln": "JACKSON MIDDLE",
+    "li": "420",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ALBUQUERQUE",
+    "dc": "001",
+    "dt": "State District",
+    "ln": "JAMES MONROE MIDDLE",
+    "li": "490",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ALBUQUERQUE",
+    "dc": "001",
+    "dt": "State District",
+    "ln": "JANET KAHN FINE ARTS ACADEMY",
+    "li": "258",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ALBUQUERQUE",
+    "dc": "001",
+    "dt": "State District",
+    "ln": "JEFFERSON MIDDLE",
+    "li": "425",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ALBUQUERQUE",
+    "dc": "001",
+    "dt": "State District",
+    "ln": "JIMMY CARTER MIDDLE",
+    "li": "445",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ALBUQUERQUE",
+    "dc": "001",
+    "dt": "State District",
+    "ln": "JOHN ADAMS MIDDLE",
+    "li": "405",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ALBUQUERQUE",
+    "dc": "001",
+    "dt": "State District",
+    "ln": "JOHN BAKER ELEMENTARY",
+    "li": "217",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ALBUQUERQUE",
+    "dc": "001",
+    "dt": "State District",
+    "ln": "KENNEDY MIDDLE",
+    "li": "427",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ALBUQUERQUE",
+    "dc": "001",
+    "dt": "State District",
+    "ln": "KIRTLAND ELEMENTARY",
+    "li": "279",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ALBUQUERQUE",
+    "dc": "001",
+    "dt": "State District",
+    "ln": "KIT CARSON ELEMENTARY",
+    "li": "231",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ALBUQUERQUE",
+    "dc": "001",
+    "dt": "State District",
+    "ln": "L.B. JOHNSON MIDDLE",
+    "li": "485",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ALBUQUERQUE",
+    "dc": "001",
+    "dt": "State District",
+    "ln": "LA ACADEMIA DE ESPERANZA",
+    "li": "061",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ALBUQUERQUE",
+    "dc": "001",
+    "dt": "State District",
+    "ln": "LA CUEVA HIGH",
+    "li": "525",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ALBUQUERQUE",
+    "dc": "001",
+    "dt": "State District",
+    "ln": "LA LUZ ELEMENTARY",
+    "li": "282",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ALBUQUERQUE",
+    "dc": "001",
+    "dt": "State District",
+    "ln": "LA MESA ELEMENTARY",
+    "li": "285",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ALBUQUERQUE",
+    "dc": "001",
+    "dt": "State District",
+    "ln": "LAVALAND ELEMENTARY",
+    "li": "288",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ALBUQUERQUE",
+    "dc": "001",
+    "dt": "State District",
+    "ln": "LEW WALLACE ELEMENTARY",
+    "li": "373",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ALBUQUERQUE",
+    "dc": "001",
+    "dt": "State District",
+    "ln": "LONGFELLOW ELEMENTARY",
+    "li": "291",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ALBUQUERQUE",
+    "dc": "001",
+    "dt": "State District",
+    "ln": "LOS PADILLAS ELEMENTARY",
+    "li": "297",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ALBUQUERQUE",
+    "dc": "001",
+    "dt": "State District",
+    "ln": "LOS PUENTES CHARTER",
+    "li": "017",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ALBUQUERQUE",
+    "dc": "001",
+    "dt": "State District",
+    "ln": "LOS RANCHOS ELEMENTARY",
+    "li": "336",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ALBUQUERQUE",
+    "dc": "001",
+    "dt": "State District",
+    "ln": "LOWELL ELEMENTARY",
+    "li": "300",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ALBUQUERQUE",
+    "dc": "001",
+    "dt": "State District",
+    "ln": "MACARTHUR ELEMENTARY",
+    "li": "303",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ALBUQUERQUE",
+    "dc": "001",
+    "dt": "State District",
+    "ln": "MADISON MIDDLE",
+    "li": "435",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ALBUQUERQUE",
+    "dc": "001",
+    "dt": "State District",
+    "ln": "MANZANO HIGH",
+    "li": "530",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ALBUQUERQUE",
+    "dc": "001",
+    "dt": "State District",
+    "ln": "MANZANO MESA ELEMENTARY",
+    "li": "260",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ALBUQUERQUE",
+    "dc": "001",
+    "dt": "State District",
+    "ln": "MARIE M HUGHES ELEMENTARY",
+    "li": "365",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ALBUQUERQUE",
+    "dc": "001",
+    "dt": "State District",
+    "ln": "MARK ARMIJO ACADEMY",
+    "li": "039",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ALBUQUERQUE",
+    "dc": "001",
+    "dt": "State District",
+    "ln": "MARK TWAIN ELEMENTARY",
+    "li": "364",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ALBUQUERQUE",
+    "dc": "001",
+    "dt": "State District",
+    "ln": "MARYANN BINFORD ELEMENTARY",
+    "li": "250",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ALBUQUERQUE",
+    "dc": "001",
+    "dt": "State District",
+    "ln": "MATHESON PARK ELEMENTARY",
+    "li": "305",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ALBUQUERQUE",
+    "dc": "001",
+    "dt": "State District",
+    "ln": "MCCOLLUM ELEMENTARY",
+    "li": "307",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ALBUQUERQUE",
+    "dc": "001",
+    "dt": "State District",
+    "ln": "MCKINLEY MIDDLE",
+    "li": "440",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ALBUQUERQUE",
+    "dc": "001",
+    "dt": "State District",
+    "ln": "MISSION AVENUE ELEMENTARY",
+    "li": "309",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ALBUQUERQUE",
+    "dc": "001",
+    "dt": "State District",
+    "ln": "MITCHELL ELEMENTARY",
+    "li": "310",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ALBUQUERQUE",
+    "dc": "001",
+    "dt": "State District",
+    "ln": "MONTE VISTA ELEMENTARY",
+    "li": "312",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ALBUQUERQUE",
+    "dc": "001",
+    "dt": "State District",
+    "ln": "MONTESSORI OF THE RIO GRANDE",
+    "li": "095",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ALBUQUERQUE",
+    "dc": "001",
+    "dt": "State District",
+    "ln": "MONTEZUMA ELEMENTARY",
+    "li": "315",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ALBUQUERQUE",
+    "dc": "001",
+    "dt": "State District",
+    "ln": "MOUNTAIN MAHOGANY COMMUNITY SCHOOL",
+    "li": "098",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ALBUQUERQUE",
+    "dc": "001",
+    "dt": "State District",
+    "ln": "MOUNTAIN VIEW ELEMENTARY",
+    "li": "324",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ALBUQUERQUE",
+    "dc": "001",
+    "dt": "State District",
+    "ln": "NATIVE AMERICAN COMMUNITY ACADEMY",
+    "li": "006",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ALBUQUERQUE",
+    "dc": "001",
+    "dt": "State District",
+    "ln": "NAVAJO ELEMENTARY",
+    "li": "327",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ALBUQUERQUE",
+    "dc": "001",
+    "dt": "State District",
+    "ln": "NEW AMERICA SCHOOL",
+    "li": "708",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ALBUQUERQUE",
+    "dc": "001",
+    "dt": "State District",
+    "ln": "NEW FUTURES HIGH SCHOOL",
+    "li": "549",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ALBUQUERQUE",
+    "dc": "001",
+    "dt": "State District",
+    "ln": "NEW MEXICO INTERNATIONAL SCHOOL",
+    "li": "768",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ALBUQUERQUE",
+    "dc": "001",
+    "dt": "State District",
+    "ln": "NEX GEN ACADEMY",
+    "li": "516",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ALBUQUERQUE",
+    "dc": "001",
+    "dt": "State District",
+    "ln": "NORTH STAR ELEMENTARY",
+    "li": "268",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ALBUQUERQUE",
+    "dc": "001",
+    "dt": "State District",
+    "ln": "ONATE ELEMENTARY",
+    "li": "227",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ALBUQUERQUE",
+    "dc": "001",
+    "dt": "State District",
+    "ln": "OSUNA ELEMENTARY",
+    "li": "332",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ALBUQUERQUE",
+    "dc": "001",
+    "dt": "State District",
+    "ln": "PAINTED SKY ELEMENTARY",
+    "li": "275",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ALBUQUERQUE",
+    "dc": "001",
+    "dt": "State District",
+    "ln": "PAJARITO ELEMENTARY",
+    "li": "333",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ALBUQUERQUE",
+    "dc": "001",
+    "dt": "State District",
+    "ln": "PETROGLYPH ELEMENTARY",
+    "li": "317",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ALBUQUERQUE",
+    "dc": "001",
+    "dt": "State District",
+    "ln": "POLK MIDDLE",
+    "li": "448",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ALBUQUERQUE",
+    "dc": "001",
+    "dt": "State District",
+    "ln": "PUBLIC ACADEMY FOR PERFORMING ARTS",
+    "li": "047",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ALBUQUERQUE",
+    "dc": "001",
+    "dt": "State District",
+    "ln": "REGINALD CHAVEZ ELEMENTARY",
+    "li": "330",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ALBUQUERQUE",
+    "dc": "001",
+    "dt": "State District",
+    "ln": "RIO GRANDE HIGH",
+    "li": "540",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ALBUQUERQUE",
+    "dc": "001",
+    "dt": "State District",
+    "ln": "ROBERT F. KENNEDY CHARTER",
+    "li": "051",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ALBUQUERQUE",
+    "dc": "001",
+    "dt": "State District",
+    "ln": "ROOSEVELT MIDDLE",
+    "li": "452",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ALBUQUERQUE",
+    "dc": "001",
+    "dt": "State District",
+    "ln": "RUDOLFO ANAYA ELEMENTARY",
+    "li": "392",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ALBUQUERQUE",
+    "dc": "001",
+    "dt": "State District",
+    "ln": "S. Y. JACKSON ELEMENTARY",
+    "li": "360",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ALBUQUERQUE",
+    "dc": "001",
+    "dt": "State District",
+    "ln": "SAN ANTONITO ELEMENTARY",
+    "li": "345",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ALBUQUERQUE",
+    "dc": "001",
+    "dt": "State District",
+    "ln": "SANDIA BASE ELEMENTARY",
+    "li": "348",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ALBUQUERQUE",
+    "dc": "001",
+    "dt": "State District",
+    "ln": "SANDIA HIGH",
+    "li": "550",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ALBUQUERQUE",
+    "dc": "001",
+    "dt": "State District",
+    "ln": "SCHOOL ON WHEELS HIGH SCHOOL",
+    "li": "597",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ALBUQUERQUE",
+    "dc": "001",
+    "dt": "State District",
+    "ln": "SEVEN BAR ELEMENTARY",
+    "li": "265",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ALBUQUERQUE",
+    "dc": "001",
+    "dt": "State District",
+    "ln": "SIEMBRA LEADERSHIP HIGH SCHOOL",
+    "li": "750",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ALBUQUERQUE",
+    "dc": "001",
+    "dt": "State District",
+    "ln": "SIERRA ALTERNATIVE",
+    "li": "594",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ALBUQUERQUE",
+    "dc": "001",
+    "dt": "State District",
+    "ln": "SIERRA VISTA ELEMENTARY",
+    "li": "356",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ALBUQUERQUE",
+    "dc": "001",
+    "dt": "State District",
+    "ln": "SOMBRA DEL MONTE ELEMENTARY",
+    "li": "357",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ALBUQUERQUE",
+    "dc": "001",
+    "dt": "State District",
+    "ln": "SOUTH VALLEY ACADEMY",
+    "li": "025",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ALBUQUERQUE",
+    "dc": "001",
+    "dt": "State District",
+    "ln": "SUNSET VIEW ELEMENTARY",
+    "li": "393",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ALBUQUERQUE",
+    "dc": "001",
+    "dt": "State District",
+    "ln": "SUSIE RAYOS MARMON ELEMENTARY",
+    "li": "280",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ALBUQUERQUE",
+    "dc": "001",
+    "dt": "State District",
+    "ln": "TAFT MIDDLE",
+    "li": "455",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ALBUQUERQUE",
+    "dc": "001",
+    "dt": "State District",
+    "ln": "TAYLOR MIDDLE",
+    "li": "457",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ALBUQUERQUE",
+    "dc": "001",
+    "dt": "State District",
+    "ln": "TECHNOLOGY LEADERSHIP HIGH SCHOOL",
+    "li": "753",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ALBUQUERQUE",
+    "dc": "001",
+    "dt": "State District",
+    "ln": "THE ALB TALENT DEVELOPMENT CHARTER",
+    "li": "016",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ALBUQUERQUE",
+    "dc": "001",
+    "dt": "State District",
+    "ln": "TIERRA ANTIGUA ELEMENTARY",
+    "li": "389",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ALBUQUERQUE",
+    "dc": "001",
+    "dt": "State District",
+    "ln": "TOMASITA ELEMENTARY",
+    "li": "363",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ALBUQUERQUE",
+    "dc": "001",
+    "dt": "State District",
+    "ln": "TONY HILLERMAN MIDDLE SCHOOL",
+    "li": "492",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ALBUQUERQUE",
+    "dc": "001",
+    "dt": "State District",
+    "ln": "TRES VOLCANES COMMUNITY COLLABORATIVE SCHOOL",
+    "li": "497",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ALBUQUERQUE",
+    "dc": "001",
+    "dt": "State District",
+    "ln": "TRUMAN MIDDLE",
+    "li": "475",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ALBUQUERQUE",
+    "dc": "001",
+    "dt": "State District",
+    "ln": "VALLE VISTA ELEMENTARY",
+    "li": "370",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ALBUQUERQUE",
+    "dc": "001",
+    "dt": "State District",
+    "ln": "VALLEY HIGH",
+    "li": "560",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ALBUQUERQUE",
+    "dc": "001",
+    "dt": "State District",
+    "ln": "VAN BUREN MIDDLE",
+    "li": "460",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ALBUQUERQUE",
+    "dc": "001",
+    "dt": "State District",
+    "ln": "VENTANA RANCH ELEMENTARY",
+    "li": "264",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ALBUQUERQUE",
+    "dc": "001",
+    "dt": "State District",
+    "ln": "VISION QUEST ALTERNATIVE MIDDLE",
+    "li": "840",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ALBUQUERQUE",
+    "dc": "001",
+    "dt": "State District",
+    "ln": "VOLCANO VISTA HIGH",
+    "li": "575",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ALBUQUERQUE",
+    "dc": "001",
+    "dt": "State District",
+    "ln": "WASHINGTON MIDDLE",
+    "li": "465",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ALBUQUERQUE",
+    "dc": "001",
+    "dt": "State District",
+    "ln": "WEST MESA HIGH",
+    "li": "570",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ALBUQUERQUE",
+    "dc": "001",
+    "dt": "State District",
+    "ln": "WHERRY ELEMENTARY",
+    "li": "376",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ALBUQUERQUE",
+    "dc": "001",
+    "dt": "State District",
+    "ln": "WHITTIER ELEMENTARY",
+    "li": "379",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ALBUQUERQUE",
+    "dc": "001",
+    "dt": "State District",
+    "ln": "WILLIAM W & JOSEPHINE DORN CHARTER COMMUNITY SCHOOL",
+    "li": "782",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ALBUQUERQUE",
+    "dc": "001",
+    "dt": "State District",
+    "ln": "WILSON MIDDLE",
+    "li": "470",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ALBUQUERQUE",
+    "dc": "001",
+    "dt": "State District",
+    "ln": "ZIA ELEMENTARY",
+    "li": "385",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ALBUQUERQUE",
+    "dc": "001",
+    "dt": "State District",
+    "ln": "ZUNI ELEMENTARY",
+    "li": "388",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ALBUQUERQUE BILINGUAL ACADEMY",
+    "dc": "528",
+    "dt": "State Charter",
+    "ln": "ALBUQUERQUE BILINGUAL ACADEMY",
+    "li": "001",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ALBUQUERQUE COLLEGIATE CHARTER SCHOOL",
+    "dc": "574",
+    "dt": "State Charter",
+    "ln": "ALBUQUERQUE COLLEGIATE CHARTER SCHOOL",
+    "li": "001",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ALBUQUERQUE INSTITUTE OF MATH & SCIENCE",
+    "dc": "524",
+    "dt": "State Charter",
+    "ln": "ALBUQUERQUE INSTITUTE OF MATH & SCIENCE",
+    "li": "001",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ALDO LEOPOLD CHARTER",
+    "dc": "532",
+    "dt": "State Charter",
+    "ln": "ALDO LEOPOLD CHARTER",
+    "li": "001",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ALMA D'ARTE CHARTER",
+    "dc": "511",
+    "dt": "State Charter",
+    "ln": "ALMA D'ARTE CHARTER",
+    "li": "001",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ALTURA PREPARATORY SCHOOL",
+    "dc": "575",
+    "dt": "State Charter",
+    "ln": "ALTURA PREPARATORY SCHOOL",
+    "li": "001",
+    "st": "OPEN"
+  },
+  {
+    "dn": "AMY BIEHL CHARTER HIGH SCHOOL",
+    "dc": "525",
+    "dt": "State Charter",
+    "ln": "AMY BIEHL CHARTER HIGH SCHOOL",
+    "li": "001",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ANIMAS",
+    "dc": "030",
+    "dt": "State District",
+    "ln": "ANIMAS 7-12 SCHOOL",
+    "li": "017",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ANIMAS",
+    "dc": "030",
+    "dt": "State District",
+    "ln": "ANIMAS ELEMENTARY",
+    "li": "016",
+    "st": "OPEN"
+  },
+  { "dn": "ANIMAS", "dc": "030", "dt": "State District", "ln": "ANIMAS MIDDLE", "li": "020", "st": "OPEN" },
+  { "dn": "ARTESIA", "dc": "022", "dt": "State District", "ln": "ARTESIA HIGH", "li": "014", "st": "OPEN" },
+  {
+    "dn": "ARTESIA",
+    "dc": "022",
+    "dt": "State District",
+    "ln": "ARTESIA PARK JUNIOR HIGH",
+    "li": "187",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ARTESIA",
+    "dc": "022",
+    "dt": "State District",
+    "ln": "ARTESIA ZIA INTERMEDIATE",
+    "li": "189",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ARTESIA",
+    "dc": "022",
+    "dt": "State District",
+    "ln": "CENTRAL ELEMENTARY",
+    "li": "032",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ARTESIA",
+    "dc": "022",
+    "dt": "State District",
+    "ln": "GRAND HEIGHTS EARLY CHILDHOOD",
+    "li": "054",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ARTESIA",
+    "dc": "022",
+    "dt": "State District",
+    "ln": "HERMOSA ELEMENTARY",
+    "li": "056",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ARTESIA",
+    "dc": "022",
+    "dt": "State District",
+    "ln": "PENASCO ELEMENTARY",
+    "li": "128",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ARTESIA",
+    "dc": "022",
+    "dt": "State District",
+    "ln": "ROSELAWN ELEMENTARY",
+    "li": "139",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ARTESIA",
+    "dc": "022",
+    "dt": "State District",
+    "ln": "YESO ELEMENTARY",
+    "li": "001",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ARTESIA",
+    "dc": "022",
+    "dt": "State District",
+    "ln": "YUCCA ELEMENTARY",
+    "li": "183",
+    "st": "OPEN"
+  },
+  { "dn": "AZTEC", "dc": "064", "dt": "State District", "ln": "AZTEC HIGH", "li": "018", "st": "OPEN" },
+  {
+    "dn": "AZTEC",
+    "dc": "064",
+    "dt": "State District",
+    "ln": "C.V. KOOGLER MIDDLE",
+    "li": "017",
+    "st": "OPEN"
+  },
+  {
+    "dn": "AZTEC",
+    "dc": "064",
+    "dt": "State District",
+    "ln": "LYDIA RIPPEY ELEMENTARY",
+    "li": "136",
+    "st": "OPEN"
+  },
+  {
+    "dn": "AZTEC",
+    "dc": "064",
+    "dt": "State District",
+    "ln": "MCCOY AVENUE ELEMENTARY",
+    "li": "099",
+    "st": "OPEN"
+  },
+  {
+    "dn": "AZTEC",
+    "dc": "064",
+    "dt": "State District",
+    "ln": "MOSAIC ACADEMY CHARTER",
+    "li": "001",
+    "st": "OPEN"
+  },
+  {
+    "dn": "AZTEC",
+    "dc": "064",
+    "dt": "State District",
+    "ln": "PARK AVENUE ELEMENTARY",
+    "li": "123",
+    "st": "OPEN"
+  },
+  { "dn": "AZTEC", "dc": "064", "dt": "State District", "ln": "VISTA NUEVA HIGH", "li": "002", "st": "OPEN" },
+  { "dn": "BELEN", "dc": "087", "dt": "State District", "ln": "BELEN HIGH", "li": "026", "st": "OPEN" },
+  {
+    "dn": "BELEN",
+    "dc": "087",
+    "dt": "State District",
+    "ln": "BELEN INFINITY HIGH",
+    "li": "001",
+    "st": "OPEN"
+  },
+  { "dn": "BELEN", "dc": "087", "dt": "State District", "ln": "BELEN MIDDLE", "li": "025", "st": "OPEN" },
+  {
+    "dn": "BELEN",
+    "dc": "087",
+    "dt": "State District",
+    "ln": "CENTRAL ELEMENTARY",
+    "li": "034",
+    "st": "OPEN"
+  },
+  {
+    "dn": "BELEN",
+    "dc": "087",
+    "dt": "State District",
+    "ln": "DENNIS CHAVEZ ELEMENTARY",
+    "li": "080",
+    "st": "OPEN"
+  },
+  {
+    "dn": "BELEN",
+    "dc": "087",
+    "dt": "State District",
+    "ln": "GIL SANCHEZ ELEMENTARY",
+    "li": "066",
+    "st": "OPEN"
+  },
+  {
+    "dn": "BELEN",
+    "dc": "087",
+    "dt": "State District",
+    "ln": "JARAMILLO ELEMENTARY",
+    "li": "068",
+    "st": "OPEN"
+  },
+  {
+    "dn": "BELEN",
+    "dc": "087",
+    "dt": "State District",
+    "ln": "LA MERCED ELEMENTARY",
+    "li": "038",
+    "st": "OPEN"
+  },
+  {
+    "dn": "BELEN",
+    "dc": "087",
+    "dt": "State District",
+    "ln": "LA PROMESA ELEMENTARY",
+    "li": "003",
+    "st": "OPEN"
+  },
+  {
+    "dn": "BELEN",
+    "dc": "087",
+    "dt": "State District",
+    "ln": "RIO GRANDE ELEMENTARY",
+    "li": "045",
+    "st": "OPEN"
+  },
+  {
+    "dn": "BELEN",
+    "dc": "087",
+    "dt": "State District",
+    "ln": "THE FAMILY SCHOOL",
+    "li": "006",
+    "st": "OPEN"
+  },
+  {
+    "dn": "BERNALILLO",
+    "dc": "061",
+    "dt": "State District",
+    "ln": "ALGODONES ELEMENTARY",
+    "li": "016",
+    "st": "OPEN"
+  },
+  {
+    "dn": "BERNALILLO",
+    "dc": "061",
+    "dt": "State District",
+    "ln": "BERNALILLO ELEMENTARY",
+    "li": "136",
+    "st": "OPEN"
+  },
+  {
+    "dn": "BERNALILLO",
+    "dc": "061",
+    "dt": "State District",
+    "ln": "BERNALILLO HIGH",
+    "li": "027",
+    "st": "OPEN"
+  },
+  {
+    "dn": "BERNALILLO",
+    "dc": "061",
+    "dt": "State District",
+    "ln": "BERNALILLO MIDDLE",
+    "li": "026",
+    "st": "OPEN"
+  },
+  {
+    "dn": "BERNALILLO",
+    "dc": "061",
+    "dt": "State District",
+    "ln": "COCHITI ELEMENTARY",
+    "li": "020",
+    "st": "OPEN"
+  },
+  {
+    "dn": "BERNALILLO",
+    "dc": "061",
+    "dt": "State District",
+    "ln": "COCHITI MIDDLE",
+    "li": "024",
+    "st": "OPEN"
+  },
+  {
+    "dn": "BERNALILLO",
+    "dc": "061",
+    "dt": "State District",
+    "ln": "PLACITAS ELEMENTARY",
+    "li": "127",
+    "st": "OPEN"
+  },
+  {
+    "dn": "BERNALILLO",
+    "dc": "061",
+    "dt": "State District",
+    "ln": "SANTO DOMINGO ELEMENTARY",
+    "li": "151",
+    "st": "OPEN"
+  },
+  {
+    "dn": "BERNALILLO",
+    "dc": "061",
+    "dt": "State District",
+    "ln": "SANTO DOMINGO MIDDLE",
+    "li": "028",
+    "st": "OPEN"
+  },
+  {
+    "dn": "BERNALILLO",
+    "dc": "061",
+    "dt": "State District",
+    "ln": "WD CARROLL ELEMENTARY",
+    "li": "140",
+    "st": "OPEN"
+  },
+  {
+    "dn": "BLOOMFIELD",
+    "dc": "066",
+    "dt": "State District",
+    "ln": "BLANCO ELEMENTARY",
+    "li": "025",
+    "st": "OPEN"
+  },
+  {
+    "dn": "BLOOMFIELD",
+    "dc": "066",
+    "dt": "State District",
+    "ln": "BLOOMFIELD EARLY CHILDHOOD CENTER",
+    "li": "030",
+    "st": "OPEN"
+  },
+  {
+    "dn": "BLOOMFIELD",
+    "dc": "066",
+    "dt": "State District",
+    "ln": "BLOOMFIELD HIGH",
+    "li": "026",
+    "st": "OPEN"
+  },
+  {
+    "dn": "BLOOMFIELD",
+    "dc": "066",
+    "dt": "State District",
+    "ln": "CENTRAL PRIMARY",
+    "li": "033",
+    "st": "OPEN"
+  },
+  {
+    "dn": "BLOOMFIELD",
+    "dc": "066",
+    "dt": "State District",
+    "ln": "CHARLIE Y. BROWN ALT",
+    "li": "001",
+    "st": "OPEN"
+  },
+  {
+    "dn": "BLOOMFIELD",
+    "dc": "066",
+    "dt": "State District",
+    "ln": "MESA ALTA JR HIGH",
+    "li": "095",
+    "st": "OPEN"
+  },
+  {
+    "dn": "BLOOMFIELD",
+    "dc": "066",
+    "dt": "State District",
+    "ln": "NAABA ANI ELEMENTARY",
+    "li": "125",
+    "st": "OPEN"
+  },
+  {
+    "dn": "CAPITAN",
+    "dc": "040",
+    "dt": "State District",
+    "ln": "CAPITAN ELEMENTARY",
+    "li": "033",
+    "st": "OPEN"
+  },
+  { "dn": "CAPITAN", "dc": "040", "dt": "State District", "ln": "CAPITAN HIGH", "li": "034", "st": "OPEN" },
+  { "dn": "CAPITAN", "dc": "040", "dt": "State District", "ln": "CAPITAN MIDDLE", "li": "036", "st": "OPEN" },
+  {
+    "dn": "CARLSBAD",
+    "dc": "020",
+    "dt": "State District",
+    "ln": "CARLSBAD EARLY COLLEGE HIGH",
+    "li": "035",
+    "st": "OPEN"
+  },
+  {
+    "dn": "CARLSBAD",
+    "dc": "020",
+    "dt": "State District",
+    "ln": "CARLSBAD ENRICHMENT CENTER",
+    "li": "164",
+    "st": "NEW"
+  },
+  { "dn": "CARLSBAD", "dc": "020", "dt": "State District", "ln": "CARLSBAD HIGH", "li": "034", "st": "OPEN" },
+  {
+    "dn": "CARLSBAD",
+    "dc": "020",
+    "dt": "State District",
+    "ln": "CARLSBAD INTERMEDIATE SCHOOL",
+    "li": "032",
+    "st": "OPEN"
+  },
+  {
+    "dn": "CARLSBAD",
+    "dc": "020",
+    "dt": "State District",
+    "ln": "CARLSBAD SIXTH GRADE ACADEMY",
+    "li": "018",
+    "st": "OPEN"
+  },
+  {
+    "dn": "CARLSBAD",
+    "dc": "020",
+    "dt": "State District",
+    "ln": "COTTONWOOD ELEMENTARY",
+    "li": "163",
+    "st": "NEW"
+  },
+  {
+    "dn": "CARLSBAD",
+    "dc": "020",
+    "dt": "State District",
+    "ln": "DESERT WILLOW ELEMENTARY",
+    "li": "160",
+    "st": "OPEN"
+  },
+  {
+    "dn": "CARLSBAD",
+    "dc": "020",
+    "dt": "State District",
+    "ln": "EARLY CHILDHOOD EDUCATION CENTER",
+    "li": "047",
+    "st": "OPEN"
+  },
+  {
+    "dn": "CARLSBAD",
+    "dc": "020",
+    "dt": "State District",
+    "ln": "EDISON ELEMENTARY",
+    "li": "162",
+    "st": "OPEN"
+  },
+  {
+    "dn": "CARLSBAD",
+    "dc": "020",
+    "dt": "State District",
+    "ln": "HILLCREST PRESCHOOL",
+    "li": "058",
+    "st": "OPEN"
+  },
+  {
+    "dn": "CARLSBAD",
+    "dc": "020",
+    "dt": "State District",
+    "ln": "JEFFERSON MONTESSORI",
+    "li": "001",
+    "st": "OPEN"
+  },
+  {
+    "dn": "CARLSBAD",
+    "dc": "020",
+    "dt": "State District",
+    "ln": "MONTERREY ELEMENTARY",
+    "li": "100",
+    "st": "OPEN"
+  },
+  {
+    "dn": "CARLSBAD",
+    "dc": "020",
+    "dt": "State District",
+    "ln": "OCOTILLO ELEMENTARY",
+    "li": "161",
+    "st": "OPEN"
+  },
+  {
+    "dn": "CARLSBAD",
+    "dc": "020",
+    "dt": "State District",
+    "ln": "PECOS CONNECTIONS ACADEMY",
+    "li": "005",
+    "st": "OPEN"
+  },
+  {
+    "dn": "CARLSBAD",
+    "dc": "020",
+    "dt": "State District",
+    "ln": "SUNSET ELEMENTARY",
+    "li": "158",
+    "st": "OPEN"
+  },
+  {
+    "dn": "CARRIZOZO",
+    "dc": "037",
+    "dt": "State District",
+    "ln": "CARRIZOZO ELEMENTARY",
+    "li": "035",
+    "st": "OPEN"
+  },
+  {
+    "dn": "CARRIZOZO",
+    "dc": "037",
+    "dt": "State District",
+    "ln": "CARRIZOZO HIGH",
+    "li": "036",
+    "st": "OPEN"
+  },
+  {
+    "dn": "CARRIZOZO",
+    "dc": "037",
+    "dt": "State District",
+    "ln": "CARRIZOZO MIDDLE",
+    "li": "157",
+    "st": "OPEN"
+  },
+  {
+    "dn": "CENTRAL CONS.",
+    "dc": "067",
+    "dt": "State District",
+    "ln": "CAREER PREP ALTERNATIVE",
+    "li": "025",
+    "st": "OPEN"
+  },
+  {
+    "dn": "CENTRAL CONS.",
+    "dc": "067",
+    "dt": "State District",
+    "ln": "CENTRAL HIGH",
+    "li": "035",
+    "st": "OPEN"
+  },
+  {
+    "dn": "CENTRAL CONS.",
+    "dc": "067",
+    "dt": "State District",
+    "ln": "DREAM DINE",
+    "li": "109",
+    "st": "OPEN"
+  },
+  {
+    "dn": "CENTRAL CONS.",
+    "dc": "067",
+    "dt": "State District",
+    "ln": "EVA B STOKELY ELEMENTARY",
+    "li": "026",
+    "st": "OPEN"
+  },
+  {
+    "dn": "CENTRAL CONS.",
+    "dc": "067",
+    "dt": "State District",
+    "ln": "JUDY NELSON ELEMENTARY",
+    "li": "060",
+    "st": "OPEN"
+  },
+  {
+    "dn": "CENTRAL CONS.",
+    "dc": "067",
+    "dt": "State District",
+    "ln": "KIRTLAND ELEMENTARY",
+    "li": "038",
+    "st": "OPEN"
+  },
+  {
+    "dn": "CENTRAL CONS.",
+    "dc": "067",
+    "dt": "State District",
+    "ln": "KIRTLAND MIDDLE",
+    "li": "034",
+    "st": "OPEN"
+  },
+  {
+    "dn": "CENTRAL CONS.",
+    "dc": "067",
+    "dt": "State District",
+    "ln": "KIRTLAND PRE-K EARLY",
+    "li": "024",
+    "st": "OPEN"
+  },
+  {
+    "dn": "CENTRAL CONS.",
+    "dc": "067",
+    "dt": "State District",
+    "ln": "MESA ELEMENTARY",
+    "li": "110",
+    "st": "OPEN"
+  },
+  {
+    "dn": "CENTRAL CONS.",
+    "dc": "067",
+    "dt": "State District",
+    "ln": "NASCHITTI ELEMENTARY",
+    "li": "114",
+    "st": "OPEN"
+  },
+  {
+    "dn": "CENTRAL CONS.",
+    "dc": "067",
+    "dt": "State District",
+    "ln": "NEWCOMB ELEMENTARY",
+    "li": "116",
+    "st": "OPEN"
+  },
+  {
+    "dn": "CENTRAL CONS.",
+    "dc": "067",
+    "dt": "State District",
+    "ln": "NEWCOMB HIGH",
+    "li": "130",
+    "st": "OPEN"
+  },
+  {
+    "dn": "CENTRAL CONS.",
+    "dc": "067",
+    "dt": "State District",
+    "ln": "NEWCOMB MIDDLE",
+    "li": "126",
+    "st": "OPEN"
+  },
+  {
+    "dn": "CENTRAL CONS.",
+    "dc": "067",
+    "dt": "State District",
+    "ln": "NIZHONI ELEMENTARY",
+    "li": "152",
+    "st": "OPEN"
+  },
+  {
+    "dn": "CENTRAL CONS.",
+    "dc": "067",
+    "dt": "State District",
+    "ln": "OJO AMARILLO ELEMENTARY",
+    "li": "075",
+    "st": "OPEN"
+  },
+  {
+    "dn": "CENTRAL CONS.",
+    "dc": "067",
+    "dt": "State District",
+    "ln": "SHIPROCK HIGH",
+    "li": "039",
+    "st": "OPEN"
+  },
+  {
+    "dn": "CENTRAL CONS.",
+    "dc": "067",
+    "dt": "State District",
+    "ln": "TSE'BIT'AI MIDDLE",
+    "li": "160",
+    "st": "OPEN"
+  },
+  {
+    "dn": "CESAR CHAVEZ COMMUNITY SCHOOL",
+    "dc": "512",
+    "dt": "State Charter",
+    "ln": "CESAR CHAVEZ COMMUNITY SCHOOL",
+    "li": "001",
+    "st": "OPEN"
+  },
+  { "dn": "CHAMA", "dc": "053", "dt": "State District", "ln": "CHAMA ELEMENTARY", "li": "036", "st": "OPEN" },
+  { "dn": "CHAMA", "dc": "053", "dt": "State District", "ln": "CHAMA MIDDLE", "li": "042", "st": "OPEN" },
+  {
+    "dn": "CHAMA",
+    "dc": "053",
+    "dt": "State District",
+    "ln": "ESCALANTE MIDDLE/HIGH SCHOOL",
+    "li": "165",
+    "st": "OPEN"
+  },
+  {
+    "dn": "CHAMA",
+    "dc": "053",
+    "dt": "State District",
+    "ln": "TIERRA AMARILLA ELEMENTARY",
+    "li": "064",
+    "st": "OPEN"
+  },
+  {
+    "dn": "CIMARRON",
+    "dc": "008",
+    "dt": "State District",
+    "ln": "CIMARRON ELEMENTARY",
+    "li": "033",
+    "st": "OPEN"
+  },
+  { "dn": "CIMARRON", "dc": "008", "dt": "State District", "ln": "CIMARRON HIGH", "li": "034", "st": "OPEN" },
+  {
+    "dn": "CIMARRON",
+    "dc": "008",
+    "dt": "State District",
+    "ln": "CIMARRON MIDDLE",
+    "li": "036",
+    "st": "OPEN"
+  },
+  {
+    "dn": "CIMARRON",
+    "dc": "008",
+    "dt": "State District",
+    "ln": "EAGLE NEST ELEMENTARY",
+    "li": "047",
+    "st": "OPEN"
+  },
+  {
+    "dn": "CIMARRON",
+    "dc": "008",
+    "dt": "State District",
+    "ln": "EAGLE NEST MIDDLE",
+    "li": "048",
+    "st": "OPEN"
+  },
+  {
+    "dn": "CIMARRON",
+    "dc": "008",
+    "dt": "State District",
+    "ln": "MORENO VALLEY HIGH",
+    "li": "003",
+    "st": "OPEN"
+  },
+  {
+    "dn": "CLAYTON",
+    "dc": "084",
+    "dt": "State District",
+    "ln": "ALVIS ELEMENTARY",
+    "li": "037",
+    "st": "OPEN"
+  },
+  { "dn": "CLAYTON", "dc": "084", "dt": "State District", "ln": "CLAYTON HIGH", "li": "039", "st": "OPEN" },
+  {
+    "dn": "CLAYTON",
+    "dc": "084",
+    "dt": "State District",
+    "ln": "CLAYTON JUNIOR HIGH",
+    "li": "038",
+    "st": "OPEN"
+  },
+  {
+    "dn": "CLAYTON",
+    "dc": "084",
+    "dt": "State District",
+    "ln": "KISER ELEMENTARY",
+    "li": "045",
+    "st": "OPEN"
+  },
+  {
+    "dn": "CLOUDCROFT",
+    "dc": "048",
+    "dt": "State District",
+    "ln": "CLOUDCROFT ELEMENTARY",
+    "li": "038",
+    "st": "OPEN"
+  },
+  {
+    "dn": "CLOUDCROFT",
+    "dc": "048",
+    "dt": "State District",
+    "ln": "CLOUDCROFT HIGH",
+    "li": "039",
+    "st": "OPEN"
+  },
+  {
+    "dn": "CLOUDCROFT",
+    "dc": "048",
+    "dt": "State District",
+    "ln": "CLOUDCROFT MIDDLE",
+    "li": "042",
+    "st": "OPEN"
+  },
+  {
+    "dn": "CLOVIS",
+    "dc": "012",
+    "dt": "State District",
+    "ln": "ARTS ACADEMY AT BELLA VISTA",
+    "li": "042",
+    "st": "OPEN"
+  },
+  {
+    "dn": "CLOVIS",
+    "dc": "012",
+    "dt": "State District",
+    "ln": "BARRY ELEMENTARY",
+    "li": "040",
+    "st": "OPEN"
+  },
+  {
+    "dn": "CLOVIS",
+    "dc": "012",
+    "dt": "State District",
+    "ln": "CAMEO ELEMENTARY",
+    "li": "068",
+    "st": "OPEN"
+  },
+  { "dn": "CLOVIS", "dc": "012", "dt": "State District", "ln": "CLOVIS HIGH", "li": "036", "st": "OPEN" },
+  {
+    "dn": "CLOVIS",
+    "dc": "012",
+    "dt": "State District",
+    "ln": "CLOVIS HS FRESHMAN ACADEMY",
+    "li": "056",
+    "st": "OPEN"
+  },
+  {
+    "dn": "CLOVIS",
+    "dc": "012",
+    "dt": "State District",
+    "ln": "CMS IACADEMY AT LINCOLN JACKSON",
+    "li": "081",
+    "st": "OPEN"
+  },
+  {
+    "dn": "CLOVIS",
+    "dc": "012",
+    "dt": "State District",
+    "ln": "HIGHLAND ELEMENTARY",
+    "li": "058",
+    "st": "OPEN"
+  },
+  {
+    "dn": "CLOVIS",
+    "dc": "012",
+    "dt": "State District",
+    "ln": "JAMES BICKLEY ELEMENTARY",
+    "li": "066",
+    "st": "OPEN"
+  },
+  {
+    "dn": "CLOVIS",
+    "dc": "012",
+    "dt": "State District",
+    "ln": "LA CASITA ELEMENTARY",
+    "li": "072",
+    "st": "OPEN"
+  },
+  {
+    "dn": "CLOVIS",
+    "dc": "012",
+    "dt": "State District",
+    "ln": "LOCKWOOD ELEMENTARY",
+    "li": "084",
+    "st": "OPEN"
+  },
+  { "dn": "CLOVIS", "dc": "012", "dt": "State District", "ln": "LOS NINOS", "li": "003", "st": "OPEN" },
+  { "dn": "CLOVIS", "dc": "012", "dt": "State District", "ln": "MARSHALL MIDDLE", "li": "091", "st": "OPEN" },
+  { "dn": "CLOVIS", "dc": "012", "dt": "State District", "ln": "MESA ELEMENTARY", "li": "095", "st": "OPEN" },
+  {
+    "dn": "CLOVIS",
+    "dc": "012",
+    "dt": "State District",
+    "ln": "PARKVIEW ELEMENTARY",
+    "li": "122",
+    "st": "OPEN"
+  },
+  {
+    "dn": "CLOVIS",
+    "dc": "012",
+    "dt": "State District",
+    "ln": "SANDIA ELEMENTARY",
+    "li": "145",
+    "st": "OPEN"
+  },
+  {
+    "dn": "CLOVIS",
+    "dc": "012",
+    "dt": "State District",
+    "ln": "W D GATTIS MIDDLE SCHOOL",
+    "li": "156",
+    "st": "OPEN"
+  },
+  { "dn": "CLOVIS", "dc": "012", "dt": "State District", "ln": "YUCCA MIDDLE", "li": "098", "st": "OPEN" },
+  { "dn": "CLOVIS", "dc": "012", "dt": "State District", "ln": "ZIA ELEMENTARY", "li": "155", "st": "OPEN" },
+  {
+    "dn": "COBRE CONS.",
+    "dc": "024",
+    "dt": "State District",
+    "ln": "BAYARD ELEMENTARY",
+    "li": "023",
+    "st": "OPEN"
+  },
+  {
+    "dn": "COBRE CONS.",
+    "dc": "024",
+    "dt": "State District",
+    "ln": "CENTRAL ELEMENTARY",
+    "li": "033",
+    "st": "OPEN"
+  },
+  { "dn": "COBRE CONS.", "dc": "024", "dt": "State District", "ln": "COBRE HIGH", "li": "036", "st": "OPEN" },
+  {
+    "dn": "COBRE CONS.",
+    "dc": "024",
+    "dt": "State District",
+    "ln": "HURLEY ELEMENTARY",
+    "li": "059",
+    "st": "OPEN"
+  },
+  {
+    "dn": "COBRE CONS.",
+    "dc": "024",
+    "dt": "State District",
+    "ln": "SAN LORENZO ELEMENTARY",
+    "li": "143",
+    "st": "OPEN"
+  },
+  {
+    "dn": "COBRE CONS.",
+    "dc": "024",
+    "dt": "State District",
+    "ln": "SNELL MIDDLE",
+    "li": "132",
+    "st": "OPEN"
+  },
+  {
+    "dn": "CORONA",
+    "dc": "038",
+    "dt": "State District",
+    "ln": "CORONA ELEMENTARY",
+    "li": "038",
+    "st": "OPEN"
+  },
+  { "dn": "CORONA", "dc": "038", "dt": "State District", "ln": "CORONA HIGH", "li": "039", "st": "OPEN" },
+  { "dn": "CUBA", "dc": "062", "dt": "State District", "ln": "CUBA ELEMENTARY", "li": "037", "st": "OPEN" },
+  { "dn": "CUBA", "dc": "062", "dt": "State District", "ln": "CUBA HIGH", "li": "038", "st": "OPEN" },
+  { "dn": "CUBA", "dc": "062", "dt": "State District", "ln": "CUBA MIDDLE", "li": "075", "st": "OPEN" },
+  {
+    "dn": "DEAP",
+    "dc": "562",
+    "dt": "State Charter",
+    "ln": "DZIT DIT LOOL SCHOOL OF EMPOWERMENT ACTION AND PERSEVERANCE",
+    "li": "001",
+    "st": "OPEN"
+  },
+  {
+    "dn": "DEMING",
+    "dc": "042",
+    "dt": "State District",
+    "ln": "BATAAN ELEMENTARY",
+    "li": "005",
+    "st": "OPEN"
+  },
+  { "dn": "DEMING", "dc": "042", "dt": "State District", "ln": "BELL ELEMENTARY", "li": "024", "st": "OPEN" },
+  {
+    "dn": "DEMING",
+    "dc": "042",
+    "dt": "State District",
+    "ln": "CHAPARRAL ELEMENTARY",
+    "li": "028",
+    "st": "OPEN"
+  },
+  {
+    "dn": "DEMING",
+    "dc": "042",
+    "dt": "State District",
+    "ln": "COLUMBUS ELEMENTARY",
+    "li": "036",
+    "st": "OPEN"
+  },
+  {
+    "dn": "DEMING",
+    "dc": "042",
+    "dt": "State District",
+    "ln": "DEMING CESAR CHAVEZ",
+    "li": "006",
+    "st": "OPEN"
+  },
+  { "dn": "DEMING", "dc": "042", "dt": "State District", "ln": "DEMING HIGH", "li": "044", "st": "OPEN" },
+  {
+    "dn": "DEMING",
+    "dc": "042",
+    "dt": "State District",
+    "ln": "DEMING INTERMEDIATE",
+    "li": "025",
+    "st": "OPEN"
+  },
+  {
+    "dn": "DEMING",
+    "dc": "042",
+    "dt": "State District",
+    "ln": "EARLY COLLEGE HIGH SCHOOL",
+    "li": "010",
+    "st": "OPEN"
+  },
+  {
+    "dn": "DEMING",
+    "dc": "042",
+    "dt": "State District",
+    "ln": "MEMORIAL ELEMENTARY",
+    "li": "096",
+    "st": "OPEN"
+  },
+  {
+    "dn": "DEMING",
+    "dc": "042",
+    "dt": "State District",
+    "ln": "MIMBRES VALLEY HIGH SCHOOL",
+    "li": "045",
+    "st": "OPEN"
+  },
+  {
+    "dn": "DEMING",
+    "dc": "042",
+    "dt": "State District",
+    "ln": "MY LITTLE SCHOOL",
+    "li": "001",
+    "st": "OPEN"
+  },
+  {
+    "dn": "DEMING",
+    "dc": "042",
+    "dt": "State District",
+    "ln": "RED MOUNTAIN MIDDLE",
+    "li": "007",
+    "st": "OPEN"
+  },
+  {
+    "dn": "DEMING",
+    "dc": "042",
+    "dt": "State District",
+    "ln": "RUBEN S. TORRES ELEMENTARY",
+    "li": "008",
+    "st": "OPEN"
+  },
+  {
+    "dn": "DES MOINES",
+    "dc": "085",
+    "dt": "State District",
+    "ln": "DES MOINES ELEMENTARY",
+    "li": "044",
+    "st": "OPEN"
+  },
+  {
+    "dn": "DES MOINES",
+    "dc": "085",
+    "dt": "State District",
+    "ln": "DES MOINES HIGH",
+    "li": "045",
+    "st": "OPEN"
+  },
+  {
+    "dn": "DEXTER",
+    "dc": "006",
+    "dt": "State District",
+    "ln": "DEXTER ELEMENTARY",
+    "li": "043",
+    "st": "OPEN"
+  },
+  { "dn": "DEXTER", "dc": "006", "dt": "State District", "ln": "DEXTER HIGH", "li": "045", "st": "OPEN" },
+  { "dn": "DEXTER", "dc": "006", "dt": "State District", "ln": "DEXTER MIDDLE", "li": "048", "st": "OPEN" },
+  { "dn": "DORA", "dc": "060", "dt": "State District", "ln": "DORA ELEMENTARY", "li": "044", "st": "OPEN" },
+  { "dn": "DORA", "dc": "060", "dt": "State District", "ln": "DORA HIGH", "li": "045", "st": "OPEN" },
+  { "dn": "DULCE", "dc": "054", "dt": "State District", "ln": "DULCE ELEMENTARY", "li": "044", "st": "OPEN" },
+  { "dn": "DULCE", "dc": "054", "dt": "State District", "ln": "DULCE HIGH", "li": "045", "st": "OPEN" },
+  { "dn": "DULCE", "dc": "054", "dt": "State District", "ln": "DULCE MIDDLE", "li": "050", "st": "OPEN" },
+  { "dn": "ELIDA", "dc": "058", "dt": "State District", "ln": "ELIDA ELEMENTARY", "li": "047", "st": "OPEN" },
+  { "dn": "ELIDA", "dc": "058", "dt": "State District", "ln": "ELIDA HIGH", "li": "048", "st": "OPEN" },
+  {
+    "dn": "ESPANOLA",
+    "dc": "055",
+    "dt": "State District",
+    "ln": "ABIQUIU ELEMENTARY",
+    "li": "005",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ESPANOLA",
+    "dc": "055",
+    "dt": "State District",
+    "ln": "ALCALDE ELEMENTARY",
+    "li": "015",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ESPANOLA",
+    "dc": "055",
+    "dt": "State District",
+    "ln": "CARLOS F. VIGIL MIDDLE",
+    "li": "019",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ESPANOLA",
+    "dc": "055",
+    "dt": "State District",
+    "ln": "CHIMAYO ELEMENTARY",
+    "li": "039",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ESPANOLA",
+    "dc": "055",
+    "dt": "State District",
+    "ln": "DIXON ELEMENTARY",
+    "li": "042",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ESPANOLA",
+    "dc": "055",
+    "dt": "State District",
+    "ln": "ESPANOLA VALLEY HIGH",
+    "li": "050",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ESPANOLA",
+    "dc": "055",
+    "dt": "State District",
+    "ln": "EUTIMIO SALAZAR ELEMENTARY",
+    "li": "053",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ESPANOLA",
+    "dc": "055",
+    "dt": "State District",
+    "ln": "HERNANDEZ ELEMENTARY",
+    "li": "059",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ESPANOLA",
+    "dc": "055",
+    "dt": "State District",
+    "ln": "JAMES RODRIGUEZ ELEMENTARY",
+    "li": "048",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ESPANOLA",
+    "dc": "055",
+    "dt": "State District",
+    "ln": "LOS NINOS ELEMENTARY",
+    "li": "142",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ESPANOLA",
+    "dc": "055",
+    "dt": "State District",
+    "ln": "SAN JUAN ELEMENTARY",
+    "li": "144",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ESPANOLA",
+    "dc": "055",
+    "dt": "State District",
+    "ln": "TONY QUINTANA ELEMENTARY",
+    "li": "145",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ESPANOLA",
+    "dc": "055",
+    "dt": "State District",
+    "ln": "VELARDE ELEMENTARY",
+    "li": "169",
+    "st": "OPEN"
+  },
+  { "dn": "ESTANCIA", "dc": "080", "dt": "State District", "ln": "ESTANCIA HIGH", "li": "050", "st": "OPEN" },
+  {
+    "dn": "ESTANCIA",
+    "dc": "080",
+    "dt": "State District",
+    "ln": "ESTANCIA MIDDLE",
+    "li": "172",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ESTANCIA",
+    "dc": "080",
+    "dt": "State District",
+    "ln": "LOWER ELEMENTARY",
+    "li": "169",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ESTANCIA",
+    "dc": "080",
+    "dt": "State District",
+    "ln": "UPPER ELEMENTARY",
+    "li": "001",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ESTANCIA",
+    "dc": "080",
+    "dt": "State District",
+    "ln": "VANSTONE ELEMENTARY",
+    "li": "185",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ESTANCIA VALLEY CLASSICAL ACADEMY",
+    "dc": "550",
+    "dt": "State Charter",
+    "ln": "ESTANCIA VALLEY CLASSICAL ACADEMY",
+    "li": "001",
+    "st": "OPEN"
+  },
+  { "dn": "EUNICE", "dc": "032", "dt": "State District", "ln": "CATON MIDDLE", "li": "049", "st": "OPEN" },
+  { "dn": "EUNICE", "dc": "032", "dt": "State District", "ln": "EUNICE HIGH", "li": "050", "st": "OPEN" },
+  {
+    "dn": "EUNICE",
+    "dc": "032",
+    "dt": "State District",
+    "ln": "METTIE JORDAN ELEMENTARY",
+    "li": "048",
+    "st": "OPEN"
+  },
+  {
+    "dn": "EXPLORE ACADEMY",
+    "dc": "557",
+    "dt": "State Charter",
+    "ln": "EXPLORE ACADEMY",
+    "li": "001",
+    "st": "OPEN"
+  },
+  {
+    "dn": "FARMINGTON",
+    "dc": "065",
+    "dt": "State District",
+    "ln": "ANIMAS ELEMENTARY",
+    "li": "015",
+    "st": "OPEN"
+  },
+  {
+    "dn": "FARMINGTON",
+    "dc": "065",
+    "dt": "State District",
+    "ln": "APACHE ELEMENTARY",
+    "li": "017",
+    "st": "OPEN"
+  },
+  {
+    "dn": "FARMINGTON",
+    "dc": "065",
+    "dt": "State District",
+    "ln": "BLUFFVIEW ELEMENTARY",
+    "li": "019",
+    "st": "OPEN"
+  },
+  {
+    "dn": "FARMINGTON",
+    "dc": "065",
+    "dt": "State District",
+    "ln": "COUNTRY CLUB ELEMENTARY",
+    "li": "037",
+    "st": "OPEN"
+  },
+  {
+    "dn": "FARMINGTON",
+    "dc": "065",
+    "dt": "State District",
+    "ln": "ESPERANZA ELEMENTARY",
+    "li": "038",
+    "st": "OPEN"
+  },
+  {
+    "dn": "FARMINGTON",
+    "dc": "065",
+    "dt": "State District",
+    "ln": "FARMINGTON HIGH",
+    "li": "053",
+    "st": "OPEN"
+  },
+  {
+    "dn": "FARMINGTON",
+    "dc": "065",
+    "dt": "State District",
+    "ln": "FARMINGTON PRESCHOOL ACADEMY EAST",
+    "li": "055",
+    "st": "OPEN"
+  },
+  {
+    "dn": "FARMINGTON",
+    "dc": "065",
+    "dt": "State District",
+    "ln": "FARMINGTON PRESCHOOL ACADEMY WEST",
+    "li": "056",
+    "st": "OPEN"
+  },
+  {
+    "dn": "FARMINGTON",
+    "dc": "065",
+    "dt": "State District",
+    "ln": "HEIGHTS MIDDLE SCHOOL",
+    "li": "059",
+    "st": "OPEN"
+  },
+  {
+    "dn": "FARMINGTON",
+    "dc": "065",
+    "dt": "State District",
+    "ln": "HERMOSA MIDDLE SCHOOL",
+    "li": "058",
+    "st": "OPEN"
+  },
+  {
+    "dn": "FARMINGTON",
+    "dc": "065",
+    "dt": "State District",
+    "ln": "LADERA DEL NORTE ELEMENTARY",
+    "li": "073",
+    "st": "OPEN"
+  },
+  {
+    "dn": "FARMINGTON",
+    "dc": "065",
+    "dt": "State District",
+    "ln": "MCCORMICK ELEMENTARY",
+    "li": "095",
+    "st": "OPEN"
+  },
+  {
+    "dn": "FARMINGTON",
+    "dc": "065",
+    "dt": "State District",
+    "ln": "MCKINLEY ELEMENTARY",
+    "li": "100",
+    "st": "OPEN"
+  },
+  {
+    "dn": "FARMINGTON",
+    "dc": "065",
+    "dt": "State District",
+    "ln": "MESA VERDE ELEMENTARY",
+    "li": "106",
+    "st": "OPEN"
+  },
+  {
+    "dn": "FARMINGTON",
+    "dc": "065",
+    "dt": "State District",
+    "ln": "MESA VIEW MIDDLE SCHOOL",
+    "li": "108",
+    "st": "OPEN"
+  },
+  {
+    "dn": "FARMINGTON",
+    "dc": "065",
+    "dt": "State District",
+    "ln": "NORTHEAST ELEMENTARY",
+    "li": "118",
+    "st": "OPEN"
+  },
+  {
+    "dn": "FARMINGTON",
+    "dc": "065",
+    "dt": "State District",
+    "ln": "PIEDRA VISTA HIGH",
+    "li": "006",
+    "st": "OPEN"
+  },
+  {
+    "dn": "FARMINGTON",
+    "dc": "065",
+    "dt": "State District",
+    "ln": "ROCINANTE HIGH",
+    "li": "148",
+    "st": "OPEN"
+  },
+  {
+    "dn": "FARMINGTON",
+    "dc": "065",
+    "dt": "State District",
+    "ln": "SAN JUAN COLLEGE HIGH SCHOOL",
+    "li": "180",
+    "st": "OPEN"
+  },
+  {
+    "dn": "FARMINGTON",
+    "dc": "065",
+    "dt": "State District",
+    "ln": "TIBBETTS MIDDLE SCHOOL",
+    "li": "162",
+    "st": "OPEN"
+  },
+  { "dn": "FLOYD", "dc": "059", "dt": "State District", "ln": "FLOYD ELEMENTARY", "li": "053", "st": "OPEN" },
+  { "dn": "FLOYD", "dc": "059", "dt": "State District", "ln": "FLOYD HIGH", "li": "054", "st": "OPEN" },
+  { "dn": "FLOYD", "dc": "059", "dt": "State District", "ln": "FLOYD MIDDLE", "li": "001", "st": "OPEN" },
+  {
+    "dn": "FT SUMNER",
+    "dc": "016",
+    "dt": "State District",
+    "ln": "FORT SUMNER ELEMENTARY",
+    "li": "051",
+    "st": "OPEN"
+  },
+  {
+    "dn": "FT SUMNER",
+    "dc": "016",
+    "dt": "State District",
+    "ln": "FORT SUMNER HIGH",
+    "li": "052",
+    "st": "OPEN"
+  },
+  {
+    "dn": "FT SUMNER",
+    "dc": "016",
+    "dt": "State District",
+    "ln": "FORT SUMNER MIDDLE",
+    "li": "060",
+    "st": "OPEN"
+  },
+  {
+    "dn": "GADSDEN",
+    "dc": "019",
+    "dt": "State District",
+    "ln": "ALTA VISTA EARLY COLLEGE HIGH SCHOOL",
+    "li": "018",
+    "st": "OPEN"
+  },
+  {
+    "dn": "GADSDEN",
+    "dc": "019",
+    "dt": "State District",
+    "ln": "ANTHONY ELEMENTARY",
+    "li": "016",
+    "st": "OPEN"
+  },
+  {
+    "dn": "GADSDEN",
+    "dc": "019",
+    "dt": "State District",
+    "ln": "ANTHONY ON-TRACK PREK CENTER",
+    "li": "060",
+    "st": "OPEN"
+  },
+  {
+    "dn": "GADSDEN",
+    "dc": "019",
+    "dt": "State District",
+    "ln": "BERINO ELEMENTARY",
+    "li": "020",
+    "st": "OPEN"
+  },
+  {
+    "dn": "GADSDEN",
+    "dc": "019",
+    "dt": "State District",
+    "ln": "CHAPARRAL ELEMENTARY",
+    "li": "030",
+    "st": "OPEN"
+  },
+  { "dn": "GADSDEN", "dc": "019", "dt": "State District", "ln": "CHAPARRAL HIGH", "li": "003", "st": "OPEN" },
+  {
+    "dn": "GADSDEN",
+    "dc": "019",
+    "dt": "State District",
+    "ln": "CHAPARRAL MIDDLE",
+    "li": "032",
+    "st": "OPEN"
+  },
+  {
+    "dn": "GADSDEN",
+    "dc": "019",
+    "dt": "State District",
+    "ln": "CHAPARRAL ON-TRACK PREK CENTER",
+    "li": "061",
+    "st": "OPEN"
+  },
+  {
+    "dn": "GADSDEN",
+    "dc": "019",
+    "dt": "State District",
+    "ln": "DESERT PRIDE ACADEMY",
+    "li": "007",
+    "st": "REOPENED"
+  },
+  {
+    "dn": "GADSDEN",
+    "dc": "019",
+    "dt": "State District",
+    "ln": "DESERT TRAIL ELEMENTARY",
+    "li": "040",
+    "st": "OPEN"
+  },
+  {
+    "dn": "GADSDEN",
+    "dc": "019",
+    "dt": "State District",
+    "ln": "DESERT VIEW ELEMENTARY",
+    "li": "035",
+    "st": "OPEN"
+  },
+  {
+    "dn": "GADSDEN",
+    "dc": "019",
+    "dt": "State District",
+    "ln": "GADSDEN ADMIN COMPLEX PREK CENTER",
+    "li": "062",
+    "st": "OPEN"
+  },
+  {
+    "dn": "GADSDEN",
+    "dc": "019",
+    "dt": "State District",
+    "ln": "GADSDEN ELEMENTARY",
+    "li": "017",
+    "st": "OPEN"
+  },
+  { "dn": "GADSDEN", "dc": "019", "dt": "State District", "ln": "GADSDEN HIGH", "li": "054", "st": "OPEN" },
+  { "dn": "GADSDEN", "dc": "019", "dt": "State District", "ln": "GADSDEN MIDDLE", "li": "052", "st": "OPEN" },
+  {
+    "dn": "GADSDEN",
+    "dc": "019",
+    "dt": "State District",
+    "ln": "LA MESA ON TRACK PREK CENTER",
+    "li": "063",
+    "st": "OPEN"
+  },
+  {
+    "dn": "GADSDEN",
+    "dc": "019",
+    "dt": "State District",
+    "ln": "LA UNION ELEMENTARY",
+    "li": "076",
+    "st": "OPEN"
+  },
+  {
+    "dn": "GADSDEN",
+    "dc": "019",
+    "dt": "State District",
+    "ln": "LOMA LINDA ELEMENTARY",
+    "li": "086",
+    "st": "OPEN"
+  },
+  {
+    "dn": "GADSDEN",
+    "dc": "019",
+    "dt": "State District",
+    "ln": "MESQUITE ELEMENTARY",
+    "li": "104",
+    "st": "OPEN"
+  },
+  {
+    "dn": "GADSDEN",
+    "dc": "019",
+    "dt": "State District",
+    "ln": "NORTH VALLEY ELEMENTARY",
+    "li": "120",
+    "st": "OPEN"
+  },
+  {
+    "dn": "GADSDEN",
+    "dc": "019",
+    "dt": "State District",
+    "ln": "RIVERSIDE ELEMENTARY",
+    "li": "140",
+    "st": "OPEN"
+  },
+  {
+    "dn": "GADSDEN",
+    "dc": "019",
+    "dt": "State District",
+    "ln": "SANTA TERESA ELEMENTARY",
+    "li": "008",
+    "st": "OPEN"
+  },
+  {
+    "dn": "GADSDEN",
+    "dc": "019",
+    "dt": "State District",
+    "ln": "SANTA TERESA HIGH",
+    "li": "200",
+    "st": "OPEN"
+  },
+  {
+    "dn": "GADSDEN",
+    "dc": "019",
+    "dt": "State District",
+    "ln": "SANTA TERESA MIDDLE",
+    "li": "175",
+    "st": "OPEN"
+  },
+  {
+    "dn": "GADSDEN",
+    "dc": "019",
+    "dt": "State District",
+    "ln": "SUNLAND PARK ELEMENTARY",
+    "li": "013",
+    "st": "OPEN"
+  },
+  {
+    "dn": "GADSDEN",
+    "dc": "019",
+    "dt": "State District",
+    "ln": "SUNRISE ELEMENTARY",
+    "li": "009",
+    "st": "OPEN"
+  },
+  {
+    "dn": "GADSDEN",
+    "dc": "019",
+    "dt": "State District",
+    "ln": "VADO ELEMENTARY",
+    "li": "001",
+    "st": "OPEN"
+  },
+  {
+    "dn": "GADSDEN",
+    "dc": "019",
+    "dt": "State District",
+    "ln": "YUCCA HEIGHTS ELEMENTARY",
+    "li": "025",
+    "st": "OPEN"
+  },
+  {
+    "dn": "GALLUP",
+    "dc": "043",
+    "dt": "State District",
+    "ln": "CATHERINE A. MILLER ELEMENTARY",
+    "li": "034",
+    "st": "OPEN"
+  },
+  {
+    "dn": "GALLUP",
+    "dc": "043",
+    "dt": "State District",
+    "ln": "CHEE DODGE ELEMENTARY",
+    "li": "030",
+    "st": "OPEN"
+  },
+  {
+    "dn": "GALLUP",
+    "dc": "043",
+    "dt": "State District",
+    "ln": "CHIEF MANUELITO MIDDLE",
+    "li": "003",
+    "st": "OPEN"
+  },
+  {
+    "dn": "GALLUP",
+    "dc": "043",
+    "dt": "State District",
+    "ln": "CROWNPOINT ELEMENTARY",
+    "li": "038",
+    "st": "OPEN"
+  },
+  { "dn": "GALLUP", "dc": "043", "dt": "State District", "ln": "CROWNPOINT HIGH", "li": "039", "st": "OPEN" },
+  {
+    "dn": "GALLUP",
+    "dc": "043",
+    "dt": "State District",
+    "ln": "CROWNPOINT MIDDLE",
+    "li": "088",
+    "st": "OPEN"
+  },
+  {
+    "dn": "GALLUP",
+    "dc": "043",
+    "dt": "State District",
+    "ln": "DAVID SKEET ELEMENTARY",
+    "li": "160",
+    "st": "OPEN"
+  },
+  {
+    "dn": "GALLUP",
+    "dc": "043",
+    "dt": "State District",
+    "ln": "DEL NORTE ELEMENTARY",
+    "li": "174",
+    "st": "OPEN"
+  },
+  {
+    "dn": "GALLUP",
+    "dc": "043",
+    "dt": "State District",
+    "ln": "EDUCATION DEV CENTER",
+    "li": "177",
+    "st": "OPEN"
+  },
+  {
+    "dn": "GALLUP",
+    "dc": "043",
+    "dt": "State District",
+    "ln": "GALLUP CENTRAL ALTERNATIVE",
+    "li": "016",
+    "st": "OPEN"
+  },
+  { "dn": "GALLUP", "dc": "043", "dt": "State District", "ln": "GALLUP HIGH", "li": "055", "st": "OPEN" },
+  { "dn": "GALLUP", "dc": "043", "dt": "State District", "ln": "GALLUP MIDDLE", "li": "054", "st": "OPEN" },
+  {
+    "dn": "GALLUP",
+    "dc": "043",
+    "dt": "State District",
+    "ln": "INDIAN HILLS ELEMENTARY",
+    "li": "062",
+    "st": "OPEN"
+  },
+  {
+    "dn": "GALLUP",
+    "dc": "043",
+    "dt": "State District",
+    "ln": "JEFFERSON ELEMENTARY",
+    "li": "066",
+    "st": "OPEN"
+  },
+  {
+    "dn": "GALLUP",
+    "dc": "043",
+    "dt": "State District",
+    "ln": "JOHN F. KENNEDY MIDDLE",
+    "li": "190",
+    "st": "OPEN"
+  },
+  {
+    "dn": "GALLUP",
+    "dc": "043",
+    "dt": "State District",
+    "ln": "LINCOLN ELEMENTARY",
+    "li": "077",
+    "st": "OPEN"
+  },
+  {
+    "dn": "GALLUP",
+    "dc": "043",
+    "dt": "State District",
+    "ln": "MIYAMURA HIGH SCHOOL",
+    "li": "073",
+    "st": "OPEN"
+  },
+  {
+    "dn": "GALLUP",
+    "dc": "043",
+    "dt": "State District",
+    "ln": "NAVAJO ELEMENTARY",
+    "li": "079",
+    "st": "OPEN"
+  },
+  {
+    "dn": "GALLUP",
+    "dc": "043",
+    "dt": "State District",
+    "ln": "NAVAJO MIDDLE SCHOOL",
+    "li": "100",
+    "st": "OPEN"
+  },
+  {
+    "dn": "GALLUP",
+    "dc": "043",
+    "dt": "State District",
+    "ln": "NAVAJO PINE HIGH",
+    "li": "075",
+    "st": "OPEN"
+  },
+  {
+    "dn": "GALLUP",
+    "dc": "043",
+    "dt": "State District",
+    "ln": "RAMAH ELEMENTARY",
+    "li": "132",
+    "st": "OPEN"
+  },
+  { "dn": "GALLUP", "dc": "043", "dt": "State District", "ln": "RAMAH HIGH", "li": "130", "st": "OPEN" },
+  {
+    "dn": "GALLUP",
+    "dc": "043",
+    "dt": "State District",
+    "ln": "RED ROCK ELEMENTARY",
+    "li": "134",
+    "st": "OPEN"
+  },
+  {
+    "dn": "GALLUP",
+    "dc": "043",
+    "dt": "State District",
+    "ln": "STAGECOACH ELEMENTARY",
+    "li": "152",
+    "st": "OPEN"
+  },
+  {
+    "dn": "GALLUP",
+    "dc": "043",
+    "dt": "State District",
+    "ln": "THOREAU ELEMENTARY",
+    "li": "162",
+    "st": "OPEN"
+  },
+  { "dn": "GALLUP", "dc": "043", "dt": "State District", "ln": "THOREAU HIGH", "li": "145", "st": "OPEN" },
+  { "dn": "GALLUP", "dc": "043", "dt": "State District", "ln": "THOREAU MIDDLE", "li": "155", "st": "OPEN" },
+  {
+    "dn": "GALLUP",
+    "dc": "043",
+    "dt": "State District",
+    "ln": "TOBE TURPEN ELEMENTARY",
+    "li": "091",
+    "st": "OPEN"
+  },
+  {
+    "dn": "GALLUP",
+    "dc": "043",
+    "dt": "State District",
+    "ln": "TOHATCHI ELEMENTARY",
+    "li": "164",
+    "st": "OPEN"
+  },
+  { "dn": "GALLUP", "dc": "043", "dt": "State District", "ln": "TOHATCHI HIGH", "li": "064", "st": "OPEN" },
+  { "dn": "GALLUP", "dc": "043", "dt": "State District", "ln": "TOHATCHI MIDDLE", "li": "120", "st": "OPEN" },
+  { "dn": "GALLUP", "dc": "043", "dt": "State District", "ln": "TSE'YI'GAI HIGH", "li": "089", "st": "OPEN" },
+  {
+    "dn": "GALLUP",
+    "dc": "043",
+    "dt": "State District",
+    "ln": "TWIN LAKES ELEMENTARY",
+    "li": "170",
+    "st": "OPEN"
+  },
+  { "dn": "GRADY", "dc": "015", "dt": "State District", "ln": "GRADY ELEMENTARY", "li": "055", "st": "OPEN" },
+  { "dn": "GRADY", "dc": "015", "dt": "State District", "ln": "GRADY HIGH", "li": "057", "st": "OPEN" },
+  {
+    "dn": "GRADY",
+    "dc": "015",
+    "dt": "State District",
+    "ln": "GRADY MIDDLE SCHOOL",
+    "li": "056",
+    "st": "OPEN"
+  },
+  {
+    "dn": "GRANTS",
+    "dc": "088",
+    "dt": "State District",
+    "ln": "BLUEWATER ELEMENTARY",
+    "li": "915",
+    "st": "OPEN"
+  },
+  {
+    "dn": "GRANTS",
+    "dc": "088",
+    "dt": "State District",
+    "ln": "CUBERO ELEMENTARY",
+    "li": "038",
+    "st": "OPEN"
+  },
+  {
+    "dn": "GRANTS",
+    "dc": "088",
+    "dt": "State District",
+    "ln": "GCCS EARLY COLLEGE HIGH SCHOOL",
+    "li": "060",
+    "st": "OPEN"
+  },
+  { "dn": "GRANTS", "dc": "088", "dt": "State District", "ln": "GRANTS HIGH", "li": "055", "st": "OPEN" },
+  {
+    "dn": "GRANTS",
+    "dc": "088",
+    "dt": "State District",
+    "ln": "LAGUNA-ACOMA HIGH",
+    "li": "057",
+    "st": "OPEN"
+  },
+  {
+    "dn": "GRANTS",
+    "dc": "088",
+    "dt": "State District",
+    "ln": "LAGUNA-ACOMA MIDDLE",
+    "li": "058",
+    "st": "OPEN"
+  },
+  {
+    "dn": "GRANTS",
+    "dc": "088",
+    "dt": "State District",
+    "ln": "LOS ALAMITOS MIDDLE",
+    "li": "056",
+    "st": "OPEN"
+  },
+  {
+    "dn": "GRANTS",
+    "dc": "088",
+    "dt": "State District",
+    "ln": "MESA VIEW ELEMENTARY",
+    "li": "099",
+    "st": "OPEN"
+  },
+  {
+    "dn": "GRANTS",
+    "dc": "088",
+    "dt": "State District",
+    "ln": "MILAN ELEMENTARY",
+    "li": "104",
+    "st": "OPEN"
+  },
+  {
+    "dn": "GRANTS",
+    "dc": "088",
+    "dt": "State District",
+    "ln": "MOUNT TAYLOR ELEMENTARY",
+    "li": "106",
+    "st": "OPEN"
+  },
+  {
+    "dn": "GRANTS",
+    "dc": "088",
+    "dt": "State District",
+    "ln": "SAN RAFAEL ELEMENTARY",
+    "li": "152",
+    "st": "OPEN"
+  },
+  {
+    "dn": "GRANTS",
+    "dc": "088",
+    "dt": "State District",
+    "ln": "SEBOYETA ELEMENTARY",
+    "li": "155",
+    "st": "OPEN"
+  },
+  {
+    "dn": "HAGERMAN",
+    "dc": "005",
+    "dt": "State District",
+    "ln": "HAGERMAN ELEMENTARY",
+    "li": "054",
+    "st": "OPEN"
+  },
+  { "dn": "HAGERMAN", "dc": "005", "dt": "State District", "ln": "HAGERMAN HIGH", "li": "055", "st": "OPEN" },
+  {
+    "dn": "HAGERMAN",
+    "dc": "005",
+    "dt": "State District",
+    "ln": "HAGERMAN MIDDLE",
+    "li": "056",
+    "st": "OPEN"
+  },
+  {
+    "dn": "HATCH",
+    "dc": "018",
+    "dt": "State District",
+    "ln": "GARFIELD ELEMENTARY",
+    "li": "053",
+    "st": "OPEN"
+  },
+  {
+    "dn": "HATCH",
+    "dc": "018",
+    "dt": "State District",
+    "ln": "HATCH VALLEY ELEMENTARY",
+    "li": "057",
+    "st": "OPEN"
+  },
+  {
+    "dn": "HATCH",
+    "dc": "018",
+    "dt": "State District",
+    "ln": "HATCH VALLEY HIGH",
+    "li": "058",
+    "st": "OPEN"
+  },
+  {
+    "dn": "HATCH",
+    "dc": "018",
+    "dt": "State District",
+    "ln": "HATCH VALLEY MIDDLE",
+    "li": "050",
+    "st": "OPEN"
+  },
+  {
+    "dn": "HATCH",
+    "dc": "018",
+    "dt": "State District",
+    "ln": "RIO GRANDE ELEMENTARY",
+    "li": "001",
+    "st": "OPEN"
+  },
+  {
+    "dn": "HOBBS",
+    "dc": "033",
+    "dt": "State District",
+    "ln": "BOOKER T. WASHINGTON ELEMENTARY",
+    "li": "172",
+    "st": "OPEN"
+  },
+  {
+    "dn": "HOBBS",
+    "dc": "033",
+    "dt": "State District",
+    "ln": "BROADMOOR ELEMENTARY",
+    "li": "028",
+    "st": "OPEN"
+  },
+  {
+    "dn": "HOBBS",
+    "dc": "033",
+    "dt": "State District",
+    "ln": "COLLEGE LANE ELEMENTARY",
+    "li": "030",
+    "st": "OPEN"
+  },
+  {
+    "dn": "HOBBS",
+    "dc": "033",
+    "dt": "State District",
+    "ln": "CORONADO ELEMENTARY",
+    "li": "032",
+    "st": "OPEN"
+  },
+  {
+    "dn": "HOBBS",
+    "dc": "033",
+    "dt": "State District",
+    "ln": "EDISON ELEMENTARY",
+    "li": "046",
+    "st": "OPEN"
+  },
+  {
+    "dn": "HOBBS",
+    "dc": "033",
+    "dt": "State District",
+    "ln": "HEIZER MIDDLE SCHOOL",
+    "li": "008",
+    "st": "OPEN"
+  },
+  {
+    "dn": "HOBBS",
+    "dc": "033",
+    "dt": "State District",
+    "ln": "HIGHLAND MIDDLE SCHOOL",
+    "li": "057",
+    "st": "OPEN"
+  },
+  {
+    "dn": "HOBBS",
+    "dc": "033",
+    "dt": "State District",
+    "ln": "HOBBS FRESHMAN HIGH",
+    "li": "055",
+    "st": "OPEN"
+  },
+  { "dn": "HOBBS", "dc": "033", "dt": "State District", "ln": "HOBBS HIGH", "li": "058", "st": "OPEN" },
+  {
+    "dn": "HOBBS",
+    "dc": "033",
+    "dt": "State District",
+    "ln": "HOUSTON MIDDLE SCHOOL",
+    "li": "059",
+    "st": "OPEN"
+  },
+  {
+    "dn": "HOBBS",
+    "dc": "033",
+    "dt": "State District",
+    "ln": "JEFFERSON ELEMENTARY",
+    "li": "066",
+    "st": "OPEN"
+  },
+  { "dn": "HOBBS", "dc": "033", "dt": "State District", "ln": "MILLS ELEMENTARY", "li": "072", "st": "OPEN" },
+  {
+    "dn": "HOBBS",
+    "dc": "033",
+    "dt": "State District",
+    "ln": "MURRAY ELEMENTARY",
+    "li": "177",
+    "st": "OPEN"
+  },
+  {
+    "dn": "HOBBS",
+    "dc": "033",
+    "dt": "State District",
+    "ln": "SANGER ELEMENTARY",
+    "li": "144",
+    "st": "OPEN"
+  },
+  {
+    "dn": "HOBBS",
+    "dc": "033",
+    "dt": "State District",
+    "ln": "SOUTHERN HEIGHTS ELEMENTARY",
+    "li": "156",
+    "st": "OPEN"
+  },
+  { "dn": "HOBBS", "dc": "033", "dt": "State District", "ln": "STONE ELEMENTARY", "li": "075", "st": "OPEN" },
+  {
+    "dn": "HOBBS",
+    "dc": "033",
+    "dt": "State District",
+    "ln": "TAYLOR ELEMENTARY",
+    "li": "164",
+    "st": "OPEN"
+  },
+  {
+    "dn": "HOBBS",
+    "dc": "033",
+    "dt": "State District",
+    "ln": "WILL ROGERS ELEMENTARY",
+    "li": "176",
+    "st": "OPEN"
+  },
+  { "dn": "HONDO", "dc": "039", "dt": "State District", "ln": "HONDO ELEMENTARY", "li": "059", "st": "OPEN" },
+  { "dn": "HONDO", "dc": "039", "dt": "State District", "ln": "HONDO HIGH", "li": "060", "st": "OPEN" },
+  {
+    "dn": "HORIZON ACADEMY WEST",
+    "dc": "503",
+    "dt": "State Charter",
+    "ln": "HORIZON ACADEMY WEST",
+    "li": "022",
+    "st": "OPEN"
+  },
+  { "dn": "HOUSE", "dc": "050", "dt": "State District", "ln": "HOUSE ELEMENTARY", "li": "059", "st": "OPEN" },
+  { "dn": "HOUSE", "dc": "050", "dt": "State District", "ln": "HOUSE HIGH", "li": "060", "st": "OPEN" },
+  {
+    "dn": "HOUSE",
+    "dc": "050",
+    "dt": "State District",
+    "ln": "HOUSE JUNIOR HIGH",
+    "li": "058",
+    "st": "OPEN"
+  },
+  {
+    "dn": "HOZHO ACADEMY",
+    "dc": "573",
+    "dt": "State Charter",
+    "ln": "HOZHO ACADEMY",
+    "li": "001",
+    "st": "OPEN"
+  },
+  {
+    "dn": "J PAUL TAYLOR ACADEMY",
+    "dc": "535",
+    "dt": "State Charter",
+    "ln": "J PAUL TAYLOR ACADEMY",
+    "li": "001",
+    "st": "OPEN"
+  },
+  { "dn": "JAL", "dc": "034", "dt": "State District", "ln": "JAL ELEMENTARY", "li": "064", "st": "OPEN" },
+  { "dn": "JAL", "dc": "034", "dt": "State District", "ln": "JAL HIGH", "li": "066", "st": "OPEN" },
+  { "dn": "JAL", "dc": "034", "dt": "State District", "ln": "JAL JR HIGH", "li": "060", "st": "OPEN" },
+  {
+    "dn": "JEMEZ MOUNTAIN",
+    "dc": "056",
+    "dt": "State District",
+    "ln": "CORONADO HIGH",
+    "li": "038",
+    "st": "OPEN"
+  },
+  {
+    "dn": "JEMEZ MOUNTAIN",
+    "dc": "056",
+    "dt": "State District",
+    "ln": "CORONADO MIDDLE",
+    "li": "060",
+    "st": "OPEN"
+  },
+  {
+    "dn": "JEMEZ MOUNTAIN",
+    "dc": "056",
+    "dt": "State District",
+    "ln": "GALLINA ELEMENTARY",
+    "li": "054",
+    "st": "OPEN"
+  },
+  {
+    "dn": "JEMEZ MOUNTAIN",
+    "dc": "056",
+    "dt": "State District",
+    "ln": "LYBROOK ELEMENTARY",
+    "li": "087",
+    "st": "OPEN"
+  },
+  {
+    "dn": "JEMEZ VALLEY",
+    "dc": "063",
+    "dt": "State District",
+    "ln": "JEMEZ VALLEY ELEMENTARY",
+    "li": "145",
+    "st": "OPEN"
+  },
+  {
+    "dn": "JEMEZ VALLEY",
+    "dc": "063",
+    "dt": "State District",
+    "ln": "JEMEZ VALLEY HIGH",
+    "li": "166",
+    "st": "OPEN"
+  },
+  {
+    "dn": "JEMEZ VALLEY",
+    "dc": "063",
+    "dt": "State District",
+    "ln": "JEMEZ VALLEY MIDDLE",
+    "li": "170",
+    "st": "OPEN"
+  },
+  {
+    "dn": "JEMEZ VALLEY",
+    "dc": "063",
+    "dt": "State District",
+    "ln": "SAN DIEGO RIVERSIDE",
+    "li": "004",
+    "st": "OPEN"
+  },
+  {
+    "dn": "LA ACADEMIA DOLORES HUERTA",
+    "dc": "560",
+    "dt": "State Charter",
+    "ln": "LA ACADEMIA DOLORES HUERTA",
+    "li": "001",
+    "st": "OPEN"
+  },
+  {
+    "dn": "LA TIERRA MONTESSORI SCHOOL",
+    "dc": "546",
+    "dt": "State Charter",
+    "ln": "LA TIERRA MONTESSORI SCHOOL OF THE ARTS AND SCIENCES",
+    "li": "001",
+    "st": "OPEN"
+  },
+  {
+    "dn": "LAKE ARTHUR",
+    "dc": "007",
+    "dt": "State District",
+    "ln": "LAKE ARTHUR ELEMENTARY",
+    "li": "073",
+    "st": "OPEN"
+  },
+  {
+    "dn": "LAKE ARTHUR",
+    "dc": "007",
+    "dt": "State District",
+    "ln": "LAKE ARTHUR HIGH",
+    "li": "075",
+    "st": "OPEN"
+  },
+  {
+    "dn": "LAKE ARTHUR",
+    "dc": "007",
+    "dt": "State District",
+    "ln": "LAKE ARTHUR MIDDLE",
+    "li": "077",
+    "st": "OPEN"
+  },
+  {
+    "dn": "LAS CRUCES",
+    "dc": "017",
+    "dt": "State District",
+    "ln": "ALAMEDA ELEMENTARY",
+    "li": "010",
+    "st": "OPEN"
+  },
+  {
+    "dn": "LAS CRUCES",
+    "dc": "017",
+    "dt": "State District",
+    "ln": "ARROWHEAD PARK MEDICAL ACADEMY",
+    "li": "019",
+    "st": "OPEN"
+  },
+  {
+    "dn": "LAS CRUCES",
+    "dc": "017",
+    "dt": "State District",
+    "ln": "BOOKER T. WASHINGTON",
+    "li": "172",
+    "st": "OPEN"
+  },
+  {
+    "dn": "LAS CRUCES",
+    "dc": "017",
+    "dt": "State District",
+    "ln": "CAMINO REAL MIDDLE",
+    "li": "002",
+    "st": "OPEN"
+  },
+  {
+    "dn": "LAS CRUCES",
+    "dc": "017",
+    "dt": "State District",
+    "ln": "CENTENNIAL HIGH SCHOOL",
+    "li": "018",
+    "st": "OPEN"
+  },
+  {
+    "dn": "LAS CRUCES",
+    "dc": "017",
+    "dt": "State District",
+    "ln": "CENTRAL ELEMENTARY",
+    "li": "034",
+    "st": "OPEN"
+  },
+  {
+    "dn": "LAS CRUCES",
+    "dc": "017",
+    "dt": "State District",
+    "ln": "CESAR CHAVEZ ELEMENTARY",
+    "li": "006",
+    "st": "OPEN"
+  },
+  {
+    "dn": "LAS CRUCES",
+    "dc": "017",
+    "dt": "State District",
+    "ln": "COLUMBIA ELEMENTARY",
+    "li": "009",
+    "st": "OPEN"
+  },
+  {
+    "dn": "LAS CRUCES",
+    "dc": "017",
+    "dt": "State District",
+    "ln": "CONLEE ELEMENTARY",
+    "li": "036",
+    "st": "OPEN"
+  },
+  {
+    "dn": "LAS CRUCES",
+    "dc": "017",
+    "dt": "State District",
+    "ln": "DESERT HILLS ELEMENTARY",
+    "li": "045",
+    "st": "OPEN"
+  },
+  {
+    "dn": "LAS CRUCES",
+    "dc": "017",
+    "dt": "State District",
+    "ln": "DONA ANA ELEMENTARY",
+    "li": "048",
+    "st": "OPEN"
+  },
+  {
+    "dn": "LAS CRUCES",
+    "dc": "017",
+    "dt": "State District",
+    "ln": "EARLY COLLEGE HIGH SCHOOL",
+    "li": "016",
+    "st": "OPEN"
+  },
+  {
+    "dn": "LAS CRUCES",
+    "dc": "017",
+    "dt": "State District",
+    "ln": "EAST PICACHO ELEMENTARY",
+    "li": "044",
+    "st": "OPEN"
+  },
+  {
+    "dn": "LAS CRUCES",
+    "dc": "017",
+    "dt": "State District",
+    "ln": "FAIRACRES ELEMENTARY",
+    "li": "051",
+    "st": "OPEN"
+  },
+  {
+    "dn": "LAS CRUCES",
+    "dc": "017",
+    "dt": "State District",
+    "ln": "HERMOSA HEIGHTS ELEMENTARY",
+    "li": "059",
+    "st": "OPEN"
+  },
+  {
+    "dn": "LAS CRUCES",
+    "dc": "017",
+    "dt": "State District",
+    "ln": "HIGHLAND ELEMENTARY",
+    "li": "053",
+    "st": "OPEN"
+  },
+  {
+    "dn": "LAS CRUCES",
+    "dc": "017",
+    "dt": "State District",
+    "ln": "HILLRISE ELEMENTARY",
+    "li": "055",
+    "st": "OPEN"
+  },
+  {
+    "dn": "LAS CRUCES",
+    "dc": "017",
+    "dt": "State District",
+    "ln": "JORNADA ELEMENTARY",
+    "li": "061",
+    "st": "OPEN"
+  },
+  {
+    "dn": "LAS CRUCES",
+    "dc": "017",
+    "dt": "State District",
+    "ln": "LAS CRUCES HIGH",
+    "li": "075",
+    "st": "OPEN"
+  },
+  {
+    "dn": "LAS CRUCES",
+    "dc": "017",
+    "dt": "State District",
+    "ln": "LOMA HEIGHTS ELEMENTARY",
+    "li": "065",
+    "st": "OPEN"
+  },
+  { "dn": "LAS CRUCES", "dc": "017", "dt": "State District", "ln": "LYNN MIDDLE", "li": "086", "st": "OPEN" },
+  {
+    "dn": "LAS CRUCES",
+    "dc": "017",
+    "dt": "State District",
+    "ln": "MAC ARTHUR ELEMENTARY",
+    "li": "093",
+    "st": "OPEN"
+  },
+  {
+    "dn": "LAS CRUCES",
+    "dc": "017",
+    "dt": "State District",
+    "ln": "MAYFIELD HIGH",
+    "li": "100",
+    "st": "OPEN"
+  },
+  { "dn": "LAS CRUCES", "dc": "017", "dt": "State District", "ln": "MESA MIDDLE", "li": "015", "st": "OPEN" },
+  {
+    "dn": "LAS CRUCES",
+    "dc": "017",
+    "dt": "State District",
+    "ln": "MESILLA ELEMENTARY",
+    "li": "097",
+    "st": "OPEN"
+  },
+  {
+    "dn": "LAS CRUCES",
+    "dc": "017",
+    "dt": "State District",
+    "ln": "MESILLA PARK ELEMENTARY",
+    "li": "110",
+    "st": "OPEN"
+  },
+  {
+    "dn": "LAS CRUCES",
+    "dc": "017",
+    "dt": "State District",
+    "ln": "MESILLA VALLEY LEADERSHIP ACADEMY",
+    "li": "017",
+    "st": "OPEN"
+  },
+  {
+    "dn": "LAS CRUCES",
+    "dc": "017",
+    "dt": "State District",
+    "ln": "MONTE VISTA ELEMENTARY",
+    "li": "014",
+    "st": "OPEN"
+  },
+  { "dn": "LAS CRUCES", "dc": "017", "dt": "State District", "ln": "ONATE HIGH", "li": "130", "st": "OPEN" },
+  {
+    "dn": "LAS CRUCES",
+    "dc": "017",
+    "dt": "State District",
+    "ln": "PICACHO MIDDLE",
+    "li": "035",
+    "st": "OPEN"
+  },
+  {
+    "dn": "LAS CRUCES",
+    "dc": "017",
+    "dt": "State District",
+    "ln": "RIO GRANDE PREPARATORY INSTITUTE",
+    "li": "012",
+    "st": "OPEN"
+  },
+  {
+    "dn": "LAS CRUCES",
+    "dc": "017",
+    "dt": "State District",
+    "ln": "SIERRA MIDDLE",
+    "li": "144",
+    "st": "OPEN"
+  },
+  {
+    "dn": "LAS CRUCES",
+    "dc": "017",
+    "dt": "State District",
+    "ln": "SONOMA ELEMENTARY",
+    "li": "007",
+    "st": "OPEN"
+  },
+  {
+    "dn": "LAS CRUCES",
+    "dc": "017",
+    "dt": "State District",
+    "ln": "SUNRISE ELEMENTARY",
+    "li": "140",
+    "st": "OPEN"
+  },
+  {
+    "dn": "LAS CRUCES",
+    "dc": "017",
+    "dt": "State District",
+    "ln": "TOMBAUGH ELEMENTARY",
+    "li": "145",
+    "st": "OPEN"
+  },
+  {
+    "dn": "LAS CRUCES",
+    "dc": "017",
+    "dt": "State District",
+    "ln": "UNIVERSITY HILLS ELEMENTARY",
+    "li": "150",
+    "st": "OPEN"
+  },
+  {
+    "dn": "LAS CRUCES",
+    "dc": "017",
+    "dt": "State District",
+    "ln": "VALLEY VIEW ELEMENTARY",
+    "li": "166",
+    "st": "OPEN"
+  },
+  {
+    "dn": "LAS CRUCES",
+    "dc": "017",
+    "dt": "State District",
+    "ln": "VISTA MIDDLE",
+    "li": "170",
+    "st": "OPEN"
+  },
+  {
+    "dn": "LAS CRUCES",
+    "dc": "017",
+    "dt": "State District",
+    "ln": "WHITE SANDS ELEMENTARY",
+    "li": "177",
+    "st": "OPEN"
+  },
+  { "dn": "LAS CRUCES", "dc": "017", "dt": "State District", "ln": "ZIA MIDDLE", "li": "184", "st": "OPEN" },
+  {
+    "dn": "LAS MONTANAS CHARTER",
+    "dc": "567",
+    "dt": "State Charter",
+    "ln": "LAS MONTANAS CHARTER",
+    "li": "001",
+    "st": "OPEN"
+  },
+  {
+    "dn": "LAS VEGAS CITY",
+    "dc": "069",
+    "dt": "State District",
+    "ln": "7TH AND 8TH GRADE ACADEMY",
+    "li": "031",
+    "st": "OPEN"
+  },
+  {
+    "dn": "LAS VEGAS CITY",
+    "dc": "069",
+    "dt": "State District",
+    "ln": "LOS NINOS ELEMENTARY",
+    "li": "037",
+    "st": "OPEN"
+  },
+  {
+    "dn": "LAS VEGAS CITY",
+    "dc": "069",
+    "dt": "State District",
+    "ln": "LVCS EARLY CHILDHOOD",
+    "li": "003",
+    "st": "OPEN"
+  },
+  {
+    "dn": "LAS VEGAS CITY",
+    "dc": "069",
+    "dt": "State District",
+    "ln": "MIKE SENA ELEMENTARY",
+    "li": "150",
+    "st": "OPEN"
+  },
+  {
+    "dn": "LAS VEGAS CITY",
+    "dc": "069",
+    "dt": "State District",
+    "ln": "ROBERTSON HIGH",
+    "li": "136",
+    "st": "OPEN"
+  },
+  {
+    "dn": "LAS VEGAS CITY",
+    "dc": "069",
+    "dt": "State District",
+    "ln": "SIERRA VISTA ELEMENTARY",
+    "li": "054",
+    "st": "OPEN"
+  },
+  { "dn": "LOGAN", "dc": "051", "dt": "State District", "ln": "LOGAN ELEMENTARY", "li": "080", "st": "OPEN" },
+  { "dn": "LOGAN", "dc": "051", "dt": "State District", "ln": "LOGAN HIGH", "li": "081", "st": "OPEN" },
+  { "dn": "LOGAN", "dc": "051", "dt": "State District", "ln": "LOGAN MIDDLE", "li": "082", "st": "OPEN" },
+  {
+    "dn": "LOGAN",
+    "dc": "051",
+    "dt": "State District",
+    "ln": "UTE LAKE ONLINE LEARNING CENTER",
+    "li": "100",
+    "st": "OPEN"
+  },
+  {
+    "dn": "LORDSBURG",
+    "dc": "029",
+    "dt": "State District",
+    "ln": "CENTRAL ELEMENTARY",
+    "li": "034",
+    "st": "OPEN"
+  },
+  {
+    "dn": "LORDSBURG",
+    "dc": "029",
+    "dt": "State District",
+    "ln": "DUGAN-TARANGO MIDDLE",
+    "li": "060",
+    "st": "OPEN"
+  },
+  {
+    "dn": "LORDSBURG",
+    "dc": "029",
+    "dt": "State District",
+    "ln": "LORDSBURG HIGH",
+    "li": "082",
+    "st": "OPEN"
+  },
+  {
+    "dn": "LORDSBURG",
+    "dc": "029",
+    "dt": "State District",
+    "ln": "R.V.TRAYLOR ELEMENTARY",
+    "li": "174",
+    "st": "OPEN"
+  },
+  {
+    "dn": "LOS ALAMOS",
+    "dc": "041",
+    "dt": "State District",
+    "ln": "ASPEN ELEMENTARY",
+    "li": "017",
+    "st": "OPEN"
+  },
+  {
+    "dn": "LOS ALAMOS",
+    "dc": "041",
+    "dt": "State District",
+    "ln": "BARRANCA MESA ELEMENTARY",
+    "li": "021",
+    "st": "OPEN"
+  },
+  {
+    "dn": "LOS ALAMOS",
+    "dc": "041",
+    "dt": "State District",
+    "ln": "CHAMISA ELEMENTARY",
+    "li": "040",
+    "st": "OPEN"
+  },
+  {
+    "dn": "LOS ALAMOS",
+    "dc": "041",
+    "dt": "State District",
+    "ln": "LOS ALAMOS HIGH",
+    "li": "080",
+    "st": "OPEN"
+  },
+  {
+    "dn": "LOS ALAMOS",
+    "dc": "041",
+    "dt": "State District",
+    "ln": "LOS ALAMOS MIDDLE",
+    "li": "124",
+    "st": "OPEN"
+  },
+  {
+    "dn": "LOS ALAMOS",
+    "dc": "041",
+    "dt": "State District",
+    "ln": "MOUNTAIN ELEMENTARY",
+    "li": "101",
+    "st": "OPEN"
+  },
+  {
+    "dn": "LOS ALAMOS",
+    "dc": "041",
+    "dt": "State District",
+    "ln": "PINON ELEMENTARY",
+    "li": "127",
+    "st": "OPEN"
+  },
+  {
+    "dn": "LOS ALAMOS",
+    "dc": "041",
+    "dt": "State District",
+    "ln": "TOPPER FRESHMAN ACADEMY",
+    "li": "079",
+    "st": "OPEN"
+  },
+  {
+    "dn": "LOS LUNAS",
+    "dc": "086",
+    "dt": "State District",
+    "ln": "ANN PARISH ELEMENTARY",
+    "li": "150",
+    "st": "OPEN"
+  },
+  {
+    "dn": "LOS LUNAS",
+    "dc": "086",
+    "dt": "State District",
+    "ln": "BOSQUE FARMS ELEMENTARY",
+    "li": "028",
+    "st": "OPEN"
+  },
+  {
+    "dn": "LOS LUNAS",
+    "dc": "086",
+    "dt": "State District",
+    "ln": "CENTURY ALT HIGH",
+    "li": "009",
+    "st": "OPEN"
+  },
+  {
+    "dn": "LOS LUNAS",
+    "dc": "086",
+    "dt": "State District",
+    "ln": "DESERT VIEW ELEMENTARY",
+    "li": "003",
+    "st": "OPEN"
+  },
+  {
+    "dn": "LOS LUNAS",
+    "dc": "086",
+    "dt": "State District",
+    "ln": "KATHERINE GALLEGOS ELEMENTARY",
+    "li": "080",
+    "st": "OPEN"
+  },
+  {
+    "dn": "LOS LUNAS",
+    "dc": "086",
+    "dt": "State District",
+    "ln": "LOS LUNAS ELEMENTARY",
+    "li": "082",
+    "st": "OPEN"
+  },
+  {
+    "dn": "LOS LUNAS",
+    "dc": "086",
+    "dt": "State District",
+    "ln": "LOS LUNAS FAMILY SCHOOL",
+    "li": "018",
+    "st": "OPEN"
+  },
+  {
+    "dn": "LOS LUNAS",
+    "dc": "086",
+    "dt": "State District",
+    "ln": "LOS LUNAS HIGH",
+    "li": "085",
+    "st": "OPEN"
+  },
+  {
+    "dn": "LOS LUNAS",
+    "dc": "086",
+    "dt": "State District",
+    "ln": "LOS LUNAS MIDDLE",
+    "li": "084",
+    "st": "OPEN"
+  },
+  {
+    "dn": "LOS LUNAS",
+    "dc": "086",
+    "dt": "State District",
+    "ln": "PERALTA ELEMENTARY",
+    "li": "122",
+    "st": "OPEN"
+  },
+  {
+    "dn": "LOS LUNAS",
+    "dc": "086",
+    "dt": "State District",
+    "ln": "RAYMOND GABALDON ELEMENTARY",
+    "li": "083",
+    "st": "OPEN"
+  },
+  {
+    "dn": "LOS LUNAS",
+    "dc": "086",
+    "dt": "State District",
+    "ln": "SUNDANCE ELEMENTARY",
+    "li": "160",
+    "st": "OPEN"
+  },
+  {
+    "dn": "LOS LUNAS",
+    "dc": "086",
+    "dt": "State District",
+    "ln": "TOME ELEMENTARY",
+    "li": "180",
+    "st": "OPEN"
+  },
+  {
+    "dn": "LOS LUNAS",
+    "dc": "086",
+    "dt": "State District",
+    "ln": "VALENCIA ELEMENTARY",
+    "li": "002",
+    "st": "OPEN"
+  },
+  {
+    "dn": "LOS LUNAS",
+    "dc": "086",
+    "dt": "State District",
+    "ln": "VALENCIA HIGH",
+    "li": "017",
+    "st": "OPEN"
+  },
+  {
+    "dn": "LOS LUNAS",
+    "dc": "086",
+    "dt": "State District",
+    "ln": "VALENCIA MIDDLE SCHOOL",
+    "li": "025",
+    "st": "OPEN"
+  },
+  {
+    "dn": "LOVING",
+    "dc": "021",
+    "dt": "State District",
+    "ln": "LOVING ELEMENTARY",
+    "li": "085",
+    "st": "OPEN"
+  },
+  { "dn": "LOVING", "dc": "021", "dt": "State District", "ln": "LOVING HIGH", "li": "086", "st": "OPEN" },
+  { "dn": "LOVING", "dc": "021", "dt": "State District", "ln": "LOVING MIDDLE", "li": "088", "st": "OPEN" },
+  {
+    "dn": "LOVINGTON",
+    "dc": "031",
+    "dt": "State District",
+    "ln": "BEN ALEXANDER ELEMENTARY",
+    "li": "123",
+    "st": "OPEN"
+  },
+  {
+    "dn": "LOVINGTON",
+    "dc": "031",
+    "dt": "State District",
+    "ln": "JEFFERSON ELEMENTARY",
+    "li": "068",
+    "st": "OPEN"
+  },
+  {
+    "dn": "LOVINGTON",
+    "dc": "031",
+    "dt": "State District",
+    "ln": "LEA ELEMENTARY",
+    "li": "076",
+    "st": "OPEN"
+  },
+  {
+    "dn": "LOVINGTON",
+    "dc": "031",
+    "dt": "State District",
+    "ln": "LLANO ELEMENTARY",
+    "li": "078",
+    "st": "OPEN"
+  },
+  {
+    "dn": "LOVINGTON",
+    "dc": "031",
+    "dt": "State District",
+    "ln": "LOVINGTON 6TH GRADE ACADEMY",
+    "li": "080",
+    "st": "OPEN"
+  },
+  {
+    "dn": "LOVINGTON",
+    "dc": "031",
+    "dt": "State District",
+    "ln": "LOVINGTON FRESHMAN ACADEMY",
+    "li": "083",
+    "st": "OPEN"
+  },
+  {
+    "dn": "LOVINGTON",
+    "dc": "031",
+    "dt": "State District",
+    "ln": "LOVINGTON HIGH",
+    "li": "081",
+    "st": "OPEN"
+  },
+  {
+    "dn": "LOVINGTON",
+    "dc": "031",
+    "dt": "State District",
+    "ln": "NEW HOPE ALTERNATIVE HIGH",
+    "li": "004",
+    "st": "OPEN"
+  },
+  {
+    "dn": "LOVINGTON",
+    "dc": "031",
+    "dt": "State District",
+    "ln": "TAYLOR MIDDLE",
+    "li": "082",
+    "st": "OPEN"
+  },
+  {
+    "dn": "LOVINGTON",
+    "dc": "031",
+    "dt": "State District",
+    "ln": "YARBRO ELEMENTARY",
+    "li": "181",
+    "st": "OPEN"
+  },
+  {
+    "dn": "MAGDALENA",
+    "dc": "075",
+    "dt": "State District",
+    "ln": "MAGDALENA ELEMENTARY",
+    "li": "133",
+    "st": "OPEN"
+  },
+  {
+    "dn": "MAGDALENA",
+    "dc": "075",
+    "dt": "State District",
+    "ln": "MAGDALENA HIGH",
+    "li": "095",
+    "st": "OPEN"
+  },
+  {
+    "dn": "MAGDALENA",
+    "dc": "075",
+    "dt": "State District",
+    "ln": "MAGDALENA MIDDLE",
+    "li": "100",
+    "st": "OPEN"
+  },
+  {
+    "dn": "MAXWELL",
+    "dc": "011",
+    "dt": "State District",
+    "ln": "MAXWELL ELEMENTARY",
+    "li": "100",
+    "st": "OPEN"
+  },
+  { "dn": "MAXWELL", "dc": "011", "dt": "State District", "ln": "MAXWELL HIGH", "li": "105", "st": "OPEN" },
+  { "dn": "MAXWELL", "dc": "011", "dt": "State District", "ln": "MAXWELL MIDDLE", "li": "108", "st": "OPEN" },
+  {
+    "dn": "MCCURDY CHARTER SCHOOL",
+    "dc": "547",
+    "dt": "State Charter",
+    "ln": "MCCURDY CHARTER SCHOOL",
+    "li": "001",
+    "st": "OPEN"
+  },
+  {
+    "dn": "MEDIA ARTS COLLABORATIVE CHARTER",
+    "dc": "501",
+    "dt": "State Charter",
+    "ln": "MEDIA ARTS COLLABORATIVE CHARTER",
+    "li": "001",
+    "st": "OPEN"
+  },
+  {
+    "dn": "MELROSE",
+    "dc": "014",
+    "dt": "State District",
+    "ln": "MELROSE ELEMENTARY",
+    "li": "094",
+    "st": "OPEN"
+  },
+  { "dn": "MELROSE", "dc": "014", "dt": "State District", "ln": "MELROSE HIGH", "li": "095", "st": "OPEN" },
+  { "dn": "MELROSE", "dc": "014", "dt": "State District", "ln": "MELROSE JUNIOR", "li": "093", "st": "OPEN" },
+  {
+    "dn": "MESA VISTA",
+    "dc": "078",
+    "dt": "State District",
+    "ln": "EL RITO ELEMENTARY",
+    "li": "047",
+    "st": "OPEN"
+  },
+  {
+    "dn": "MESA VISTA",
+    "dc": "078",
+    "dt": "State District",
+    "ln": "MESA VISTA HIGH",
+    "li": "119",
+    "st": "OPEN"
+  },
+  {
+    "dn": "MESA VISTA",
+    "dc": "078",
+    "dt": "State District",
+    "ln": "MESA VISTA MIDDLE",
+    "li": "125",
+    "st": "OPEN"
+  },
+  {
+    "dn": "MESA VISTA",
+    "dc": "078",
+    "dt": "State District",
+    "ln": "OJO CALIENTE ELEMENTARY",
+    "li": "118",
+    "st": "OPEN"
+  },
+  {
+    "dn": "MIDDLE COLLEGE HIGH SCHOOL CHARTER - GALLUP",
+    "dc": "578",
+    "dt": "State Charter",
+    "ln": "MIDDLE COLLEGE HIGH SCHOOL CHARTER - GALLUP",
+    "li": "001",
+    "st": "OPEN"
+  },
+  {
+    "dn": "MISSION ACHIEVEMENT AND SUCCESS",
+    "dc": "542",
+    "dt": "State Charter",
+    "ln": "MISSION ACHIEVEMENT AND SUCCESS 1.0",
+    "li": "001",
+    "st": "OPEN"
+  },
+  {
+    "dn": "MISSION ACHIEVEMENT AND SUCCESS",
+    "dc": "542",
+    "dt": "State Charter",
+    "ln": "MISSION ACHIEVEMENT AND SUCCESS 2.0",
+    "li": "002",
+    "st": "OPEN"
+  },
+  {
+    "dn": "MONTE DEL SOL CHARTER",
+    "dc": "564",
+    "dt": "State Charter",
+    "ln": "MONTE DEL SOL CHARTER",
+    "li": "001",
+    "st": "OPEN"
+  },
+  {
+    "dn": "MONTESSORI ELEMENTARY SCHOOL",
+    "dc": "529",
+    "dt": "State Charter",
+    "ln": "MONTESSORI ELEMENTARY SCHOOL",
+    "li": "001",
+    "st": "OPEN"
+  },
+  { "dn": "MORA", "dc": "044", "dt": "State District", "ln": "HOLMAN ELEMENTARY", "li": "059", "st": "OPEN" },
+  {
+    "dn": "MORA",
+    "dc": "044",
+    "dt": "State District",
+    "ln": "LAZARO LARRY GARCIA MIDDLE",
+    "li": "001",
+    "st": "OPEN"
+  },
+  { "dn": "MORA", "dc": "044", "dt": "State District", "ln": "MORA ELEMENTARY", "li": "104", "st": "OPEN" },
+  { "dn": "MORA", "dc": "044", "dt": "State District", "ln": "MORA HIGH", "li": "105", "st": "OPEN" },
+  {
+    "dn": "MORIARTY-EDGEWOOD",
+    "dc": "081",
+    "dt": "State District",
+    "ln": "EARLY CHILDHOOD CENTER",
+    "li": "151",
+    "st": "OPEN"
+  },
+  {
+    "dn": "MORIARTY-EDGEWOOD",
+    "dc": "081",
+    "dt": "State District",
+    "ln": "EDGEWOOD MIDDLE",
+    "li": "003",
+    "st": "OPEN"
+  },
+  {
+    "dn": "MORIARTY-EDGEWOOD",
+    "dc": "081",
+    "dt": "State District",
+    "ln": "MORIARTY ELEMENTARY",
+    "li": "100",
+    "st": "OPEN"
+  },
+  {
+    "dn": "MORIARTY-EDGEWOOD",
+    "dc": "081",
+    "dt": "State District",
+    "ln": "MORIARTY HIGH",
+    "li": "101",
+    "st": "OPEN"
+  },
+  {
+    "dn": "MORIARTY-EDGEWOOD",
+    "dc": "081",
+    "dt": "State District",
+    "ln": "MORIARTY MIDDLE",
+    "li": "102",
+    "st": "OPEN"
+  },
+  {
+    "dn": "MORIARTY-EDGEWOOD",
+    "dc": "081",
+    "dt": "State District",
+    "ln": "ROUTE 66 ELEMENTARY",
+    "li": "001",
+    "st": "OPEN"
+  },
+  {
+    "dn": "MORIARTY-EDGEWOOD",
+    "dc": "081",
+    "dt": "State District",
+    "ln": "SOUTH MOUNTAIN ELEMENTARY",
+    "li": "120",
+    "st": "OPEN"
+  },
+  {
+    "dn": "MOSQUERO",
+    "dc": "028",
+    "dt": "State District",
+    "ln": "MOSQUERO ELEMENTARY",
+    "li": "100",
+    "st": "OPEN"
+  },
+  { "dn": "MOSQUERO", "dc": "028", "dt": "State District", "ln": "MOSQUERO HIGH", "li": "101", "st": "OPEN" },
+  {
+    "dn": "MOUNTAINAIR",
+    "dc": "082",
+    "dt": "State District",
+    "ln": "MOUNTAINAIR ELEMENTARY",
+    "li": "105",
+    "st": "OPEN"
+  },
+  {
+    "dn": "MOUNTAINAIR",
+    "dc": "082",
+    "dt": "State District",
+    "ln": "MOUNTAINAIR HIGH",
+    "li": "107",
+    "st": "OPEN"
+  },
+  {
+    "dn": "MOUNTAINAIR",
+    "dc": "082",
+    "dt": "State District",
+    "ln": "MOUNTAINAIR JR HIGH",
+    "li": "106",
+    "st": "OPEN"
+  },
+  {
+    "dn": "NEW AMERICA SCHOOL - LAS CRUCES",
+    "dc": "549",
+    "dt": "State Charter",
+    "ln": "NEW AMERICA SCHOOL - LAS CRUCES",
+    "li": "001",
+    "st": "OPEN"
+  },
+  {
+    "dn": "NEW MEXICO CONNECTIONS ACADEMY",
+    "dc": "554",
+    "dt": "State Charter",
+    "ln": "NEW MEXICO CONNECTIONS ACADEMY",
+    "li": "001",
+    "st": "OPEN"
+  },
+  {
+    "dn": "NM SCHOOL FOR ARTS",
+    "dc": "509",
+    "dt": "State Charter",
+    "ln": "NM SCHOOL FOR THE ARTS",
+    "li": "001",
+    "st": "OPEN"
+  },
+  {
+    "dn": "NORTH VALLEY ACADEMY CHARTER",
+    "dc": "504",
+    "dt": "State Charter",
+    "ln": "NORTH VALLEY ACADEMY",
+    "li": "001",
+    "st": "OPEN"
+  },
+  { "dn": "PECOS", "dc": "070", "dt": "State District", "ln": "PECOS ELEMENTARY", "li": "173", "st": "OPEN" },
+  { "dn": "PECOS", "dc": "070", "dt": "State District", "ln": "PECOS HIGH", "li": "124", "st": "OPEN" },
+  { "dn": "PECOS", "dc": "070", "dt": "State District", "ln": "PECOS MIDDLE", "li": "150", "st": "OPEN" },
+  {
+    "dn": "PENASCO",
+    "dc": "077",
+    "dt": "State District",
+    "ln": "PENASCO ELEMENTARY",
+    "li": "121",
+    "st": "OPEN"
+  },
+  { "dn": "PENASCO", "dc": "077", "dt": "State District", "ln": "PENASCO HIGH", "li": "123", "st": "OPEN" },
+  { "dn": "PENASCO", "dc": "077", "dt": "State District", "ln": "PENASCO MIDDLE", "li": "128", "st": "OPEN" },
+  {
+    "dn": "POJOAQUE",
+    "dc": "072",
+    "dt": "State District",
+    "ln": "PABLO ROYBAL ELEMENTARY",
+    "li": "123",
+    "st": "OPEN"
+  },
+  { "dn": "POJOAQUE", "dc": "072", "dt": "State District", "ln": "POJOAQUE HIGH", "li": "124", "st": "OPEN" },
+  {
+    "dn": "POJOAQUE",
+    "dc": "072",
+    "dt": "State District",
+    "ln": "POJOAQUE INTERMEDIATE",
+    "li": "128",
+    "st": "OPEN"
+  },
+  {
+    "dn": "POJOAQUE",
+    "dc": "072",
+    "dt": "State District",
+    "ln": "POJOAQUE MIDDLE",
+    "li": "125",
+    "st": "OPEN"
+  },
+  {
+    "dn": "POJOAQUE",
+    "dc": "072",
+    "dt": "State District",
+    "ln": "SIXTH GRADE ACADEMY",
+    "li": "132",
+    "st": "OPEN"
+  },
+  {
+    "dn": "PORTALES",
+    "dc": "057",
+    "dt": "State District",
+    "ln": "BROWN EARLY CHILDHOOD CENTER",
+    "li": "028",
+    "st": "OPEN"
+  },
+  {
+    "dn": "PORTALES",
+    "dc": "057",
+    "dt": "State District",
+    "ln": "JAMES ELEMENTARY",
+    "li": "032",
+    "st": "OPEN"
+  },
+  {
+    "dn": "PORTALES",
+    "dc": "057",
+    "dt": "State District",
+    "ln": "LINDSEY-STEINER ELEMENTARY",
+    "li": "155",
+    "st": "OPEN"
+  },
+  { "dn": "PORTALES", "dc": "057", "dt": "State District", "ln": "PORTALES HIGH", "li": "124", "st": "OPEN" },
+  {
+    "dn": "PORTALES",
+    "dc": "057",
+    "dt": "State District",
+    "ln": "PORTALES JR HIGH",
+    "li": "123",
+    "st": "OPEN"
+  },
+  {
+    "dn": "PORTALES",
+    "dc": "057",
+    "dt": "State District",
+    "ln": "VALENCIA ELEMENTARY",
+    "li": "160",
+    "st": "OPEN"
+  },
+  {
+    "dn": "QUEMADO",
+    "dc": "003",
+    "dt": "State District",
+    "ln": "DATIL ELEMENTARY",
+    "li": "045",
+    "st": "OPEN"
+  },
+  {
+    "dn": "QUEMADO",
+    "dc": "003",
+    "dt": "State District",
+    "ln": "QUEMADO ELEMENTARY",
+    "li": "129",
+    "st": "OPEN"
+  },
+  { "dn": "QUEMADO", "dc": "003", "dt": "State District", "ln": "QUEMADO HIGH", "li": "130", "st": "OPEN" },
+  {
+    "dn": "QUESTA",
+    "dc": "079",
+    "dt": "State District",
+    "ln": "ALTA VISTA ELEMENTARY",
+    "li": "001",
+    "st": "OPEN"
+  },
+  {
+    "dn": "QUESTA",
+    "dc": "079",
+    "dt": "State District",
+    "ln": "ALTA VISTA INTERMEDIATE",
+    "li": "003",
+    "st": "OPEN"
+  },
+  { "dn": "QUESTA", "dc": "079", "dt": "State District", "ln": "QUESTA HIGH", "li": "129", "st": "OPEN" },
+  { "dn": "QUESTA", "dc": "079", "dt": "State District", "ln": "QUESTA JR HIGH", "li": "130", "st": "OPEN" },
+  {
+    "dn": "QUESTA",
+    "dc": "079",
+    "dt": "State District",
+    "ln": "RIO COSTILLA SW LEARNING ACADEMY",
+    "li": "039",
+    "st": "OPEN"
+  },
+  {
+    "dn": "RAICES DEL SABER XINACHTLI COMMUNITY SCHOOL",
+    "dc": "577",
+    "dt": "State Charter",
+    "ln": "RAICES DEL SABER XINACHTLI COMMUNITY",
+    "li": "001",
+    "st": "OPEN"
+  },
+  {
+    "dn": "RATON",
+    "dc": "009",
+    "dt": "State District",
+    "ln": "LONGFELLOW ELEMENTARY",
+    "li": "080",
+    "st": "OPEN"
+  },
+  { "dn": "RATON", "dc": "009", "dt": "State District", "ln": "RATON HIGH", "li": "136", "st": "OPEN" },
+  {
+    "dn": "RATON",
+    "dc": "009",
+    "dt": "State District",
+    "ln": "RATON INTERMEDIATE",
+    "li": "135",
+    "st": "OPEN"
+  },
+  {
+    "dn": "RED RIVER VALLEY CHARTER SCHOOL",
+    "dc": "539",
+    "dt": "State Charter",
+    "ln": "RED RIVER VALLEY CHARTER SCHOOL",
+    "li": "001",
+    "st": "OPEN"
+  },
+  {
+    "dn": "RESERVE",
+    "dc": "002",
+    "dt": "State District",
+    "ln": "RESERVE ELEMENTARY",
+    "li": "135",
+    "st": "OPEN"
+  },
+  { "dn": "RESERVE", "dc": "002", "dt": "State District", "ln": "RESERVE HIGH", "li": "136", "st": "OPEN" },
+  {
+    "dn": "RIO RANCHO",
+    "dc": "083",
+    "dt": "State District",
+    "ln": "CIELO AZUL ELEMENTARY",
+    "li": "021",
+    "st": "OPEN"
+  },
+  {
+    "dn": "RIO RANCHO",
+    "dc": "083",
+    "dt": "State District",
+    "ln": "CLEVELAND HIGH SCHOOL",
+    "li": "011",
+    "st": "OPEN"
+  },
+  {
+    "dn": "RIO RANCHO",
+    "dc": "083",
+    "dt": "State District",
+    "ln": "COLINAS DEL NORTE ELEMENTARY",
+    "li": "050",
+    "st": "OPEN"
+  },
+  {
+    "dn": "RIO RANCHO",
+    "dc": "083",
+    "dt": "State District",
+    "ln": "EAGLE RIDGE MIDDLE",
+    "li": "001",
+    "st": "OPEN"
+  },
+  {
+    "dn": "RIO RANCHO",
+    "dc": "083",
+    "dt": "State District",
+    "ln": "ENCHANTED HILLS ELEMENTARY",
+    "li": "100",
+    "st": "OPEN"
+  },
+  {
+    "dn": "RIO RANCHO",
+    "dc": "083",
+    "dt": "State District",
+    "ln": "ERNEST STAPLETON ELEMENTARY",
+    "li": "372",
+    "st": "OPEN"
+  },
+  {
+    "dn": "RIO RANCHO",
+    "dc": "083",
+    "dt": "State District",
+    "ln": "INDEPENDENCE HIGH SCHOOL",
+    "li": "013",
+    "st": "OPEN"
+  },
+  {
+    "dn": "RIO RANCHO",
+    "dc": "083",
+    "dt": "State District",
+    "ln": "JOE HARRIS ELEMENTARY",
+    "li": "025",
+    "st": "NEW"
+  },
+  {
+    "dn": "RIO RANCHO",
+    "dc": "083",
+    "dt": "State District",
+    "ln": "LINCOLN MIDDLE",
+    "li": "481",
+    "st": "OPEN"
+  },
+  {
+    "dn": "RIO RANCHO",
+    "dc": "083",
+    "dt": "State District",
+    "ln": "MAGGIE CORDOVA ELEMENTARY SCHOOL",
+    "li": "012",
+    "st": "OPEN"
+  },
+  {
+    "dn": "RIO RANCHO",
+    "dc": "083",
+    "dt": "State District",
+    "ln": "MARTIN KING JR ELEMENTARY",
+    "li": "375",
+    "st": "OPEN"
+  },
+  {
+    "dn": "RIO RANCHO",
+    "dc": "083",
+    "dt": "State District",
+    "ln": "MOUNTAIN VIEW MIDDLE",
+    "li": "105",
+    "st": "OPEN"
+  },
+  {
+    "dn": "RIO RANCHO",
+    "dc": "083",
+    "dt": "State District",
+    "ln": "PUESTA DEL SOL ELEMENTARY",
+    "li": "319",
+    "st": "OPEN"
+  },
+  {
+    "dn": "RIO RANCHO",
+    "dc": "083",
+    "dt": "State District",
+    "ln": "RIO RANCHO CYBER ACADEMY",
+    "li": "018",
+    "st": "OPEN"
+  },
+  {
+    "dn": "RIO RANCHO",
+    "dc": "083",
+    "dt": "State District",
+    "ln": "RIO RANCHO ELEMENTARY",
+    "li": "340",
+    "st": "OPEN"
+  },
+  {
+    "dn": "RIO RANCHO",
+    "dc": "083",
+    "dt": "State District",
+    "ln": "RIO RANCHO HIGH",
+    "li": "006",
+    "st": "OPEN"
+  },
+  {
+    "dn": "RIO RANCHO",
+    "dc": "083",
+    "dt": "State District",
+    "ln": "RIO RANCHO MIDDLE SCHOOL",
+    "li": "016",
+    "st": "OPEN"
+  },
+  {
+    "dn": "RIO RANCHO",
+    "dc": "083",
+    "dt": "State District",
+    "ln": "SANDIA VISTA ELEMENTARY",
+    "li": "020",
+    "st": "OPEN"
+  },
+  {
+    "dn": "RIO RANCHO",
+    "dc": "083",
+    "dt": "State District",
+    "ln": "SHINING STARS PRESCHOOL",
+    "li": "017",
+    "st": "OPEN"
+  },
+  {
+    "dn": "RIO RANCHO",
+    "dc": "083",
+    "dt": "State District",
+    "ln": "VISTA GRANDE ELEMENTARY",
+    "li": "015",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ROOTS AND WINGS COMMUNITY",
+    "dc": "570",
+    "dt": "State Charter",
+    "ln": "ROOTS & WINGS COMMUNITY",
+    "li": "001",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ROSWELL",
+    "dc": "004",
+    "dt": "State District",
+    "ln": "BERRENDO ELEMENTARY",
+    "li": "024",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ROSWELL",
+    "dc": "004",
+    "dt": "State District",
+    "ln": "BERRENDO MIDDLE",
+    "li": "025",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ROSWELL",
+    "dc": "004",
+    "dt": "State District",
+    "ln": "DEL NORTE ELEMENTARY",
+    "li": "041",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ROSWELL",
+    "dc": "004",
+    "dt": "State District",
+    "ln": "EARLY COLLEGE HIGH SCHOOL",
+    "li": "133",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ROSWELL",
+    "dc": "004",
+    "dt": "State District",
+    "ln": "EAST GRAND PLAINS ELEMENTARY",
+    "li": "044",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ROSWELL",
+    "dc": "004",
+    "dt": "State District",
+    "ln": "EL CAPITAN ELEMENTARY",
+    "li": "050",
+    "st": "OPEN"
+  },
+  { "dn": "ROSWELL", "dc": "004", "dt": "State District", "ln": "GODDARD HIGH", "li": "130", "st": "OPEN" },
+  { "dn": "ROSWELL", "dc": "004", "dt": "State District", "ln": "MESA MIDDLE", "li": "042", "st": "OPEN" },
+  {
+    "dn": "ROSWELL",
+    "dc": "004",
+    "dt": "State District",
+    "ln": "MILITARY HEIGHTS ELEMENTARY",
+    "li": "095",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ROSWELL",
+    "dc": "004",
+    "dt": "State District",
+    "ln": "MISSOURI AVE ELEMENTARY",
+    "li": "100",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ROSWELL",
+    "dc": "004",
+    "dt": "State District",
+    "ln": "MONTERREY ELEMENTARY",
+    "li": "105",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ROSWELL",
+    "dc": "004",
+    "dt": "State District",
+    "ln": "MOUNTAIN VIEW MIDDLE",
+    "li": "036",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ROSWELL",
+    "dc": "004",
+    "dt": "State District",
+    "ln": "NANCY LOPEZ ELEMENTARY",
+    "li": "052",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ROSWELL",
+    "dc": "004",
+    "dt": "State District",
+    "ln": "PARKVIEW EARLY LITERACY CENTER",
+    "li": "122",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ROSWELL",
+    "dc": "004",
+    "dt": "State District",
+    "ln": "PECOS ELEMENTARY",
+    "li": "126",
+    "st": "OPEN"
+  },
+  { "dn": "ROSWELL", "dc": "004", "dt": "State District", "ln": "ROSWELL HIGH", "li": "135", "st": "OPEN" },
+  {
+    "dn": "ROSWELL",
+    "dc": "004",
+    "dt": "State District",
+    "ln": "SIDNEY GUTIERREZ MIDDLE",
+    "li": "009",
+    "st": "OPEN"
+  },
+  { "dn": "ROSWELL", "dc": "004", "dt": "State District", "ln": "SIERRA MIDDLE", "li": "125", "st": "OPEN" },
+  {
+    "dn": "ROSWELL",
+    "dc": "004",
+    "dt": "State District",
+    "ln": "SUNSET ELEMENTARY",
+    "li": "120",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ROSWELL",
+    "dc": "004",
+    "dt": "State District",
+    "ln": "UNIVERSITY HIGH",
+    "li": "132",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ROSWELL",
+    "dc": "004",
+    "dt": "State District",
+    "ln": "VALLEY VIEW ELEMENTARY",
+    "li": "161",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ROSWELL",
+    "dc": "004",
+    "dt": "State District",
+    "ln": "WASHINGTON AVE ELEMENTARY",
+    "li": "175",
+    "st": "OPEN"
+  },
+  { "dn": "ROY", "dc": "027", "dt": "State District", "ln": "ROY ELEMENTARY", "li": "135", "st": "OPEN" },
+  { "dn": "ROY", "dc": "027", "dt": "State District", "ln": "ROY HIGH", "li": "136", "st": "OPEN" },
+  { "dn": "RUIDOSO", "dc": "036", "dt": "State District", "ln": "RUIDOSO HIGH", "li": "139", "st": "OPEN" },
+  { "dn": "RUIDOSO", "dc": "036", "dt": "State District", "ln": "RUIDOSO MIDDLE", "li": "130", "st": "OPEN" },
+  {
+    "dn": "RUIDOSO",
+    "dc": "036",
+    "dt": "State District",
+    "ln": "SIERRA VISTA PRIMARY",
+    "li": "145",
+    "st": "OPEN"
+  },
+  {
+    "dn": "RUIDOSO",
+    "dc": "036",
+    "dt": "State District",
+    "ln": "WHITE MOUNTAIN ELEMENTARY",
+    "li": "160",
+    "st": "OPEN"
+  },
+  {
+    "dn": "SAN JON",
+    "dc": "052",
+    "dt": "State District",
+    "ln": "SAN JON ELEMENTARY",
+    "li": "144",
+    "st": "OPEN"
+  },
+  { "dn": "SAN JON", "dc": "052", "dt": "State District", "ln": "SAN JON HIGH", "li": "145", "st": "OPEN" },
+  {
+    "dn": "SAN JON",
+    "dc": "052",
+    "dt": "State District",
+    "ln": "SAN JON MIDDLE SCHOOL",
+    "li": "001",
+    "st": "OPEN"
+  },
+  {
+    "dn": "SANDOVAL ACADEMY OF BILINGUAL EDUCATION",
+    "dc": "563",
+    "dt": "State Charter",
+    "ln": "SANDOVAL ACADEMY OF BILINGUAL EDUCATION",
+    "li": "001",
+    "st": "OPEN"
+  },
+  {
+    "dn": "SANTA FE",
+    "dc": "071",
+    "dt": "State District",
+    "ln": "ACADEMY FOR TECHNOLOGY & CLASSICS",
+    "li": "024",
+    "st": "OPEN"
+  },
+  {
+    "dn": "SANTA FE",
+    "dc": "071",
+    "dt": "State District",
+    "ln": "ACEQUIA MADRE ELEMENTARY",
+    "li": "008",
+    "st": "OPEN"
+  },
+  {
+    "dn": "SANTA FE",
+    "dc": "071",
+    "dt": "State District",
+    "ln": "AMY BIEHL COMMUNITY SCHOOL AT RANCHO VIEJO",
+    "li": "141",
+    "st": "OPEN"
+  },
+  {
+    "dn": "SANTA FE",
+    "dc": "071",
+    "dt": "State District",
+    "ln": "ASPEN COMMUNITY SCHOOL",
+    "li": "054",
+    "st": "OPEN"
+  },
+  {
+    "dn": "SANTA FE",
+    "dc": "071",
+    "dt": "State District",
+    "ln": "ATALAYA ELEMENTARY",
+    "li": "033",
+    "st": "OPEN"
+  },
+  { "dn": "SANTA FE", "dc": "071", "dt": "State District", "ln": "CAPITAL HIGH", "li": "020", "st": "OPEN" },
+  {
+    "dn": "SANTA FE",
+    "dc": "071",
+    "dt": "State District",
+    "ln": "CARLOS GILBERT ELEMENTARY",
+    "li": "022",
+    "st": "OPEN"
+  },
+  {
+    "dn": "SANTA FE",
+    "dc": "071",
+    "dt": "State District",
+    "ln": "CESAR CHAVEZ ELEMENTARY",
+    "li": "005",
+    "st": "OPEN"
+  },
+  {
+    "dn": "SANTA FE",
+    "dc": "071",
+    "dt": "State District",
+    "ln": "CHAPARRAL ELEMENTARY",
+    "li": "146",
+    "st": "OPEN"
+  },
+  {
+    "dn": "SANTA FE",
+    "dc": "071",
+    "dt": "State District",
+    "ln": "DESERT SAGE ACADEMY",
+    "li": "012",
+    "st": "OPEN"
+  },
+  {
+    "dn": "SANTA FE",
+    "dc": "071",
+    "dt": "State District",
+    "ln": "E.J. MARTINEZ ELEMENTARY",
+    "li": "099",
+    "st": "OPEN"
+  },
+  {
+    "dn": "SANTA FE",
+    "dc": "071",
+    "dt": "State District",
+    "ln": "EARLY COLLEGE OPPORTUNITIES",
+    "li": "166",
+    "st": "OPEN"
+  },
+  {
+    "dn": "SANTA FE",
+    "dc": "071",
+    "dt": "State District",
+    "ln": "EDWARD ORTIZ MIDDLE",
+    "li": "110",
+    "st": "OPEN"
+  },
+  {
+    "dn": "SANTA FE",
+    "dc": "071",
+    "dt": "State District",
+    "ln": "EL CAMINO REAL ACADEMY COMMUNITY",
+    "li": "011",
+    "st": "OPEN"
+  },
+  {
+    "dn": "SANTA FE",
+    "dc": "071",
+    "dt": "State District",
+    "ln": "EL DORADO COMMUNITY SCHOOL",
+    "li": "135",
+    "st": "OPEN"
+  },
+  {
+    "dn": "SANTA FE",
+    "dc": "071",
+    "dt": "State District",
+    "ln": "FRANCIS X. NAVA ELEMENTARY",
+    "li": "145",
+    "st": "OPEN"
+  },
+  {
+    "dn": "SANTA FE",
+    "dc": "071",
+    "dt": "State District",
+    "ln": "GONZALES ELEMENTARY",
+    "li": "057",
+    "st": "OPEN"
+  },
+  {
+    "dn": "SANTA FE",
+    "dc": "071",
+    "dt": "State District",
+    "ln": "KEARNY ELEMENTARY",
+    "li": "070",
+    "st": "OPEN"
+  },
+  {
+    "dn": "SANTA FE",
+    "dc": "071",
+    "dt": "State District",
+    "ln": "MANDELA INTERNATIONAL MAGNET (MIMS)",
+    "li": "173",
+    "st": "OPEN"
+  },
+  {
+    "dn": "SANTA FE",
+    "dc": "071",
+    "dt": "State District",
+    "ln": "MILAGRO MIDDLE",
+    "li": "189",
+    "st": "OPEN"
+  },
+  {
+    "dn": "SANTA FE",
+    "dc": "071",
+    "dt": "State District",
+    "ln": "NINA OTERO COMMUNITY SCHOOL",
+    "li": "170",
+    "st": "OPEN"
+  },
+  {
+    "dn": "SANTA FE",
+    "dc": "071",
+    "dt": "State District",
+    "ln": "NYE EARLY CHILDHOOD",
+    "li": "168",
+    "st": "OPEN"
+  },
+  {
+    "dn": "SANTA FE",
+    "dc": "071",
+    "dt": "State District",
+    "ln": "PINON ELEMENTARY",
+    "li": "100",
+    "st": "OPEN"
+  },
+  {
+    "dn": "SANTA FE",
+    "dc": "071",
+    "dt": "State District",
+    "ln": "R.M. SWEENEY ELEMENTARY",
+    "li": "130",
+    "st": "OPEN"
+  },
+  {
+    "dn": "SANTA FE",
+    "dc": "071",
+    "dt": "State District",
+    "ln": "RAMIREZ THOMAS ELEMENTARY",
+    "li": "023",
+    "st": "OPEN"
+  },
+  {
+    "dn": "SANTA FE",
+    "dc": "071",
+    "dt": "State District",
+    "ln": "SALAZAR ELEMENTARY",
+    "li": "143",
+    "st": "OPEN"
+  },
+  {
+    "dn": "SANTA FE",
+    "dc": "071",
+    "dt": "State District",
+    "ln": "SANTA FE ENGAGE",
+    "li": "169",
+    "st": "OPEN"
+  },
+  { "dn": "SANTA FE", "dc": "071", "dt": "State District", "ln": "SANTA FE HIGH", "li": "165", "st": "OPEN" },
+  {
+    "dn": "SANTA FE",
+    "dc": "071",
+    "dt": "State District",
+    "ln": "TESUQUE ELEMENTARY",
+    "li": "160",
+    "st": "OPEN"
+  },
+  {
+    "dn": "SANTA FE",
+    "dc": "071",
+    "dt": "State District",
+    "ln": "WOOD-GORMLEY ELEMENTARY",
+    "li": "176",
+    "st": "OPEN"
+  },
+  {
+    "dn": "SANTA ROSA",
+    "dc": "025",
+    "dt": "State District",
+    "ln": "ANTON CHICO MIDDLE",
+    "li": "020",
+    "st": "OPEN"
+  },
+  {
+    "dn": "SANTA ROSA",
+    "dc": "025",
+    "dt": "State District",
+    "ln": "RITA A. MARQUEZ ELEMENTARY",
+    "li": "015",
+    "st": "OPEN"
+  },
+  {
+    "dn": "SANTA ROSA",
+    "dc": "025",
+    "dt": "State District",
+    "ln": "SANTA ROSA ELEMENTARY",
+    "li": "144",
+    "st": "OPEN"
+  },
+  {
+    "dn": "SANTA ROSA",
+    "dc": "025",
+    "dt": "State District",
+    "ln": "SANTA ROSA HIGH",
+    "li": "146",
+    "st": "OPEN"
+  },
+  {
+    "dn": "SANTA ROSA",
+    "dc": "025",
+    "dt": "State District",
+    "ln": "SANTA ROSA MIDDLE",
+    "li": "150",
+    "st": "OPEN"
+  },
+  {
+    "dn": "SCHOOL OF DREAMS ACADEMY",
+    "dc": "505",
+    "dt": "State Charter",
+    "ln": "SCHOOL OF DREAMS ACADEMY",
+    "li": "001",
+    "st": "OPEN"
+  },
+  {
+    "dn": "SILVER CITY",
+    "dc": "023",
+    "dt": "State District",
+    "ln": "CLIFF ELEMENTARY",
+    "li": "037",
+    "st": "OPEN"
+  },
+  { "dn": "SILVER CITY", "dc": "023", "dt": "State District", "ln": "CLIFF HIGH", "li": "034", "st": "OPEN" },
+  {
+    "dn": "SILVER CITY",
+    "dc": "023",
+    "dt": "State District",
+    "ln": "G.W.STOUT ELEMENTARY",
+    "li": "123",
+    "st": "OPEN"
+  },
+  {
+    "dn": "SILVER CITY",
+    "dc": "023",
+    "dt": "State District",
+    "ln": "HARRISON SCHMITT ELEMENTARY",
+    "li": "157",
+    "st": "OPEN"
+  },
+  {
+    "dn": "SILVER CITY",
+    "dc": "023",
+    "dt": "State District",
+    "ln": "JOSE BARRIOS ELEMENTARY",
+    "li": "115",
+    "st": "OPEN"
+  },
+  {
+    "dn": "SILVER CITY",
+    "dc": "023",
+    "dt": "State District",
+    "ln": "LA PLATA MIDDLE",
+    "li": "145",
+    "st": "OPEN"
+  },
+  {
+    "dn": "SILVER CITY",
+    "dc": "023",
+    "dt": "State District",
+    "ln": "SILVER HIGH",
+    "li": "152",
+    "st": "OPEN"
+  },
+  {
+    "dn": "SILVER CITY",
+    "dc": "023",
+    "dt": "State District",
+    "ln": "SILVER SCHOLARS ACADEMY",
+    "li": "012",
+    "st": "OPEN"
+  },
+  {
+    "dn": "SILVER CITY",
+    "dc": "023",
+    "dt": "State District",
+    "ln": "SIXTH STREET ELEMENTARY",
+    "li": "155",
+    "st": "OPEN"
+  },
+  {
+    "dn": "SIX DIRECTIONS INDIGENOUS SCHOOL",
+    "dc": "568",
+    "dt": "State Charter",
+    "ln": "SIX DIRECTIONS INDIGENOUS SCHOOL",
+    "li": "001",
+    "st": "OPEN"
+  },
+  {
+    "dn": "SOCORRO",
+    "dc": "074",
+    "dt": "State District",
+    "ln": "COTTONWOOD VALLEY CHARTER",
+    "li": "003",
+    "st": "OPEN"
+  },
+  {
+    "dn": "SOCORRO",
+    "dc": "074",
+    "dt": "State District",
+    "ln": "MIDWAY ELEMENTARY",
+    "li": "079",
+    "st": "OPEN"
+  },
+  {
+    "dn": "SOCORRO",
+    "dc": "074",
+    "dt": "State District",
+    "ln": "PARKVIEW ELEMENTARY",
+    "li": "001",
+    "st": "OPEN"
+  },
+  {
+    "dn": "SOCORRO",
+    "dc": "074",
+    "dt": "State District",
+    "ln": "R. SARRACINO MIDDLE",
+    "li": "155",
+    "st": "OPEN"
+  },
+  {
+    "dn": "SOCORRO",
+    "dc": "074",
+    "dt": "State District",
+    "ln": "SAN ANTONIO ELEMENTARY",
+    "li": "144",
+    "st": "OPEN"
+  },
+  { "dn": "SOCORRO", "dc": "074", "dt": "State District", "ln": "SOCORRO HIGH", "li": "160", "st": "OPEN" },
+  {
+    "dn": "SOLARE COLLEGIATE CHARTER SCHOOL",
+    "dc": "576",
+    "dt": "State Charter",
+    "ln": "SOLARE COLLEGIATE CHARTER SCHOOL",
+    "li": "001",
+    "st": "OPEN"
+  },
+  {
+    "dn": "SOUTH VALLEY PREP",
+    "dc": "515",
+    "dt": "State Charter",
+    "ln": "SOUTH VALLEY PREP",
+    "li": "001",
+    "st": "OPEN"
+  },
+  {
+    "dn": "SOUTHWEST PREPARATORY LEARNING CENTER",
+    "dc": "530",
+    "dt": "State Charter",
+    "ln": "SOUTHWEST PREPARATORY LEARNING CENTER",
+    "li": "001",
+    "st": "OPEN"
+  },
+  {
+    "dn": "SOUTHWEST SECONDARY LEARNING CENTER",
+    "dc": "531",
+    "dt": "State Charter",
+    "ln": "SOUTHWEST SECONDARY LEARNING CENTER",
+    "li": "001",
+    "st": "OPEN"
+  },
+  {
+    "dn": "SPRINGER",
+    "dc": "010",
+    "dt": "State District",
+    "ln": "FORRESTER ELEMENTARY",
+    "li": "056",
+    "st": "OPEN"
+  },
+  { "dn": "SPRINGER", "dc": "010", "dt": "State District", "ln": "SPRINGER HIGH", "li": "150", "st": "OPEN" },
+  {
+    "dn": "SPRINGER",
+    "dc": "010",
+    "dt": "State District",
+    "ln": "WILFERTH ELEMENTARY",
+    "li": "058",
+    "st": "OPEN"
+  },
+  {
+    "dn": "SW AERONAUTICS MATHEMATICS AND SCIENCE",
+    "dc": "544",
+    "dt": "State Charter",
+    "ln": "SW AERONAUTICS MATHEMATICS AND SCIENCE ACADEMY",
+    "li": "001",
+    "st": "OPEN"
+  },
+  {
+    "dn": "TAOS",
+    "dc": "076",
+    "dt": "State District",
+    "ln": "ANANSI CHARTER SCHOOL",
+    "li": "006",
+    "st": "OPEN"
+  },
+  {
+    "dn": "TAOS",
+    "dc": "076",
+    "dt": "State District",
+    "ln": "ARROYO DEL NORTE ELEMENTARY",
+    "li": "004",
+    "st": "OPEN"
+  },
+  {
+    "dn": "TAOS",
+    "dc": "076",
+    "dt": "State District",
+    "ln": "CHRYSALIS ALTERNATIVE",
+    "li": "010",
+    "st": "OPEN"
+  },
+  {
+    "dn": "TAOS",
+    "dc": "076",
+    "dt": "State District",
+    "ln": "ENOS GARCIA ELEMENTARY",
+    "li": "175",
+    "st": "OPEN"
+  },
+  {
+    "dn": "TAOS",
+    "dc": "076",
+    "dt": "State District",
+    "ln": "RANCHOS DE TAOS ELEMENTARY",
+    "li": "133",
+    "st": "OPEN"
+  },
+  { "dn": "TAOS", "dc": "076", "dt": "State District", "ln": "TAOS CYBER MAGNET", "li": "011", "st": "OPEN" },
+  { "dn": "TAOS", "dc": "076", "dt": "State District", "ln": "TAOS HIGH", "li": "165", "st": "OPEN" },
+  { "dn": "TAOS", "dc": "076", "dt": "State District", "ln": "TAOS MIDDLE", "li": "164", "st": "OPEN" },
+  {
+    "dn": "TAOS",
+    "dc": "076",
+    "dt": "State District",
+    "ln": "TAOS MUNICIPAL CHARTER",
+    "li": "005",
+    "st": "OPEN"
+  },
+  {
+    "dn": "TAOS",
+    "dc": "076",
+    "dt": "State District",
+    "ln": "VISTA GRANDE HIGH SCHOOL",
+    "li": "012",
+    "st": "OPEN"
+  },
+  {
+    "dn": "TAOS ACADEMY",
+    "dc": "510",
+    "dt": "State Charter",
+    "ln": "TAOS ACADEMY",
+    "li": "001",
+    "st": "OPEN"
+  },
+  {
+    "dn": "TAOS INTEGRATED SCHOOL OF THE ARTS",
+    "dc": "521",
+    "dt": "State Charter",
+    "ln": "TAOS INTEGRATED SCHOOL OF ARTS",
+    "li": "001",
+    "st": "OPEN"
+  },
+  {
+    "dn": "TAOS INTERNATIONAL SCHOOL",
+    "dc": "555",
+    "dt": "State Charter",
+    "ln": "TAOS INTERNATIONAL SCHOOL",
+    "li": "001",
+    "st": "OPEN"
+  },
+  { "dn": "TATUM", "dc": "035", "dt": "State District", "ln": "TATUM ELEMENTARY", "li": "162", "st": "OPEN" },
+  { "dn": "TATUM", "dc": "035", "dt": "State District", "ln": "TATUM HIGH", "li": "163", "st": "OPEN" },
+  { "dn": "TATUM", "dc": "035", "dt": "State District", "ln": "TATUM JR HIGH", "li": "090", "st": "OPEN" },
+  {
+    "dn": "TEXICO",
+    "dc": "013",
+    "dt": "State District",
+    "ln": "TEXICO ELEMENTARY",
+    "li": "161",
+    "st": "OPEN"
+  },
+  { "dn": "TEXICO", "dc": "013", "dt": "State District", "ln": "TEXICO HIGH", "li": "162", "st": "OPEN" },
+  { "dn": "TEXICO", "dc": "013", "dt": "State District", "ln": "TEXICO MIDDLE", "li": "163", "st": "OPEN" },
+  {
+    "dn": "THE ASK ACADEMY",
+    "dc": "520",
+    "dt": "State Charter",
+    "ln": "THE ASK ACADEMY",
+    "li": "001",
+    "st": "OPEN"
+  },
+  {
+    "dn": "THE GREAT ACADEMY",
+    "dc": "536",
+    "dt": "State Charter",
+    "ln": "THE GREAT ACADEMY",
+    "li": "001",
+    "st": "OPEN"
+  },
+  {
+    "dn": "THE MASTERS PROGRAM",
+    "dc": "519",
+    "dt": "State Charter",
+    "ln": "THE MASTERS PROGRAM",
+    "li": "001",
+    "st": "OPEN"
+  },
+  {
+    "dn": "TIERRA ADENTRO",
+    "dc": "518",
+    "dt": "State Charter",
+    "ln": "TIERRA ADENTRO",
+    "li": "001",
+    "st": "OPEN"
+  },
+  {
+    "dn": "TIERRA ENCANTADA CHARTER SCHOOL",
+    "dc": "565",
+    "dt": "State Charter",
+    "ln": "TIERRA ENCANTADA CHARTER SCHOOL",
+    "li": "001",
+    "st": "OPEN"
+  },
+  {
+    "dn": "TRUTH OR CONS.",
+    "dc": "073",
+    "dt": "State District",
+    "ln": "ARREY ELEMENTARY",
+    "li": "016",
+    "st": "OPEN"
+  },
+  {
+    "dn": "TRUTH OR CONS.",
+    "dc": "073",
+    "dt": "State District",
+    "ln": "HOT SPRINGS HIGH",
+    "li": "058",
+    "st": "OPEN"
+  },
+  {
+    "dn": "TRUTH OR CONS.",
+    "dc": "073",
+    "dt": "State District",
+    "ln": "SIERRA ELEMENTARY",
+    "li": "060",
+    "st": "OPEN"
+  },
+  {
+    "dn": "TRUTH OR CONS.",
+    "dc": "073",
+    "dt": "State District",
+    "ln": "T OR C ELEMENTARY",
+    "li": "162",
+    "st": "OPEN"
+  },
+  {
+    "dn": "TRUTH OR CONS.",
+    "dc": "073",
+    "dt": "State District",
+    "ln": "T OR C MIDDLE",
+    "li": "063",
+    "st": "OPEN"
+  },
+  {
+    "dn": "TUCUMCARI",
+    "dc": "049",
+    "dt": "State District",
+    "ln": "TUCUMCARI ELEMENTARY",
+    "li": "053",
+    "st": "OPEN"
+  },
+  {
+    "dn": "TUCUMCARI",
+    "dc": "049",
+    "dt": "State District",
+    "ln": "TUCUMCARI HIGH",
+    "li": "164",
+    "st": "OPEN"
+  },
+  {
+    "dn": "TUCUMCARI",
+    "dc": "049",
+    "dt": "State District",
+    "ln": "TUCUMCARI MIDDLE",
+    "li": "163",
+    "st": "OPEN"
+  },
+  {
+    "dn": "TULAROSA",
+    "dc": "047",
+    "dt": "State District",
+    "ln": "TULAROSA ELEMENTARY",
+    "li": "163",
+    "st": "OPEN"
+  },
+  { "dn": "TULAROSA", "dc": "047", "dt": "State District", "ln": "TULAROSA HIGH", "li": "165", "st": "OPEN" },
+  {
+    "dn": "TULAROSA",
+    "dc": "047",
+    "dt": "State District",
+    "ln": "TULAROSA INTERMEDIATE",
+    "li": "160",
+    "st": "OPEN"
+  },
+  {
+    "dn": "TULAROSA",
+    "dc": "047",
+    "dt": "State District",
+    "ln": "TULAROSA MIDDLE",
+    "li": "164",
+    "st": "OPEN"
+  },
+  {
+    "dn": "TURQUOISE TRAIL CHARTER SCHOOL",
+    "dc": "566",
+    "dt": "State Charter",
+    "ln": "TURQUOISE TRAIL CHARTER SCHOOL",
+    "li": "001",
+    "st": "OPEN"
+  },
+  {
+    "dn": "VAUGHN",
+    "dc": "026",
+    "dt": "State District",
+    "ln": "VAUGHN ELEMENTARY",
+    "li": "168",
+    "st": "OPEN"
+  },
+  { "dn": "VAUGHN", "dc": "026", "dt": "State District", "ln": "VAUGHN HIGH", "li": "169", "st": "OPEN" },
+  {
+    "dn": "WAGON MOUND",
+    "dc": "045",
+    "dt": "State District",
+    "ln": "WAGON MOUND ELEMENTARY",
+    "li": "172",
+    "st": "OPEN"
+  },
+  {
+    "dn": "WAGON MOUND",
+    "dc": "045",
+    "dt": "State District",
+    "ln": "WAGON MOUND HIGH",
+    "li": "173",
+    "st": "OPEN"
+  },
+  {
+    "dn": "WALATOWA CHARTER HIGH",
+    "dc": "552",
+    "dt": "State Charter",
+    "ln": "WALATOWA CHARTER HIGH",
+    "li": "001",
+    "st": "OPEN"
+  },
+  {
+    "dn": "WEST LAS VEGAS",
+    "dc": "068",
+    "dt": "State District",
+    "ln": "DON CECILIO MARTINEZ ELEMENTARY",
+    "li": "112",
+    "st": "OPEN"
+  },
+  {
+    "dn": "WEST LAS VEGAS",
+    "dc": "068",
+    "dt": "State District",
+    "ln": "LUIS E. ARMIJO ELEMENTARY",
+    "li": "012",
+    "st": "OPEN"
+  },
+  {
+    "dn": "WEST LAS VEGAS",
+    "dc": "068",
+    "dt": "State District",
+    "ln": "RIO GALLINAS SCHOOL",
+    "li": "004",
+    "st": "OPEN"
+  },
+  {
+    "dn": "WEST LAS VEGAS",
+    "dc": "068",
+    "dt": "State District",
+    "ln": "TONY SERNA JR. ELEMENTARY",
+    "li": "125",
+    "st": "OPEN"
+  },
+  {
+    "dn": "WEST LAS VEGAS",
+    "dc": "068",
+    "dt": "State District",
+    "ln": "UNION ELEMENTARY",
+    "li": "157",
+    "st": "OPEN"
+  },
+  {
+    "dn": "WEST LAS VEGAS",
+    "dc": "068",
+    "dt": "State District",
+    "ln": "VALLEY ELEMENTARY",
+    "li": "050",
+    "st": "OPEN"
+  },
+  {
+    "dn": "WEST LAS VEGAS",
+    "dc": "068",
+    "dt": "State District",
+    "ln": "VALLEY MIDDLE",
+    "li": "068",
+    "st": "OPEN"
+  },
+  {
+    "dn": "WEST LAS VEGAS",
+    "dc": "068",
+    "dt": "State District",
+    "ln": "WEST LAS VEGAS HIGH SCHOOL",
+    "li": "173",
+    "st": "OPEN"
+  },
+  {
+    "dn": "WEST LAS VEGAS",
+    "dc": "068",
+    "dt": "State District",
+    "ln": "WEST LAS VEGAS MIDDLE SCHOOL",
+    "li": "172",
+    "st": "OPEN"
+  },
+  {
+    "dn": "WEST LAS VEGAS",
+    "dc": "068",
+    "dt": "State District",
+    "ln": "WLV FAMILY PARTNERSHIP",
+    "li": "003",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ZUNI",
+    "dc": "089",
+    "dt": "State District",
+    "ln": "SHIWI TS'ANA ELEMENTARY",
+    "li": "166",
+    "st": "OPEN"
+  },
+  {
+    "dn": "ZUNI",
+    "dc": "089",
+    "dt": "State District",
+    "ln": "TWIN BUTTES CYBER ACADEMY",
+    "li": "192",
+    "st": "OPEN"
+  },
+  { "dn": "ZUNI", "dc": "089", "dt": "State District", "ln": "ZUNI HIGH", "li": "190", "st": "OPEN" },
+  { "dn": "ZUNI", "dc": "089", "dt": "State District", "ln": "ZUNI MIDDLE", "li": "195", "st": "OPEN" }
+]
