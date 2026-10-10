@@ -24,6 +24,7 @@ export function newProfile(over = {}) {
     entityName: '',
     reportNames: [], // other spellings of the school name that its reports print
     districtCode: '',
+    locationIds: [], // PED Location IDs (3 digits) this school uses; a BAR line elsewhere gets a warning
     accountingSystem: 'aptafund',
     segments: [seg('fund', 5), seg('func', 4), seg('obj', 5), seg('prog', 4), seg('loc', 6), seg('job', 4)],
     // How the 3-digit upload location is taken from the account code's location segment.
@@ -45,6 +46,8 @@ export function gilbertPreset() {
     id: 'gilbert-l-sena',
     name: 'Gilbert L. Sena Charter High School',
     entityName: 'Gilbert L Sena Charter Hs',
+    districtCode: '001',
+    locationIds: ['707'],
   });
 }
 
@@ -57,6 +60,8 @@ export function validateProfile(p) {
     errs.push('The profile id must be lowercase letters, digits and dashes.');
   if (p.districtCode !== '' && !/^\d{1,3}$/.test(String(p.districtCode)))
     errs.push('The district/parent code is 1 to 3 digits.');
+  if ((p.locationIds || []).some((x) => !/^\d{3}$/.test(String(x))))
+    errs.push('PED location IDs are 3 digits each.');
   const segs = p.segments || [];
   if (!segs.length) errs.push('Add the account code segments.');
   const keys = segs.map((s) => s.key);

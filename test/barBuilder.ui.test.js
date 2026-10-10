@@ -77,12 +77,15 @@ describe('BAR Builder screen', () => {
     expect(st.S().bbDraft.lines.length).toBe(d.lines.length);
     expect($('#bbdraft').textContent).toContain('11000');
   });
-  it('blocks the download until the justification is filled, then allows it', () => {
+  it('blocks the download while the justification would break the file, then allows it', () => {
     const dl = () => $('button[data-act="bbDownload"]');
-    expect(dl()?.disabled ?? true).toBe(true);
+    const ta = $('textarea[data-k="justification"]');
+    input(ta, 'Move funds, as approved');
+    expect(dl().disabled).toBe(true);
     click($('button[data-act="bbSuggest"]'));
     expect(st.UI.bb.draft.justification.length).toBeGreaterThan(0);
     expect(st.UI.bb.draft.justification).not.toMatch(/[",|]/);
+    expect(dl().disabled).toBe(false);
   });
   it('rejects an added line that does not fit the code layout', () => {
     input($('[data-in="bbAddCode"]'), '123');

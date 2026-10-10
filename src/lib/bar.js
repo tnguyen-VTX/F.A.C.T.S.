@@ -69,6 +69,14 @@ export function validateBar(bar, { profile, asr } = {}) {
     }
     if (seen.has(l.code)) add('warn', `${l.code} appears more than once.`);
     seen.add(l.code);
+    if (profile?.locationIds?.length && l.loc != null) {
+      const up = uploadLocation(profile, l.loc);
+      if (up && !profile.locationIds.includes(up))
+        add(
+          'warn',
+          `${l.code}: location ${up} is not one of this school's PED location IDs (${profile.locationIds.join(', ')}).`,
+        );
+    }
     if (profile && l.loc != null && !uploadLocation(profile, l.loc))
       add(
         'stop',

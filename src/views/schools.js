@@ -8,8 +8,40 @@ import {
   uploadLocation,
   validateProfile,
 } from '../lib/profile.js';
+import { addLocationId, entryToProfileFields, findSchools } from '../lib/schoolDirectory.js';
 import { makeProfileId } from '../lib/profileStore.js';
 import { PF, UI } from '../state.js';
+
+// PED's directory loads only when someone searches it.
+let DIR = null;
+const dirData = async () => (DIR ??= (await import('../data/nm-schools.json')).default);
+export async function scDirSearch(q) {
+  const el = $('#scdir');
+  if (!el) return;
+  const found = findSchools(await dirData(), q);
+  if (UI.sc) UI.sc.dirFound = found;
+  el.innerHTML = !String(q).trim()
+    ? ''
+    : found.length
+      ? `<ul class="plain">${found
+          .map(
+            (e, i) =>
+              `<li>${esc(e.ln)} (${esc(e.dn)}) · district code <b>${esc(e.dc)}</b> · location <b>${esc(e.li)}</b>${e.st === 'OPEN' ? '' : ` · ${esc(e.st.toLowerCase())}`} <button class="btn" data-act="scDirPick" data-i="${i}">Use this</button></li>`,
+          )
+          .join('')}</ul>`
+      : '<p class="muted">No match in the PED directory.</p>';
+}
+export function scDirPick(i) {
+  const e = UI.sc?.dirFound?.[i];
+  if (!e) return;
+  const f = entryToProfileFields(e);
+  const d = UI.sc.draft;
+  d.districtCode = f.districtCode;
+  d.locationIds = addLocationId(d.locationIds, f.locationId);
+  if (!d.name) d.name = f.locationName;
+  UI.sc.dirFound = [];
+  scForm();
+}
 
 const EXTRA = 'tail';
 const clone = (o) => JSON.parse(JSON.stringify(o));
@@ -68,11 +100,14 @@ export function scForm() {
   const loc = seg(d, 'loc');
   const sample = loc ? '0'.repeat(Math.max(0, loc.len - 3)) + '707' : '';
   el.innerHTML = `<section class="panel"><h2>${sc.isNew ? 'New school' : 'Edit ' + esc(d.name || 'school')}</h2>
+  <div class="fld"><label><span>Find your school in the PED directory</span><input type="text" data-in="scDirQ" placeholder="Start typing the school's name"></label>
+  <span class="muted hint">Fills the district/parent code and location ID. You can still edit them.</span><div id="scdir"></div></div>
   <div class="grid2">
   ${field('School name', `<input type="text" data-in="sc" data-k="name" value="${esc(d.name)}">`)}
   ${field('Entity name in OBMS', `<input type="text" data-in="sc" data-k="entityName" value="${esc(d.entityName)}">`, 'As the OBMS BAR screen shows it.')}
   ${field('Names as reports print them', `<textarea rows="2" data-in="scNames" placeholder="One per line, if reports spell the school differently">${esc((d.reportNames || []).join('\n'))}</textarea>`, 'Reports are checked against this school name and the OBMS entity name too.')}
   ${field('District / parent code', `<input type="text" inputmode="numeric" size="5" data-in="sc" data-k="districtCode" value="${esc(d.districtCode)}">`, 'The code PED uses in the BAR upload header.')}
+  ${field('PED location ID(s)', `<input type="text" data-in="scLocIds" size="12" value="${esc((d.locationIds || []).join(', '))}">`, '3 digits each, separated by commas. A BAR line at any other location gets a warning.')}
   </div>
   <h3>Account code segments</h3>
   <p class="muted">Digits in each segment, in order. The code looks like ${d.segments.map((s) => '9'.repeat(Math.min(s.len, 12))).join('-')}.</p>

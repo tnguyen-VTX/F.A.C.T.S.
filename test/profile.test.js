@@ -111,3 +111,14 @@ describe('school profile', () => {
     ).toContain('location rule');
   });
 });
+
+describe('PED location IDs on a profile', () => {
+  it('must be 3 digits', async () => {
+    const { newProfile, validateProfile, gilbertPreset } = await import('../src/lib/profile.js');
+    const p = { ...gilbertPreset(), locationIds: ['7'] };
+    expect(validateProfile(p).join(' ')).toContain('3 digits');
+    expect(validateProfile({ ...p, locationIds: ['707'] })).toEqual([]);
+    expect(newProfile().locationIds).toEqual([]);
+    expect(gilbertPreset()).toMatchObject({ districtCode: '001', locationIds: ['707'] });
+  });
+});

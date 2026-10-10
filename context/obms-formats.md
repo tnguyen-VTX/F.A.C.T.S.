@@ -68,3 +68,7 @@ OBMS lets the user attach .doc, .txt or .pdf files to a BAR upload (50 MB each, 
 - Meaning and validation of flowthrough fields 9-14 beyond the table above (for example how Total Approved Budget relates to Carryover plus Allocation).
 - A rejected upload with OBMS's error message, as a negative test.
 - Each school's location rule (3-digit derivation).
+
+## District code and location (corroborated 10/10/2026)
+
+PED's school directory export (`New_Mexico_Schools.xlsx`, a list of 867 locations; the trimmed copy is `src/data/nm-schools.json`, rebuilt with `scripts/make-school-directory.mjs`) gives each school a 3-digit **District Code** and a 3-digit **Location ID**. Both schools seen so far carry them in their account codes: the location segment is district code + location ID (`512001` for Cesar Chavez Community School, `001707` for Gilbert L. Sena Charter HS). So the UBH District or Parent Code is the 3-digit district code, and the upload location is the last 3 digits of the segment. Still marked unconfirmed in each profile until an accepted OBMS upload.

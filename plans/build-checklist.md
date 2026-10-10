@@ -42,6 +42,8 @@ Environment note: `cdn.sheetjs.com` is blocked in the cloud session, so `npm ins
 - [-] Position/FTE slot dropped (no such export exists; FTE stays manual). [x] Second school: a 7-segment profile test with made-up data (location 3 digits, nothing from Gilbert).
 - [ ] AI narrative button. Real OBMS test uploads.
 
+- [x] PED school directory: `src/data/nm-schools.json` (from the user's export), search on the Schools screen fills district code and location IDs, BAR warning for other locations. Gilbert preset now has district 001, location 707.
+
 ## Hosting prep (ledgersandlearning.com)
 
 - [x] Fonts self-hosted (DM Sans body, Red Hat Display headlines), Google Fonts removed.

@@ -60,7 +60,15 @@ import { viewImport } from './views/import.js';
 import { viewCap } from './views/capitalOutlay.js';
 import { viewAbout } from './views/about.js';
 import { viewHelp } from './views/help.js';
-import { scDraftErrors, scErrors, scForm, scOpen, viewSchools } from './views/schools.js';
+import {
+  scDirPick,
+  scDirSearch,
+  scDraftErrors,
+  scErrors,
+  scForm,
+  scOpen,
+  viewSchools,
+} from './views/schools.js';
 import { crResults, viewCR } from './views/cashReceipts.js';
 import { jeList, jeResults, viewJE } from './views/journal.js';
 import { viewRfR } from './views/reimbursements.js';
@@ -350,6 +358,7 @@ const ACT = {
     UI.imp[t.dataset.kind] = null;
     render();
   },
+  scDirPick: (t) => scDirPick(+t.dataset.i),
   scNew: () => {
     scOpen();
     scForm();
@@ -532,6 +541,14 @@ const IN = {
       k = t.dataset.k;
     if (k === 'cushion') d.defaultCushion = { type: 'amount', value: num(t.value) };
     else d[k] = t.value;
+    $('#scerr').innerHTML = scErrors();
+  },
+  scDirQ: (t) => scDirSearch(t.value),
+  scLocIds: (t) => {
+    UI.sc.draft.locationIds = t.value
+      .split(/[,\s]+/)
+      .map((x) => x.trim())
+      .filter(Boolean);
     $('#scerr').innerHTML = scErrors();
   },
   scSeg: (t) => {

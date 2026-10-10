@@ -48,7 +48,7 @@ school is chosen in the sidebar. User entries (`S()`) are keyed `<school id>/<cy
 migrated to Gilbert on first read. The cached workbook is stored per school (`workbook:<id>` in IndexedDB), so switching
 schools never shows another school's file. Parsers take a profile; with none they use the Gilbert 6-segment default.
 The OBMS upload location is 3 digits (spec v2.1.4); each profile's `locationRule` says how to derive it and is marked
-unconfirmed until checked against an accepted upload. See `plans/` and `context/` for the approved plans, OBMS formats and
+unconfirmed until checked against an accepted upload (the PED school directory, `src/data/nm-schools.json`, agrees for the two schools seen: location segment = district code + Location ID). The Schools screen can search that directory to fill the district code and PED location ID(s); a BAR line at another location gets a warning. See `plans/` and `context/` for the approved plans, OBMS formats and
 business rules, and `plans/build-checklist.md` for build progress.
 
 ## Load reports (added after v0.1)

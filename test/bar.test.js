@@ -437,3 +437,24 @@ describe('file-breaking input', () => {
     expect(msgs(validateBar(b, { profile: six, asr }), 'stop')).toContain('over budget');
   });
 });
+
+describe('PED location IDs', () => {
+  const sch = school({ locationIds: ['028'] });
+  const mk = (p) => {
+    const b = newBar('T', '11000');
+    b.lines = [
+      ['11000-1000-51100-4010-028-1416', -5],
+      ['11000-1000-56118-2000-029-0000', 5],
+    ].map(([c, a]) => barLine(p, c, a));
+    b.justification = 'x';
+    return b;
+  };
+  it('warns about a line at another location, never stops', () => {
+    const c = validateBar(mk(sch), { profile: sch });
+    expect(msgs(c, 'warn')).toContain('location 029 is not one of');
+    expect(msgs(c, 'stop')).not.toContain('location 029');
+  });
+  it('says nothing when the school lists no location IDs', () => {
+    expect(msgs(validateBar(mk(P), { profile: P }))).not.toContain('PED location');
+  });
+});
