@@ -74,6 +74,8 @@ import { jeList, jeResults, viewJE } from './views/journal.js';
 import { viewRfR } from './views/reimbursements.js';
 import { txResults, viewTx } from './views/transactions.js';
 
+import { BAR_SCREENS, barOnly } from './mode.js';
+
 const NAV = [
   ['import', 'Load reports'],
   ['budget', 'Budget by fund'],
@@ -90,12 +92,15 @@ const NAV = [
 ];
 // Screens that work before any report is loaded.
 const LITE = new Set(['import', 'schools', 'about', 'help']);
+const navList = () => (barOnly() ? NAV.filter(([k]) => BAR_SCREENS.has(k)) : NAV);
 const keepBB = keep;
 const wbKey = () => 'workbook:' + PF.active;
 const LEGACY_KEY = 'workbook';
 export function render() {
   const app = $('#app');
+  if (barOnly() && !BAR_SCREENS.has(UI.view)) UI.view = D.loaded ? 'bars' : 'import';
   if (!D.loaded && !LITE.has(UI.view)) UI.view = 'import';
+  if (barOnly()) document.title = 'BAR Builder';
   const mode = D.loaded ? 'full' : 'lite';
   if (!$('#main') || app.dataset.mode !== mode) {
     app.innerHTML = shellHTML();
@@ -121,9 +126,12 @@ const schoolPicker = () =>
     )
     .join('')}</select></label>`;
 function shellHTML() {
-  const nav = D.loaded ? NAV : NAV.filter(([k]) => LITE.has(k));
-  return `<div class="app"><aside class="side"><div class="brand"><div class="band"><img class="logo" src="./brand/vertex-horizontal-white.png" width="800" height="173" alt="Vertex Education"><div class="word">FACTS</div>
-  <div class="expand">Financial Analysis &amp; Control Tracking System</div></div><div class="school">${schoolPicker()}${D.loaded ? `<span class="muted">${esc(D.school)} · ${esc(D.cycle)}</span>` : ''}</div></div>
+  const all = navList();
+  const nav = D.loaded ? all : all.filter(([k]) => LITE.has(k));
+  const head = barOnly()
+    ? `<div class="word plain">BAR Builder</div>`
+    : `<div class="band"><img class="logo" src="./brand/vertex-horizontal-white.png" width="800" height="173" alt="Vertex Education"><div class="word">FACTS</div>\n  <div class="expand">Financial Analysis &amp; Control Tracking System</div></div>`;
+  return `<div class="app"><aside class="side"><div class="brand">${head}<div class="school">${schoolPicker()}${D.loaded ? `<span class="muted">${esc(D.school)} · ${esc(D.cycle)}</span>` : ''}</div></div>
   <nav class="nav" aria-label="Sections">${nav.map(([k, l]) => `<button data-act="nav" data-v="${k}">${l}</button>`).join('')}</nav>
   <div class="side-foot">${
     D.loaded

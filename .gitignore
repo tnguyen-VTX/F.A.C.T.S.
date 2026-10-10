@@ -9,3 +9,4 @@ fixtures/*.xlsm
 fixtures/*.csv
 # Made-up test data is fine to commit.
 !test/data/*.csv
+dist-bar-builder/

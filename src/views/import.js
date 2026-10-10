@@ -1,3 +1,4 @@
+import { barOnly } from '../mode.js';
 import { $, esc } from '../lib/format.js';
 import { D, FY, PF, REP, UI, profile } from '../state.js';
 
@@ -67,10 +68,14 @@ export function viewImport() {
     )
     .join('')}</select></label></div>
   <div class="grid2">${slotHTML('asr')}${slotHTML('fa')}</div>
-  ${ready ? `<div class="toolbar"><button class="btn primary" data-act="nav" data-v="budget">Open the budget</button></div>` : ''}
+  ${ready ? `<div class="toolbar"><button class="btn primary" data-act="nav" data-v="${barOnly() ? 'bars' : 'budget'}">${barOnly() ? 'Open the BAR Builder' : 'Open the budget'}</button></div>` : ''}
   <section class="panel" id="earlier" hidden></section>
-  <details class="panel"><summary>Or load the whole FACTS workbook (version 0.1 way)</summary>
+  ${
+    barOnly()
+      ? ''
+      : `<details class="panel"><summary>Or load the whole FACTS workbook (version 0.1 way)</summary>
   <label class="drop" id="drop"><input type="file" id="file" accept=".xlsx,.xlsm" data-in="file"><strong>Drop the FACTS workbook here, or choose a file</strong>
   <span class="muted">Reads the Account Summary, Fund Audit, RfR, Cash Receipts and Capital Outlay sheets.</span></label>
-  <div class="status${UI.imp.wb?.error ? ' err' : ''}" id="status" role="status">${esc(UI.imp.wb?.error || '')}</div></details>`;
+  <div class="status${UI.imp.wb?.error ? ' err' : ''}" id="status" role="status">${esc(UI.imp.wb?.error || '')}</div></details>`
+  }`;
 }

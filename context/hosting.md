@@ -21,3 +21,12 @@ FACTS is static files only (no server code, nothing uploaded). It will be publis
 - Everything runs in your browser; reports are not uploaded. Browser storage can be cleared, so use the backup file.
 - Check numbers against the state's reports before submitting anything to OBMS. No warranty.
 - Use a current desktop browser.
+
+## Answers from the user (10/10/2026) and what was done
+
+- The site is `facts.ledgerandlearning.com` (shown as "Financial Analysis Control & Tracking System", a suite with Account Code Advisor, Cash Report Tie-Out, Federal Funds, Invoice Generator in a sidebar). All its tools are on that one subdomain, so they share one browser origin.
+- **No sign-in is set up yet.** The app keeps nothing on the server, but until sign-in exists anyone can open the page. Sign-in still has to protect the app's files when it is added.
+- **No site-wide scripts** (analytics, chat, plugins) run on the site.
+- **The site owner deploys.** The BAR Builder is one tool in the suite.
+- **BAR Builder-only build** (decided): `npm run build:bar` writes `dist-bar-builder/` with only Load reports, BAR Builder, Schools, How to use and About, and no FACTS header or logo, because the suite has its own frame. The site owner puts that folder at a path such as `/bar-builder/` and adds a sidebar link. The default `npm run build` (whole FACTS app) is unchanged. `npm run dev:bar` runs the same mode locally.
+- **Storage names** now start with `barbuilder` (localStorage `barbuilder.v1`, `barbuilder.profiles.v1`, `barbuilder.fy`, `barbuilder.dataVersion`; IndexedDB database `barbuilder`) so other tools cannot clash. Data saved under the earlier `facts.*` names is moved over once on first load. This does not stop another tool on the same origin from reading the data; a separate subdomain would. The user chose prefix names only.

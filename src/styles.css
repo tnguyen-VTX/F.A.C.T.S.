@@ -865,3 +865,9 @@ h1,
 h2 {
   color: var(--head);
 }
+
+.brand .word.plain {
+  color: var(--head);
+  font-size: 26px;
+  margin-bottom: 14px;
+}
