@@ -76,3 +76,12 @@ PED's school directory export (`New_Mexico_Schools.xlsx`, a list of 867 location
 ## Upload file name
 
 Default: `<school short name>_-_OBMS_UPLOAD_-_<fund>[_<function>]_<type>.csv`, as in the accepted example (`CIS_-_OBMS_UPLOAD_-_11000_2000_M.csv`). The function code appears only when every expenditure line is in one function. The user can type any other name on the BAR; it is cleaned (no characters Windows forbids, spaces to underscores, `.csv` added). The file name is not part of the OBMS spec; OBMS reads the contents.
+
+## OBMS rejection log
+
+**10/10/2026, Gilbert L. Sena Charter HS, BAR type T, fund 11000, FY2027, 43 lines (first real upload from FACTS).**
+- Accepted by the importer ("Import File" step OK, 43 lines): 15-field header, 9-field lines, CRLF, district code `001`, 3-digit location `707` (last 3 digits of the 6-digit segment `001707`), whole-dollar amounts, a file name with spaces and dashes, a justification with no comma, quote or pipe. No balance error (function 2500 -185,585, function 2100 +185,585).
+- Validation errors on 3 lines:
+  - `Same Func Xfer` (1; no account line named). The BAR moves money between two different functions (2500 to 2100). The user says cross-function Transfers normally upload fine, so the trigger is not understood. Not defined in the OBMS spec v2.1.4. Open guesses: OBMS groups functions by series (both are 2000-series), or something about this file's lines. Plan: upload two small test files and bisect.
+  - `Missing projected FTE` on `11000-2100-51100-0000-707-1211` and `11000-2100-51100-0000-707-1214` (job classes 1211 and 1214, FTE 0 in the file). The 51100 line with job class 1218 and the 51300 lines were not flagged. FACTS now warns on salary lines (objects starting `511`) with no FTE.
+- Not yet fully accepted, so the location rule and the FTE formula stay marked unconfirmed in the app.

@@ -458,3 +458,30 @@ describe('PED location IDs', () => {
     expect(msgs(validateBar(mk(P), { profile: P }))).not.toContain('PED location');
   });
 });
+
+describe('salary lines without an FTE (OBMS: "Missing projected FTE")', () => {
+  const salary = (fte) => {
+    const b = newBar('T', '11000');
+    b.lines = [
+      ['11000-2500-56113-0000-001-0000', -1000, 0],
+      ['11000-2100-51100-0000-001-1211', 600, fte],
+      ['11000-2100-51300-0000-001-1214', 400, 0],
+    ].map(([c, a, f]) => barLine(P, c, a, f));
+    b.justification = 'x';
+    return b;
+  };
+  it('warns about a 51100 line with no FTE, not about 51300 lines', () => {
+    const c = validateBar(salary(0), { profile: P });
+    expect(msgs(c, 'warn')).toContain('1 salary line has no FTE (11000-2100-51100-0000-001-1211)');
+    expect(msgs(c, 'warn')).toContain('Missing projected FTE');
+    expect(msgs(c, 'warn')).not.toContain('51300');
+    expect(canDownload(c)).toBe(true);
+  });
+  it('is quiet once the line has an FTE', () => {
+    expect(msgs(validateBar(salary(0.0123), { profile: P }), 'warn')).not.toContain('no FTE');
+  });
+  it("follows the school profile's salary objects", () => {
+    const none = school({ fteObjects: [] });
+    expect(msgs(validateBar(salary(0), { profile: none }), 'warn')).not.toContain('no FTE');
+  });
+});

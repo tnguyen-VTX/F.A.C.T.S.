@@ -1,4 +1,5 @@
 // A BAR (budget adjustment request): its shape and the checks run before it can be downloaded. Pure.
+import { isSalaryObject } from './fte.js';
 import { splitWith, uploadLocation } from './profile.js';
 
 export const BAR_TYPES = {
@@ -201,6 +202,27 @@ export function validateBar(bar, { profile, asr } = {}) {
     add(
       'warn',
       'The flowthrough fields are filled in, but this fund is not marked flowthrough; they will be left out of the file.',
+    );
+
+  // OBMS rejected salary (51100) lines with no FTE on a first real upload ("Missing projected FTE").
+  // A warning, not a stop: it did not flag every 51100 line, so not every line needs one.
+  const noFte = bar.lines.filter(
+    (l) =>
+      !isRevenueObject(l.obj) &&
+      isSalaryObject(l.obj, profile?.fteObjects) &&
+      Number.isFinite(l.amount) &&
+      Math.round(l.amount) !== 0 &&
+      !(Math.abs(Number(l.fte)) > 0),
+  );
+  if (noFte.length)
+    add(
+      'warn',
+      `${noFte.length} salary line${noFte.length === 1 ? ' has' : 's have'} no FTE (${noFte
+        .slice(0, 4)
+        .map((l) => l.code)
+        .join(
+          ', ',
+        )}${noFte.length > 4 ? `, and ${noFte.length - 4} more` : ''}). OBMS has rejected salary lines with no FTE ("Missing projected FTE"). Enter the FTE change in each line's FTE box.`,
     );
 
   // Header fields.

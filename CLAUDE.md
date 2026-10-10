@@ -69,7 +69,7 @@ Real exports go in `fixtures/` (git-ignored: `*.xlsx`, `*.csv`); tests that use 
 `barLogic.js` finds deficits (a function within a fund whose subtotal Available is negative) and builds a balanced transfer:
 over-budget lines first, then donors from other functions of the same fund. There is no object rule on Transfer and
 Maintenance BARs. A function never gives more than its Available. `bar.js` checks a BAR before download: balance by type,
-code layout, one fund, never over budget, flowthrough fields, justification and contact limits. Amounts are whole dollars. Saved BARs live in `S().bars` (school and year); a BAR is frozen once its status is Uploaded, Submitted or Approved.
+code layout, one fund, never over budget, flowthrough fields, justification and contact limits. Amounts are whole dollars. Salary lines (profile `fteObjects`, default `511`) with no FTE get a warning because OBMS rejected them ("Missing projected FTE"). Saved BARs live in `S().bars` (school and year); a BAR is frozen once its status is Uploaded, Submitted or Approved.
 The backup file (profiles, saved BARs, drafts, settings only) restores with a per-BAR comparison; nothing is replaced silently.
 
 ## Hosting (ledgersandlearning.com)
