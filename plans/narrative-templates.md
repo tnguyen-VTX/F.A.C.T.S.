@@ -27,4 +27,5 @@ Blanks: `[School Name]` (profile name), `[Function Title (function code)]`, `[Fu
 - Decided: a Maintenance within one function says "within the [Function] function".
 - Fund name source for Increase, Initial Budget and Decrease (`D.fundNames`); amount for Increase and Decrease = the revenue total.
 - Done: the short justification for a Decrease no longer says "to reduce the budget to the award" (now "Decrease of $X in fund N.").
-- Per-school wording (a profile override), tie-out/proof, tests, build order, how to explain it.
+- Decided: the same wording for every school; only the school name is filled in. No profile override. The user can still edit the text on a BAR.
+- Still to plan: stale text after the lines change, tie-out/proof, tests, build order, how to explain it.
