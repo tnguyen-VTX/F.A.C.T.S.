@@ -9,4 +9,4 @@ npm test         # put a copy of the workbook at fixtures/facts.xlsx first for t
 npm run build    # static site in dist/
 ```
 
-The workbook is read in the browser and never uploaded. See CLAUDE.md for architecture and domain notes.
+The workbook is read in the browser and never uploaded. See CLAUDE.md for architecture and domain notes, and DEPLOY.md for putting the BAR Builder on a website.
