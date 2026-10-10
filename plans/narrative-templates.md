@@ -16,6 +16,7 @@ Blanks: `[School Name]` (profile name), `[Function Title (function code)]`, `[Fu
    "[School Name] is requesting a transfer of [$amount] from the [Function Title (function code)] function to [Function Title (function code)] function. The funds are available in the giving function after accounting for actual expenditures and encumbrances, and the transfer ensures the receiving function is not over budget."
 3. **Maintenance** (version A), one wording for a move within one function and between functions of one series:
    "[School Name] is requesting a maintenance transfer of [$amount] from the [Function Title (function code)] function to [Function Title (function code)] function to align the budget with actual expenditures and encumbrances."
+   When every line is in one function: "[School Name] is requesting a maintenance transfer of [$amount] within the [Function Title (function code)] function to align the budget with actual expenditures and encumbrances."
 4. **Increase / Initial Budget** (version A, without the last sentence); "initial budget" or "increase" follows the BAR type:
    "[School Name] is requesting an [initial budget / increase] of [$amount] in the [Fund Name (fund code)] fund to budget the award received."
 5. **Decrease** (version A, "to reduce the budget to the award" removed because a decrease is not always caused by an award):
@@ -23,7 +24,7 @@ Blanks: `[School Name]` (profile name), `[Function Title (function code)]`, `[Fu
 
 ## Open (still to plan)
 - Several giving or receiving functions in one BAR: list them as the first template does.
-- Maintenance within one function: the "from X to Y" wording needs a version for a single function (to decide).
+- Decided: a Maintenance within one function says "within the [Function] function".
 - Fund name source for Increase, Initial Budget and Decrease (`D.fundNames`); amount for Increase and Decrease = the revenue total.
 - Done: the short justification for a Decrease no longer says "to reduce the budget to the award" (now "Decrease of $X in fund N.").
 - Per-school wording (a profile override), tie-out/proof, tests, build order, how to explain it.
