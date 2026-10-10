@@ -513,6 +513,18 @@ describe('Transfer between functions of the same series (OBMS: "Same Func Xfer")
     expect(msgs(c, 'stop')).toContain('2500 to 2100');
     expect(canDownload(c)).toBe(false);
   });
+  it('stops in another fund too (Title I 24101, 2100 to 2400)', () => {
+    const b = newBar('T', '24101');
+    b.lines = [
+      ['24101-2100-56118-0000-001-0000', -1000],
+      ['24101-2400-56118-0000-001-0000', 1000],
+    ].map(([c, a]) => barLine(P, c, a));
+    b.justification = 'x';
+    const c = validateBar(b, { profile: P });
+    expect(msgs(c, 'stop')).toContain('2100 to 2400');
+    b.type = 'M';
+    expect(canDownload(validateBar(b, { profile: P }))).toBe(true);
+  });
   it('only warns outside the 2000 series', () => {
     const c = validateBar(
       tr([
