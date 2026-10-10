@@ -25,5 +25,5 @@ Blanks: `[School Name]` (profile name), `[Function Title (function code)]`, `[Fu
 - Several giving or receiving functions in one BAR: list them as the first template does.
 - Maintenance within one function: the "from X to Y" wording needs a version for a single function (to decide).
 - Fund name source for Increase, Initial Budget and Decrease (`D.fundNames`); amount for Increase and Decrease = the revenue total.
-- The short justification (`src/lib/justify.js`) says "to reduce the budget to the award" for a Decrease; align it with the narrative.
+- Done: the short justification for a Decrease no longer says "to reduce the budget to the award" (now "Decrease of $X in fund N.").
 - Per-school wording (a profile override), tie-out/proof, tests, build order, how to explain it.

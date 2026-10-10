@@ -62,7 +62,7 @@ export function suggestJustification(bar, { funcNames = {}, fundNames = {} } = {
     t = `${bar.type === 'IB' ? 'Initial budget' : 'Increase'} of ${dollarsText(rev)} in ${fund} to budget the award received.`;
   } else if (bar.type === 'D') {
     if (!rev) return '';
-    t = `Decrease of ${dollarsText(-rev)} in ${fund} to reduce the budget to the award.`;
+    t = `Decrease of ${dollarsText(-rev)} in ${fund}.`;
   } else return '';
   return fit(plain(t).replace(/ \./g, '.'));
 }

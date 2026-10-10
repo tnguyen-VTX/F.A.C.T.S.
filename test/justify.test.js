@@ -66,7 +66,7 @@ describe('suggested justification', () => {
       ['21000-3100-56116-0000-033-0000', -100],
     ]);
     expect(suggestJustification(dec)).toBe(
-      'Decrease of $100 in fund 21000 to reduce the budget to the award.',
+      'Decrease of $100 in fund 21000.',
     );
   });
   it('gives nothing until the BAR has the lines it needs', () => {
