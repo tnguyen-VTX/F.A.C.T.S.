@@ -42,6 +42,7 @@ export function bb() {
       type: saved.type || 'T',
       mode: saved.mode || 'rank',
       cushion: saved.cushion || 0,
+      lineFte: { ...(saved.lineFte || {}) },
       draft: S().bbDraft || null,
       note: '',
       add: { code: '', amount: '' },
@@ -56,7 +57,10 @@ const lineBudget = (code) => {
   return f?.lines.find((x) => x.code === code)?.budget ?? null;
 };
 // FTE adj of salary lines = amount moved / the line's budget x the line's current FTE (typed on the line).
+// A Line FTE typed once is remembered for that account (per school and year) and fills later BARs.
 export function refreshFte(bar) {
+  const known = bb().lineFte;
+  bar.lines = bar.lines.map((l) => (!l.lineFte && known[l.code] ? { ...l, lineFte: known[l.code] } : l));
   bar.lines = suggestFte(
     bar.lines,
     (code, l) => ({ salary: lineBudget(code), fte: l.lineFte }),
@@ -66,7 +70,7 @@ export function refreshFte(bar) {
 export const keep = () => {
   const b = bb();
   b.dirty = true;
-  S().bb = { funds: [...b.funds], type: b.type, mode: b.mode, cushion: b.cushion };
+  S().bb = { funds: [...b.funds], type: b.type, mode: b.mode, cushion: b.cushion, lineFte: b.lineFte };
   S().bbDraft = b.draft;
   saveStore();
 };
@@ -151,6 +155,7 @@ export function bbBuildTransfer(fund, func, kind = 'T') {
   });
   const bar = newBar(kind, fund);
   bar.lines = t.lines.map((l) => barLine(profile(), l.code, l.amount));
+  refreshFte(bar);
   bar.justification = suggestJustification(bar, { funcNames: D.asr.funcNames, fundNames: D.fundNames });
   b.draft = bar;
   b.note = t.shortfall

@@ -87,6 +87,7 @@ describe('BAR Builder screen', () => {
     expect($(`input[data-in="bbFte"][data-i="${i}"]`).value).toBe('-0.12');
     input($(`input[data-in="bbFte"][data-i="${i}"]`), '-0.1');
     input($(`input[data-in="bbLineFte"][data-i="${i}"]`), '3');
+    expect(st.UI.bb.lineFte[d.lines[i].code]).toBe(3);
     expect(d.lines[i].fte).toBe(-0.18);
   });
   it('blocks the download while the justification would break the file, then allows it', () => {

@@ -300,6 +300,7 @@ const ACT = {
     }
     b.note = '';
     b.draft.lines.push(barLine(profile(), code, num(b.add.amount)));
+    refreshFte(b.draft);
     b.add = { code: '', amount: '' };
     keepBB();
     bbDraft();
@@ -536,6 +537,7 @@ const IN = {
   bbLineFte: (t) => {
     const l = bb().draft.lines[+t.dataset.i];
     l.lineFte = Math.max(0, num(t.value));
+    bb().lineFte[l.code] = l.lineFte;
     l.fteManual = false;
     refreshFte(bb().draft);
     syncFte();
