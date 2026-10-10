@@ -31,6 +31,7 @@ Environment note: `cdn.sheetjs.com` is blocked in the cloud session, so `npm ins
 ## Milestone 4: BAR screens and output
 
 - [x] 4a. Fund picker, New BAR by type, deficit list (`src/views/barBuilder.js`; the working BAR is kept as a draft in `S().bbDraft`).
+- [x] Upload file name in the accepted example's style, editable per BAR; short school name on the Schools screen.
 - [x] Longer narrative templates (`src/lib/narrativeTemplates.js`): first template is Transfer (negative function), wording from the user. More templates are added as the user supplies wording.
 - [x] Award cap: Increase, Initial Budget and Decrease BARs take an optional award amount; expenditure above it stops the file, less than it warns with the amount left.
 - [x] 4b. OBMS-style view, justification template (`src/lib/justify.js`), validation panel. Checked in the browser.

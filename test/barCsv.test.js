@@ -1,8 +1,8 @@
 import { describe, it, expect } from 'vitest';
 import { existsSync, readFileSync } from 'node:fs';
 import { barLine, newBar } from '../src/lib/bar.js';
-import { barCsv, barFileName, fmtAmount, fmtFte, makeBarFile } from '../src/lib/barCsv.js';
-import { newProfile } from '../src/lib/profile.js';
+import { barCsv, barFileName, fmtAmount, fmtFte, makeBarFile, safeFileName } from '../src/lib/barCsv.js';
+import { abbrevOf, newProfile } from '../src/lib/profile.js';
 
 const seg = (key, len) => ({ key, len });
 const school = (over = {}) =>
@@ -143,8 +143,42 @@ describe('the upload file', () => {
       'UBH,1,2027,11000,T,,,,,,,,,,',
     );
   });
-  it('names the file after the school, fund, type and year', () => {
-    expect(barFileName(P, { fund: '11000', type: 'M' }, 2027)).toBe('example-school_11000_M_FY2027.csv');
+  it('names the file like the accepted example: school, OBMS UPLOAD, fund, function, type', () => {
+    const line = (f, o) => ({ func: f, obj: o });
+    const m = { fund: '11000', type: 'M', lines: [line('2000', '51100'), line('2000', '52100')] };
+    expect(barFileName({ ...P, abbrev: 'CIS' }, m, 2019)).toBe('CIS_-_OBMS_UPLOAD_-_11000_2000_M.csv');
+  });
+  it('leaves the function out when the lines are in several functions or are revenue', () => {
+    const t = {
+      fund: '11000',
+      type: 'T',
+      lines: [
+        { func: '1000', obj: '51100' },
+        { func: '2600', obj: '51100' },
+      ],
+    };
+    expect(barFileName({ ...P, abbrev: 'GSC' }, t, 2027)).toBe('GSC_-_OBMS_UPLOAD_-_11000_T.csv');
+    const i = {
+      fund: '21000',
+      type: 'I',
+      lines: [
+        { func: '0000', obj: '41604' },
+        { func: '3100', obj: '56116' },
+      ],
+    };
+    expect(barFileName({ ...P, abbrev: 'GSC' }, i, 2027)).toBe('GSC_-_OBMS_UPLOAD_-_21000_3100_I.csv');
+  });
+  it('uses the school name initials when no short name is set', () => {
+    expect(abbrevOf({ name: 'Gilbert L. Sena Charter High School' })).toBe('GLSCHS');
+    expect(abbrevOf({ name: '', abbrev: '' })).toBe('SCHOOL');
+    expect(abbrevOf({ name: 'x', abbrev: 'CIS' })).toBe('CIS');
+  });
+  it('cleans an edited name', () => {
+    expect(safeFileName('my BAR: 11000/T?.csv')).toBe('my_BAR_11000T.csv');
+    expect(safeFileName('plain')).toBe('plain.csv');
+    expect(safeFileName('  ')).toBe('');
+    expect(safeFileName('x'.repeat(300)).length).toBe(120);
+    expect(safeFileName('Report.CSV')).toBe('Report.csv');
   });
 });
 
@@ -165,7 +199,12 @@ describe('the file is never made while a check says stop', () => {
   it('makes the file for a clean BAR', () => {
     const r = makeBarFile(mk(P, 'M', '11000', MAINT, {}, 'Maintenance'), { profile: P, fiscalYear: 2019 });
     expect(r.ok).toBe(true);
-    expect(r.name).toBe('example-school_11000_M_FY2019.csv');
+    expect(r.name).toBe('EXAMPLESCHOOL_-_OBMS_UPLOAD_-_11000_1000_M.csv'.replace('EXAMPLESCHOOL', 'ES'));
+    const named = makeBarFile(
+      { ...mk(P, 'M', '11000', MAINT, {}, 'Maintenance'), fileName: 'my file' },
+      { profile: P, fiscalYear: 2019 },
+    );
+    expect(named.name).toBe('my_file.csv');
   });
 });
 

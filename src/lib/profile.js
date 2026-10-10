@@ -24,6 +24,7 @@ export function newProfile(over = {}) {
     entityName: '',
     reportNames: [], // other spellings of the school name that its reports print
     districtCode: '',
+    abbrev: '', // short school name for upload file names, e.g. GSC
     locationIds: [], // PED Location IDs (3 digits) this school uses; a BAR line elsewhere gets a warning
     accountingSystem: 'aptafund',
     segments: [seg('fund', 5), seg('func', 4), seg('obj', 5), seg('prog', 4), seg('loc', 6), seg('job', 4)],
@@ -63,6 +64,8 @@ export function validateProfile(p) {
     errs.push('The district/parent code is 1 to 3 digits.');
   if ((p.locationIds || []).some((x) => !/^\d{3}$/.test(String(x))))
     errs.push('PED location IDs are 3 digits each.');
+  if (p.abbrev && !/^[A-Za-z0-9-]{1,12}$/.test(String(p.abbrev)))
+    errs.push('The short name for file names is letters, digits and dashes, up to 12 characters.');
   const segs = p.segments || [];
   if (!segs.length) errs.push('Add the account code segments.');
   const keys = segs.map((s) => s.key);
@@ -161,4 +164,17 @@ export function uploadLocation(p, locSegment) {
   const r = p.locationRule || {};
   const v = r.type === 'lastN' ? s.slice(-r.n) : s;
   return v.length === UPLOAD_LOCATION_LEN && /^\d+$/.test(v) ? v : '';
+}
+
+// Short school name used in upload file names: the typed one, else the initials of the school's name.
+export function abbrevOf(p) {
+  const typed = String(p.abbrev || '').trim();
+  if (typed) return typed;
+  const initials = String(p.name || '')
+    .split(/[^A-Za-z0-9]+/)
+    .filter(Boolean)
+    .map((w) => w[0].toUpperCase())
+    .join('')
+    .slice(0, 8);
+  return initials || 'SCHOOL';
 }

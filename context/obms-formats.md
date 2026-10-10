@@ -72,3 +72,7 @@ OBMS lets the user attach .doc, .txt or .pdf files to a BAR upload (50 MB each, 
 ## District code and location (corroborated 10/10/2026)
 
 PED's school directory export (`New_Mexico_Schools.xlsx`, a list of 867 locations; the trimmed copy is `src/data/nm-schools.json`, rebuilt with `scripts/make-school-directory.mjs`) gives each school a 3-digit **District Code** and a 3-digit **Location ID**. Both schools seen so far carry them in their account codes: the location segment is district code + location ID (`512001` for Cesar Chavez Community School, `001707` for Gilbert L. Sena Charter HS). So the UBH District or Parent Code is the 3-digit district code, and the upload location is the last 3 digits of the segment. Still marked unconfirmed in each profile until an accepted OBMS upload.
+
+## Upload file name
+
+Default: `<school short name>_-_OBMS_UPLOAD_-_<fund>[_<function>]_<type>.csv`, as in the accepted example (`CIS_-_OBMS_UPLOAD_-_11000_2000_M.csv`). The function code appears only when every expenditure line is in one function. The user can type any other name on the BAR; it is cleaned (no characters Windows forbids, spaces to underscores, `.csv` added). The file name is not part of the OBMS spec; OBMS reads the contents.

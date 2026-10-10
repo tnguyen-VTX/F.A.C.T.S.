@@ -98,6 +98,16 @@ describe('BAR Builder screen', () => {
     input($('textarea[data-k="narrative"]'), t + ' Edited.');
     expect(st.UI.bb.draft.narrative.endsWith('Edited.')).toBe(true);
   });
+  it('suggests an OBMS-style file name and lets it be edited', () => {
+    const f = $('input[data-k="fileName"]');
+    expect(f.placeholder).toMatch(/^[A-Za-z0-9-]+_-_OBMS_UPLOAD_-_11000_T\.csv$/);
+    expect($('#bbsum').textContent).toContain(f.placeholder);
+    input(f, 'My BAR: Oct');
+    expect(st.UI.bb.draft.fileName).toBe('My BAR: Oct');
+    expect($('#bbsum').textContent).toContain('My_BAR_Oct.csv');
+    input(f, '');
+    expect($('#bbsum').textContent).toContain(f.placeholder);
+  });
   it('rejects an added line that does not fit the code layout', () => {
     input($('[data-in="bbAddCode"]'), '123');
     input($('[data-in="bbAddAmt"]'), '5');

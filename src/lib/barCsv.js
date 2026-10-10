@@ -4,7 +4,7 @@
 //   UBL line, 9 fields:     UBL, fund, function, object, program, location (3), job class, amount, FTE
 // Records end CR LF (also the last one). No BOM. Zero-dollar lines are left out.
 import { isRevenueObject, validateBar, canDownload } from './bar.js';
-import { uploadLocation } from './profile.js';
+import { abbrevOf, uploadLocation } from './profile.js';
 
 const CRLF = '\r\n';
 const r2 = (n) => Math.round(n * 100) / 100;
@@ -61,9 +61,26 @@ export function barCsv(bar, { profile, fiscalYear }) {
   return [header, ...lines].map((r) => r.join(',')).join(CRLF) + CRLF;
 }
 
-// Safe file name that names the school, so a file cannot be mistaken for another school's.
-export const barFileName = (profile, bar, fiscalYear) =>
-  `${profile.id}_${bar.fund}_${bar.type}_FY${fiscalYear}.csv`;
+// Default file name, in the style of an accepted example: SCHOOL_-_OBMS_UPLOAD_-_FUND_FUNCTION_TYPE.csv.
+// The function code is included only when every expenditure line is in one function (Maintenance).
+export function barFileName(profile, bar, fiscalYear) {
+  const funcs = new Set(bar.lines.filter((l) => !isRevenueObject(l.obj) && l.func).map((l) => l.func));
+  const parts = [bar.fund, funcs.size === 1 ? [...funcs][0] : '', bar.type].filter(Boolean);
+  return `${abbrevOf(profile).replace(/[^A-Za-z0-9-]/g, '') || 'SCHOOL'}_-_OBMS_UPLOAD_-_${parts.join('_')}.csv`;
+}
+
+// Clean a typed file name: no characters Windows forbids, spaces become underscores, ends in .csv,
+// at most 120 characters. Empty in, empty out (the caller then uses the default).
+export function safeFileName(text) {
+  let s = String(text ?? '')
+    // eslint-disable-next-line no-control-regex
+    .replace(/[\\/:*?"<>|\u0000-\u001f]/g, '')
+    .replace(/\s+/g, '_')
+    .replace(/^[._]+|[._]+$/g, '');
+  if (!s) return '';
+  s = s.replace(/\.csv$/i, '').slice(0, 116);
+  return `${s}.csv`;
+}
 
 // The file, or the reasons there is none. The file is never made while a check says stop.
 export function makeBarFile(bar, { profile, asr, fiscalYear }) {
@@ -73,6 +90,6 @@ export function makeBarFile(bar, { profile, asr, fiscalYear }) {
     ok: true,
     checks,
     csv: barCsv(bar, { profile, fiscalYear }),
-    name: barFileName(profile, bar, fiscalYear),
+    name: safeFileName(bar.fileName) || barFileName(profile, bar, fiscalYear),
   };
 }

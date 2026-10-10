@@ -1,4 +1,4 @@
-import { makeBarFile } from '../lib/barCsv.js';
+import { barFileName, makeBarFile } from '../lib/barCsv.js';
 import { fillTemplate, templatesFor } from '../lib/narrativeTemplates.js';
 import {
   STATUSES,
@@ -195,6 +195,7 @@ export function bbDraft() {
   }</tbody><tfoot id="bbfoot"></tfoot></table></div>
   <div class="filters"><label>Add a line: account code<input type="text" size="34" data-in="bbAddCode" value="${esc(b.add.code)}" placeholder="11000-1000-51100-0000-001707-1411"></label>
   <label>Amount<input type="number" step="1" data-in="bbAddAmt" value="${esc(b.add.amount)}"></label><button class="btn" data-act="bbAddLine">Add line</button></div>
+  <label class="fld"><span>File name for the OBMS upload (leave empty for the suggested name)</span><input type="text" size="48" data-in="bbField" data-k="fileName" value="${esc(bar.fileName || '')}" placeholder="${esc(barFileName(p, bar, FY.value))}"></label>
   <div id="bbsum"></div></section>`;
   const saved = entryOf(bar.savedId);
   if (saved && isFrozen(saved)) {
@@ -219,6 +220,8 @@ export function bbSummary() {
   if (foot)
     foot.innerHTML = `<tr><th colspan="4">Totals</th><td class="r"><b>${fmtM(t.net)}</b></td><td class="r num">${t.fte.toFixed(4)}</td><td></td></tr>
     <tr><td colspan="4" class="muted">Revenue ${fmtM(t.revenue)} · Expenditure ${fmtM(t.expenditure)}</td><td colspan="3"></td></tr>`;
+  const fn = $('input[data-k="fileName"]');
+  if (fn) fn.placeholder = barFileName(profile(), bar, FY.value);
   const cnt = $('#bbcount');
   if (cnt) cnt.textContent = `${bar.justification.length} of ${JUSTIFICATION_MAX}`;
   const file = ok ? makeBarFile(bar, ctx()) : null;
