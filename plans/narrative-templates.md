@@ -28,4 +28,5 @@ Blanks: `[School Name]` (profile name), `[Function Title (function code)]`, `[Fu
 - Fund name source for Increase, Initial Budget and Decrease (`D.fundNames`); amount for Increase and Decrease = the revenue total.
 - Done: the short justification for a Decrease no longer says "to reduce the budget to the award" (now "Decrease of $X in fund N.").
 - Decided: the same wording for every school; only the school name is filled in. No profile override. The user can still edit the text on a BAR.
-- Still to plan: stale text after the lines change, tie-out/proof, tests, build order, how to explain it.
+- Decided: a stale narrative only warns (never stops the download; the narrative is not in the upload file). Method: save the template id and the text as generated at fill time (`narrativeFill`); warn when filling the same template again from the current lines gives different text. Hand edits do not trigger it, only changed lines do.
+- Still to plan: which Transfer template applies, tie-out/proof, tests, build order, how to explain it.
