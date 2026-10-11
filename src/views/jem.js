@@ -8,11 +8,14 @@ import { bankCode, barJE, checkJE, jeTotals } from '../lib/je.js';
 import { makePedCheck, mergeKept, pedYear } from '../lib/pedListing.js';
 import { readPedFile } from '../lib/pedZip.js';
 import {
+  DIMS,
   FILTER_KEYS,
   buildReclassJEs,
+  chargeFilter,
   chargeKey,
   hasFilter,
   matchingCharges,
+  summarize,
   vendorNames,
 } from '../lib/reclass.js';
 import { checkAccounts, chartDesc, checkChartReport, parseChart } from '../lib/chartOfAccounts.js';
@@ -43,6 +46,7 @@ export function jem() {
     amounts: {},
     made: null,
     bar: null,
+    group: { first: 'code', second: 'date', sort: 'key' },
     open: null,
     msg: '',
   };
@@ -198,7 +202,7 @@ function reclassHTML() {
   return `<section class="panel"><h2>Choose the expenditures</h2><p class="muted">Fill in any parts of the account code to find expenditures. A box left empty means any, and a short value matches everything that starts with it (53 finds 53414). You can also pick a name or vendor, or search the detail text.</p>
   <div class="filters">${boxes}<label>Name / vendor<select data-in="jemFilter" data-k="name"><option value="">Any</option>${names.map((v) => `<option value="${esc(v.name)}"${j.filter.name === v.name ? ' selected' : ''}>${esc(v.name)} (${fmtM(v.total)})</option>`).join('')}</select></label>
   <label>Detail or description<input type="search" data-in="jemFilter" data-k="text" value="${esc(j.filter.text || '')}" placeholder="optional"></label></div></section>
-  <div id="jemcharges">${chargesHTML()}</div><div id="jemout">${madeHTML()}</div>`;
+  <div id="jemsummary">${summaryHTML()}</div><div id="jemcharges">${chargesHTML()}</div><div id="jemout">${madeHTML()}</div>`;
 }
 const filterText = (f) =>
   [
@@ -207,6 +211,52 @@ const filterText = (f) =>
   ]
     .filter(Boolean)
     .join(', ');
+// ---- Summary of actuals ----
+const opt = (list, cur, none) =>
+  (none ? `<option value="">${none}</option>` : '') +
+  list.map(([k, n]) => `<option value="${k}"${cur === k ? ' selected' : ''}>${n}</option>`).join('');
+function summaryHTML() {
+  const j = jem();
+  if (!hasFilter(j.filter)) return '';
+  const g = j.group;
+  return `<section class="panel"><h2>Sum of actuals</h2><p class="muted">The total of the expenditures above, grouped the way you choose.</p>
+  <div class="filters"><label>Group by<select data-in="jemGroup" data-k="first">${opt(DIMS, g.first)}</select></label>
+  <label>Then by<select data-in="jemGroup" data-k="second">${opt(DIMS, g.second, 'None')}</select></label>
+  <label>Sort by<select data-in="jemGroup" data-k="sort">${opt(
+    [
+      ['key', 'Name or number'],
+      ['high', 'Largest amount first'],
+      ['low', 'Smallest amount first'],
+    ],
+    g.sort,
+  )}</select></label></div>
+  <div id="jemsumtable">${sumTable()}</div></section>`;
+}
+function sumTable() {
+  const j = jem(),
+    g = j.group;
+  const rows = chargeFilter(D.fa, j.filter);
+  if (!rows.length) return '<p class="muted">No expenditures match.</p>';
+  const sm = summarize(rows, {
+    first: g.first,
+    second: g.second === g.first ? '' : g.second,
+    sort: g.sort,
+    names: { func: D.asr?.funcNames || {}, fund: D.fundNames || {} },
+  });
+  return `<div class="scroll"><table class="t"><thead><tr><th>${esc(DIMS.find(([k]) => k === g.first)?.[1] || '')}</th><th class="r">Lines</th><th class="r">Sum of actuals</th></tr></thead><tbody>${sm.groups
+    .map(
+      (x) =>
+        `<tr><td><b>${esc(x.label)}</b></td><td class="r num">${x.count}</td><td class="r num"><b>${fmtM(x.total)}</b></td></tr>${x.children
+          .map(
+            (c) =>
+              `<tr><td class="muted" style="padding-left:1.5em">${esc(c.label)}</td><td class="r num muted">${c.count}</td><td class="r num">${fmtM(c.total)}</td></tr>`,
+          )
+          .join('')}`,
+    )
+    .join(
+      '',
+    )}</tbody><tfoot><tr><th>Total</th><td class="r num">${sm.count}</td><td class="r num"><b>${fmtM(sm.total)}</b></td></tr></tfoot></table></div>`;
+}
 function chargesHTML() {
   const j = jem(),
     p = profile();
@@ -445,10 +495,17 @@ export const JEM_IN = {
     const j = jem();
     j.filter[t.dataset.k] = t.value.trim();
     j.made = null;
+    const sm = $('#jemsummary');
+    if (sm) sm.innerHTML = summaryHTML();
     const el = $('#jemcharges');
     if (el) el.innerHTML = chargesHTML();
     const out = $('#jemout');
     if (out) out.innerHTML = '';
+  },
+  jemGroup: (t) => {
+    jem().group[t.dataset.k] = t.value;
+    const el = $('#jemsumtable');
+    if (el) el.innerHTML = sumTable();
   },
   jemChg: (t) => {
     const j = jem();

@@ -83,6 +83,21 @@ describe('Journal Entry Maker screen', () => {
     expect($('#jemcharges').textContent).toContain(A);
     input(sel, '');
   });
+  it('sums the actuals of a name and regroups them as chosen', () => {
+    input($('select[data-in="jemFilter"][data-k="name"]'), 'Vendor One');
+    const sm = $('#jemsummary');
+    expect(sm.textContent).toContain('Sum of actuals');
+    expect($('#jemsumtable tfoot').textContent).toContain('2,707.00');
+    input($('select[data-in="jemGroup"][data-k="first"]'), 'month');
+    input($('select[data-in="jemGroup"][data-k="second"]'), '');
+    const t = $('#jemsumtable').textContent;
+    expect(t).toContain('2026-08');
+    expect(t).toContain('2026-09');
+    expect($('#jemsumtable tfoot').textContent).toContain('2,707.00');
+    input($('select[data-in="jemGroup"][data-k="sort"]'), 'high');
+    expect($('#jemsumtable tbody tr td').textContent).toContain('2026-09');
+    input($('select[data-in="jemFilter"][data-k="name"]'), '');
+  });
   it('makes one entry per month for a reclass between funds, balanced', () => {
     input($('input[data-in="jemFilter"][data-k="fund"]'), '31400');
     input($('input[data-in="jemFilter"][data-k="text"]'), 'vendor one');

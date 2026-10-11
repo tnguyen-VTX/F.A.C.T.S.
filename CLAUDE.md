@@ -75,7 +75,7 @@ The backup file (profiles, saved BARs, drafts, settings only) restores with a pe
 ## Journal Entry Maker (added after v0.1; screen: Journal Entry Maker)
 
 Makes the debits and credits to key into AptaFund (nothing is sent anywhere); rules in `context/journal-entries.md`, plan in
-`plans/journal-entry-maker.md`. It is its own suite page (`npm run build:jem`) and also a screen in the full app. Two kinds: **reclass of actuals** (filter the Fund Audit by any account code parts (each optional, matched by its start), a name/vendor dropdown and a detail text; per account code type only the
+`plans/journal-entry-maker.md`. It is its own suite page (`npm run build:jem`) and also a screen in the full app. Two kinds: **reclass of actuals** (filter the Fund Audit by any account code parts (each optional, matched by its start), a name/vendor dropdown and a detail text; a "Sum of actuals" table of what matches, grouped by two levels you choose (account code, date, month, fund, function, object, program, location, job class, detail, name) and sorted by name or amount (`summarize` in `reclass.js`); per account code type only the
 segments that change, then amounts per charge; an entry per month and fund pair, dated the last day of the month; reclasses
 between funds go through each fund's bank account, set on the Schools screen as a pattern with per-fund overrides) and **the Budget
 entry for an approved BAR** (PED's approved BAR report as Excel; decrease = credit, increase = debit; dated the last signature).

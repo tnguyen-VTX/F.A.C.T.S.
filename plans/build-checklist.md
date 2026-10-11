@@ -51,6 +51,7 @@ Environment note: `cdn.sheetjs.com` is blocked in the cloud session, so `npm ins
 - [x] 5. Bank account setting on the school profile (pattern and per-fund override).
 - [x] 6. `src/lib/jeLog.js`: saved entries with status and AptaFund number; charges already reclassed are not offered twice.
 - [x] 7. Journal Entry Maker screen (reclass, entry for an approved BAR, saved entries, copy and Excel download); saved entries are in the backup.
+- [x] 9. Sum of actuals table on the reclass tab: two grouping levels and a sort of your choice, totals tie to the matching Fund Audit rows.
 - [x] 8. Reclass picks charges by account code parts plus text (not by vendor); the Journal Entry Maker is its own suite page (`build:jem`); same-fund comment wording approved. [ ] A Chromium look with real Gilbert data.
 
 ## Milestone 5: later
