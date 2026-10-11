@@ -78,6 +78,7 @@ import { viewRfR } from './views/reimbursements.js';
 import { txResults, viewTx } from './views/transactions.js';
 
 import { BAR_SCREENS, barOnly } from './mode.js';
+import { JEM_ACT, JEM_IN, viewJEM } from './views/jem.js';
 
 const NAV = [
   ['import', 'Load reports'],
@@ -85,6 +86,7 @@ const NAV = [
   ['tx', 'Transactions'],
   ['je', 'Journal entries'],
   ['bars', 'BAR Builder'],
+  ['jem', 'Journal Entry Maker'],
   ['bar', 'BAR spread (v0.1)'],
   ['rfr', 'Reimbursements'],
   ['cr', 'Cash receipts'],
@@ -161,6 +163,7 @@ const VIEWS = {
   tx: viewTx,
   je: viewJE,
   bars: viewBarBuilder,
+  jem: viewJEM,
   bar: viewBAR,
   rfr: viewRfR,
   cr: viewCR,
@@ -191,6 +194,7 @@ const csv = (rows) =>
     .map((r) => r.map((v) => (/[",\n]/.test(String(v)) ? `"${String(v).replace(/"/g, '""')}"` : v)).join(','))
     .join('\n');
 const ACT = {
+  ...JEM_ACT,
   nav: (t) => {
     UI.view = t.dataset.v;
     render();
@@ -433,6 +437,7 @@ const saveBar = () => {
   saveStore();
 };
 const IN = {
+  ...JEM_IN,
   file: (t) => t.files[0] && handleFile(t.files[0]),
   overOnly: (t) => {
     UI.overOnly = t.checked;

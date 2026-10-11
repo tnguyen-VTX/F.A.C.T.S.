@@ -86,6 +86,7 @@ export function reclassJE(moves, { desc = () => '' } = {}, profile) {
     out.lines.push(line(bankCode(profile, b), 'Bank Accounts', out.comment, 0, amt));
   }
   out.lines.forEach((l, i) => (l.seq = i + 1));
+  out.moves = moves.map((m) => ({ from: m.from, to: m.to, amount: r2(m.amount), date: m.date }));
   return out;
 }
 
