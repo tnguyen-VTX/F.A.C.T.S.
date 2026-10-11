@@ -155,3 +155,27 @@ describe('choosing charges by account code section', () => {
     expect(matchingCharges(rows, { obj: '53' }, {}, { maxCodes: 1 })).toMatchObject({ codes: 2, more: 1 });
   });
 });
+
+describe('choosing by name or vendor', () => {
+  const r = (name, obj, actual = 10) => ({
+    code: `31400-4000-${obj}-0000-001707-0000`,
+    fund: '31400',
+    func: '4000',
+    obj,
+    prog: '0000',
+    loc: '001707',
+    job: '0000',
+    name,
+    detail: '',
+    acctDesc: '',
+    date: '2026-09-01',
+    actual,
+  });
+  const rows = [r('Vendor One', '53414'), r('Vendor One', '56119'), r('Vendor Two', '53414')];
+  it('matches the exact name alone, or together with a segment', () => {
+    expect(hasFilter({ name: 'Vendor One' })).toBe(true);
+    expect(chargeFilter(rows, { name: 'Vendor One' })).toHaveLength(2);
+    expect(chargeFilter(rows, { name: 'Vendor One', obj: '534' })).toHaveLength(1);
+    expect(chargeFilter(rows, { name: 'Vendor' })).toEqual([]);
+  });
+});

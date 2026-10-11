@@ -60,7 +60,7 @@ export function reclassJE(moves, { desc = () => '' } = {}, profile) {
     lines: [],
     errors: [],
   };
-  if (months.size !== 1) out.errors.push('A reclass entry must hold charges from one month only.');
+  if (months.size !== 1) out.errors.push('A reclass entry must hold expenditures from one month only.');
   const first = moves[0] || {};
   const ff = fundOf(first.from || ''),
     tf = fundOf(first.to || '');

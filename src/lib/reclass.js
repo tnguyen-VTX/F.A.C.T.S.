@@ -54,9 +54,11 @@ export const vendorCharges = (fa, name, reclassed = {}) =>
 
 export const FILTER_KEYS = ['fund', 'func', 'obj', 'prog', 'loc', 'job'];
 export const hasFilter = (f = {}) =>
-  FILTER_KEYS.some((k) => String(f[k] || '').trim()) || !!String(f.text || '').trim();
+  FILTER_KEYS.some((k) => String(f[k] || '').trim()) ||
+  !!String(f.text || '').trim() ||
+  !!String(f.name || '').trim();
 
-// Fund Audit rows that match a filter: each segment is optional and matches by its start (53 matches 53414), and the
+// Fund Audit rows that match a filter: name is an exact name/vendor; each segment is optional and matches by its start (53 matches 53414), and the
 // text matches the name, detail or account description. An empty filter matches nothing, never everything.
 export function chargeFilter(rows, f = {}) {
   if (!hasFilter(f)) return [];
@@ -68,6 +70,7 @@ export function chargeFilter(rows, f = {}) {
     (r) =>
       r.actual !== 0 &&
       segs.every(([k, v]) => String(r[k] ?? '').startsWith(v)) &&
+      (!f.name || r.name === f.name) &&
       (!t || `${r.name} ${r.detail} ${r.acctDesc}`.toLowerCase().includes(t)),
   );
 }

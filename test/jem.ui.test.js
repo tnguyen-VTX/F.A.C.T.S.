@@ -75,6 +75,14 @@ describe('Journal Entry Maker screen', () => {
     expect($('#main h1').textContent).toBe('Journal Entry Maker');
     expect([...document.querySelectorAll('[data-act="jemTab"]')].length).toBe(3);
   });
+  it('offers a name / vendor dropdown with totals and says expenditures, not charges', () => {
+    const sel = $('select[data-in="jemFilter"][data-k="name"]');
+    expect(sel.textContent).toContain('Vendor One (2,707.00)');
+    expect($('#main').textContent.toLowerCase()).not.toContain('charge');
+    input(sel, 'Vendor One');
+    expect($('#jemcharges').textContent).toContain(A);
+    input(sel, '');
+  });
   it('makes one entry per month for a reclass between funds, balanced', () => {
     input($('input[data-in="jemFilter"][data-k="fund"]'), '31400');
     input($('input[data-in="jemFilter"][data-k="text"]'), 'vendor one');

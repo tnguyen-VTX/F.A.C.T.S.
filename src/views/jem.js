@@ -7,7 +7,14 @@ import { IDB } from '../lib/idb.js';
 import { bankCode, barJE, checkJE, jeTotals } from '../lib/je.js';
 import { makePedCheck, mergeKept, pedYear } from '../lib/pedListing.js';
 import { readPedFile } from '../lib/pedZip.js';
-import { FILTER_KEYS, buildReclassJEs, chargeKey, hasFilter, matchingCharges } from '../lib/reclass.js';
+import {
+  FILTER_KEYS,
+  buildReclassJEs,
+  chargeKey,
+  hasFilter,
+  matchingCharges,
+  vendorNames,
+} from '../lib/reclass.js';
 import { checkAccounts, chartDesc, checkChartReport, parseChart } from '../lib/chartOfAccounts.js';
 import { checkBarReport, parseBarReport } from '../lib/barReport.js';
 import { JE_STATUSES, addJEStatus, isJEFrozen, reclassedMap, removeJE, saveJE } from '../lib/jeLog.js';
@@ -187,8 +194,10 @@ function reclassHTML() {
         `<label>${SEG_LABEL[x.key]}<input type="text" size="${x.len + 1}" maxlength="${x.len}" inputmode="numeric" data-in="jemFilter" data-k="${x.key}" value="${esc(j.filter[x.key] || '')}" placeholder="any"></label>`,
     )
     .join('');
-  return `<section class="panel"><h2>Choose the charges</h2><p class="muted">Fill in any of the account code parts; a part you leave empty matches everything, and a short value matches everything that starts with it (53 matches 53414). The text box also searches names, detail and the account description.</p>
-  <div class="filters">${boxes}<label>Name, detail or description<input type="search" data-in="jemFilter" data-k="text" value="${esc(j.filter.text || '')}" placeholder="optional"></label></div></section>
+  const names = vendorNames(D.fa).slice(0, 500);
+  return `<section class="panel"><h2>Choose the expenditures</h2><p class="muted">Fill in any parts of the account code to find expenditures. A box left empty means any, and a short value matches everything that starts with it (53 finds 53414). You can also pick a name or vendor, or search the detail text.</p>
+  <div class="filters">${boxes}<label>Name / vendor<select data-in="jemFilter" data-k="name"><option value="">Any</option>${names.map((v) => `<option value="${esc(v.name)}"${j.filter.name === v.name ? ' selected' : ''}>${esc(v.name)} (${fmtM(v.total)})</option>`).join('')}</select></label>
+  <label>Detail or description<input type="search" data-in="jemFilter" data-k="text" value="${esc(j.filter.text || '')}" placeholder="optional"></label></div></section>
   <div id="jemcharges">${chargesHTML()}</div><div id="jemout">${madeHTML()}</div>`;
 }
 const filterText = (f) =>
@@ -202,11 +211,11 @@ function chargesHTML() {
   const j = jem(),
     p = profile();
   if (!hasFilter(j.filter))
-    return '<section class="panel"><p class="muted">Fill in at least one box above to list charges.</p></section>';
+    return '<section class="panel"><p class="muted">Fill in at least one box above to list expenditures.</p></section>';
   const found = matchingCharges(D.fa, j.filter, reclassedMap(jes()));
   const groups = found.groups;
-  if (!groups.length) return '<section class="panel"><p class="muted">No charges match.</p></section>';
-  return `<section class="panel"><h2>${esc(filterText(j.filter))}</h2>${found.more ? `<div class="warn">${found.codes} account codes match; only the first ${groups.length} are shown. Narrow the filter to see the rest.</div>` : ''}<p class="muted">For each account code, type only the parts that change; the rest stay the same. Then type how much of each charge to move. Entries are dated the last day of the charge's month.</p>
+  if (!groups.length) return '<section class="panel"><p class="muted">No expenditures match.</p></section>';
+  return `<section class="panel"><h2>${esc(filterText(j.filter))}</h2>${found.more ? `<div class="warn">${found.codes} account codes match; only the first ${groups.length} are shown. Narrow the filter to see the rest.</div>` : ''}<p class="muted">For each account code, type only the parts that change; the rest stay the same. Then type how much of each expenditure to move. Entries are dated the last day of the expenditure's month.</p>
   ${groups
     .map((g) => {
       const parts = g.code.split('-');
@@ -364,7 +373,7 @@ export const JEM_ACT = {
           choices.push({ code: g.code, date: c.date, amount: amt, change: j.changes[g.code] || {} });
       }
     j.made = buildReclassJEs(choices, { profile: profile(), desc: descOf, remaining });
-    if (!choices.length) j.made.errors.push('Type an amount to move on at least one charge.');
+    if (!choices.length) j.made.errors.push('Type an amount to move on at least one expenditure.');
     const el = $('#jemout');
     if (el) el.innerHTML = madeHTML();
   },

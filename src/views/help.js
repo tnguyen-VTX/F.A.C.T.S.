@@ -38,10 +38,10 @@ export function viewHelp() {
 ${
   !barOnly() || pageScreens().has('jem')
     ? `<section class="panel"><h2>8. Journal Entry Maker</h2><ol>
-  <li>For a reclass of actuals: fill in any parts of the account code to list the charges (a short value matches everything that starts with it; the text box also searches names and detail), type only the parts of each account code that change, type how much of each charge to move, and choose Make the entries. Each entry is dated the last day of the charge's month, and a reclass between funds goes through each fund's bank account (set on the Schools screen).</li>
+  <li>For a reclass of actuals: fill in any parts of the account code to list the expenditures (a short value matches everything that starts with it), or pick a name or vendor, or search the detail text, type only the parts of each account code that change, type how much of each expenditure to move, and choose Make the entries. Each entry is dated the last day of the expenditure's month, and a reclass between funds goes through each fund's bank account (set on the Schools screen).</li>
   <li>For an approved BAR: load PED's approved Budget Adjustment Request Report as an Excel file. Decreases are credits and increases are debits, dated with the last PED approval date.</li>
   <li>Load the school's AptaFund Chart Of Accounts report and PED's Chart Line Listing (the zip or its CSVs) once per year; FACTS then lists any account strings you must add in AptaFund first and stops codes PED does not allow.</li>
-  <li>Copy the lines or download the Excel, key the entry into AptaFund, then save it here and add its status and AptaFund number. Charges you already reclassed are not offered twice. FACTS does not make Encumbrance entries; AptaFund does those.</li></ol></section>`
+  <li>Copy the lines or download the Excel, key the entry into AptaFund, then save it here and add its status and AptaFund number. Expenditures you already reclassed are not offered twice. FACTS does not make Encumbrance entries; AptaFund does those.</li></ol></section>`
     : ''
 }`;
 }
