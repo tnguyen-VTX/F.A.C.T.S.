@@ -28,7 +28,8 @@ export function createPedParser(funds) {
   const kept = new Map(); // fund -> Set('func|obj|prog|job')
   let tail = '',
     col = null,
-    rows = 0;
+    rows = 0,
+    chartName = '';
   const seen = new Set();
   const handle = (line) => {
     if (!line.trim()) return;
@@ -47,6 +48,7 @@ export function createPedParser(funds) {
       return;
     }
     rows++;
+    if (!chartName) chartName = f[0] || '';
     const fund = f[col.fund];
     seen.add(fund);
     if (funds && !funds.has(fund)) return;
@@ -62,7 +64,7 @@ export function createPedParser(funds) {
     finish() {
       if (tail) handle(tail);
       tail = '';
-      return { kept, rows, funds: [...seen] };
+      return { kept, rows, funds: [...seen], chartName };
     },
   };
 }
@@ -85,4 +87,17 @@ export function makePedCheck(map, segs) {
 // Decode a stream of bytes as text into the parser, chunk by chunk.
 export function feedBytes(parser, decoder) {
   return (chunk, final) => parser.push(decoder.decode(chunk, { stream: !final }));
+}
+
+// The fiscal year a listing is for, from its chart name ("PED Uniform 2026-2027" is 2027); null if it cannot be read.
+export function pedYear(chartName) {
+  const m = String(chartName || '').match(/(\d{4})\s*-\s*(\d{4})/);
+  return m ? +m[2] : null;
+}
+
+// Add one parsed result's funds to a stored map (fund -> array of strings), replacing a fund that is read again.
+export function mergeKept(stored, kept) {
+  const out = { ...(stored || {}) };
+  for (const [fund, set] of kept) out[fund] = [...set];
+  return out;
 }

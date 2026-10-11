@@ -85,3 +85,24 @@ describe.skipIf(!existsSync(REAL))('the real Gilbert chart', () => {
     expect(chart.codes.has('11000-0000-11011-0000-000000-0000')).toBe(true);
   });
 });
+
+describe('the PED part of the account check', () => {
+  const ped = (c) => (c.startsWith('11000') ? true : c.startsWith('24101') ? false : null);
+  it('stops disallowed codes, notes funds not loaded, and skips bank lines', () => {
+    const bank = '11000-0000-11011-0000-000000-0000';
+    const r = checkAccounts(
+      [
+        '11000-1000-51100-0000-001707-1411',
+        '24101-2100-52315-0000-001707-9999',
+        '31400-4000-53414-0000-001707-0000',
+        bank,
+      ],
+      {
+        ped: (c) => (c === bank ? false : ped(c)),
+        skip: new Set([bank]),
+      },
+    );
+    expect(r.stops).toEqual(['24101-2100-52315-0000-001707-9999']);
+    expect(r.notes.join(' ')).toContain('fund 31400 is not loaded');
+  });
+});

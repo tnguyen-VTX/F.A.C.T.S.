@@ -66,3 +66,66 @@ describe.skipIf(!existsSync(REAL))('the real 24XXX listing', () => {
     expect(check('24101-2100-52315-0000-001707-9999')).toBe(false);
   });
 });
+
+import { mergeKept, pedYear } from '../src/lib/pedListing.js';
+describe('year and merging', () => {
+  it('reads the year from the chart name', () => {
+    expect(pedYear('PED Uniform 2026-2027')).toBe(2027);
+    expect(pedYear('whatever')).toBeNull();
+  });
+  it('captures the chart name while parsing', () => {
+    const p = createPedParser(null);
+    p.push(CSV);
+    expect(p.finish().chartName).toBe('PED Uniform 2026-2027');
+  });
+  it('merges funds read at different times, replacing one read again', () => {
+    const a = new Map([['24101', new Set(['x'])]]);
+    const b = new Map([
+      ['11000', new Set(['y'])],
+      ['24101', new Set(['z'])],
+    ]);
+    expect(mergeKept(mergeKept({}, a), b)).toEqual({ 24101: ['z'], 11000: ['y'] });
+  });
+});
+
+import { readPedCsv, readPedZip } from '../src/lib/pedZip.js';
+import { zipSync, strToU8 } from 'fflate';
+const stream = (bytes, size = 50) =>
+  new ReadableStream({
+    start(c) {
+      for (let i = 0; i < bytes.length; i += size) c.enqueue(bytes.slice(i, i + size));
+      c.close();
+    },
+  });
+describe('reading from a stream', () => {
+  it('reads a CSV in small pieces', async () => {
+    const r = await readPedCsv(stream(strToU8(CSV)), new Set(['24101']));
+    expect([...r.kept.get('24101')]).toHaveLength(2);
+  });
+  it('reads every CSV in a zip and skips other files', async () => {
+    const zip = zipSync({
+      'a - FY27.csv': strToU8(CSV),
+      'b.csv': strToU8(CSV.replace(/24101/g, '24102')),
+      'readme.txt': strToU8('hi'),
+    });
+    const names = [];
+    const rs = await readPedZip(stream(zip, 200), new Set(['24101', '24102']), (n) => names.push(n));
+    expect(rs).toHaveLength(2);
+    expect(names).toEqual(['a - FY27.csv', 'b.csv']);
+    expect(rs.map((r) => [...r.kept.keys()][0]).sort()).toEqual(['24101', '24102']);
+  });
+});
+
+const ZIP = 'fixtures/chart-line-listing.zip';
+describe.skipIf(!existsSync(ZIP))('the real zip', () => {
+  it('finds Gilbert-style funds across files without holding the whole listing', async () => {
+    const buf = new Uint8Array(readFileSync(ZIP));
+    const rs = await readPedZip(stream(buf, 1 << 20), new Set(['11000', '24101']));
+    expect(rs).toHaveLength(9);
+    const all = new Map();
+    for (const r of rs) for (const [f, s] of r.kept) all.set(f, s);
+    expect(all.get('24101').has('2100|52315|0000|1214')).toBe(true);
+    expect(all.get('11000').size).toBeGreaterThan(1000);
+    expect(rs[0].chartName).toContain('PED Uniform');
+  }, 120000);
+});

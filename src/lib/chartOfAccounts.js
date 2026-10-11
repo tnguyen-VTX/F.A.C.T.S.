@@ -65,13 +65,16 @@ export function checkChartReport(chart, { profile, fiscalYear }) {
 // The description AptaFund shows for a code (empty if the chart does not have it).
 export const chartDesc = (chart, code) => chart?.codes.get(code)?.desc || '';
 
-// Checks every code. chart = parsed chart or null; ped = (code) => true/false or null when no PED listing is loaded.
-// Returns { stops, adds, notes }: stops are codes PED does not allow; adds are codes to add (or enable) in AptaFund.
-export function checkAccounts(codes, { chart = null, ped = null } = {}) {
+// Checks every code. chart = parsed chart or null; ped = (code) => true/false, or null when that fund's listing is not
+// loaded (ped itself null = no listing at all); skip = codes left out of the PED check (bank accounts are not in
+// the listing). Returns { stops, adds, notes }: stops are codes PED does not allow; adds are codes to add (or enable)
+// in AptaFund.
+export function checkAccounts(codes, { chart = null, ped = null, skip = null } = {}) {
   const uniq = [...new Set(codes)];
   const stops = [],
     adds = [],
-    notes = [];
+    notes = [],
+    unlisted = new Set();
   if (!chart)
     notes.push(
       'No chart of accounts is loaded for this school, so the codes were not checked against AptaFund.',
@@ -81,12 +84,20 @@ export function checkAccounts(codes, { chart = null, ped = null } = {}) {
       'No PED Chart Line Listing is loaded, so the codes were not checked against the allowable UCOA strings.',
     );
   for (const code of uniq) {
-    if (ped && ped(code) === false) stops.push(code);
+    if (ped && !skip?.has(code)) {
+      const r = ped(code);
+      if (r === false) stops.push(code);
+      else if (r === null) unlisted.add(String(code).split('-')[0]);
+    }
     if (chart) {
       const e = chart.codes.get(code);
       if (!e) adds.push({ code, why: 'is not in the school chart' });
       else if (!e.enabled) adds.push({ code, why: 'is in the chart but not enabled' });
     }
   }
+  if (unlisted.size)
+    notes.push(
+      `The PED listing for fund ${[...unlisted].join(', ')} is not loaded, so those codes were not checked against PED.`,
+    );
   return { stops, adds, notes };
 }
