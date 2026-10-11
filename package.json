@@ -11,10 +11,13 @@
     "build:bar": "vite build --mode bar-builder --outDir dist-bar-builder",
     "preview": "vite preview",
     "test": "vitest run",
-    "format": "prettier --write \"src/**/*.{js,css}\" \"test/**/*.js\" index.html"
+    "format": "prettier --write \"src/**/*.{js,css}\" \"test/**/*.js\" index.html",
+    "dev:jem": "vite --mode jem",
+    "build:jem": "vite build --mode jem --outDir dist-jem"
   },
   "dependencies": {
-    "xlsx": "https://cdn.sheetjs.com/xlsx-0.20.3/xlsx-0.20.3.tgz"
+    "xlsx": "https://cdn.sheetjs.com/xlsx-0.20.3/xlsx-0.20.3.tgz",
+    "fflate": "0.8.2"
   },
   "devDependencies": {
     "jsdom": "^25.0.0",
