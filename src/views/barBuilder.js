@@ -51,11 +51,26 @@ export function bb() {
   }
   return UI.bb;
 }
-// Budget of an account line in the loaded Account Summary (null when it is not there).
-const lineBudget = (code) => {
+// What a salary line's FTE adj is worked from, in the loaded Account Summary: its budget, or when it has none
+// (an over-budget line may have spending and no budget) its actuals + encumbrances.
+const lineBase = (code) => {
   const f = D.asr?.funds.get(String(code).split('-')[0]);
-  return f?.lines.find((x) => x.code === code)?.budget ?? null;
+  const x = f?.lines.find((y) => y.code === code);
+  if (!x) return { salary: null, basis: null };
+  if (x.budget > 0) return { salary: x.budget, basis: 'budget' };
+  const spent = (x.actual || 0) + (x.enc || 0);
+  return spent > 0 ? { salary: spent, basis: 'spent' } : { salary: null, basis: null };
 };
+export const fteNote = (l) =>
+  !l.lineFte
+    ? ''
+    : l.fteBasis === 'budget'
+      ? 'Worked from the line budget'
+      : l.fteBasis === 'spent'
+        ? 'No budget: worked from actuals + encumbrances'
+        : l.fteManual
+          ? ''
+          : 'No budget or spending on this line: type the FTE adj';
 // FTE adj of salary lines = amount moved / the line's budget x the line's current FTE (typed on the line).
 // A Line FTE typed once is remembered for that account (per school and year) and fills later BARs.
 export function refreshFte(bar) {
@@ -63,7 +78,7 @@ export function refreshFte(bar) {
   bar.lines = bar.lines.map((l) => (!l.lineFte && known[l.code] ? { ...l, lineFte: known[l.code] } : l));
   bar.lines = suggestFte(
     bar.lines,
-    (code, l) => ({ salary: lineBudget(code), fte: l.lineFte }),
+    (code, l) => ({ ...lineBase(code), fte: l.lineFte }),
     profile().fteObjects,
   );
 }
@@ -175,7 +190,7 @@ function lineRow(l, i, asrLine) {
   const salary = isSalaryObject(l.obj, profile().fteObjects) && !isRevenueObject(l.obj);
   return `<tr class="${l.amount < 0 ? 'give' : ''}"><td><span class="code">${esc(l.code)}</span><br><span class="muted">${esc(descOf(l.code))}</span></td>
   <td>${isRevenueObject(l.obj) ? 'REV' : 'EXP'}</td><td class="num">${esc(l.func)}</td><td class="num">${esc(l.obj)}</td><td class="r"><input type="number" step="1" class="amt" data-in="bbAmt" data-i="${i}" value="${l.amount}" aria-label="Amount for ${esc(l.code)}"></td>
-  <td class="r">${salary ? `<input type="number" step="0.01" min="0" class="lfte" data-in="bbLineFte" data-i="${i}" value="${l.lineFte || ''}" placeholder="FTE" title="This position's current FTE; the FTE adj is filled from the amount's share of the line's budget" aria-label="Current FTE for ${esc(l.code)}">` : '<span class="muted">N/A</span>'}</td>
+  <td class="r">${salary ? `<input type="number" step="0.01" min="0" class="lfte" data-in="bbLineFte" data-i="${i}" value="${l.lineFte || ''}" placeholder="FTE" title="This position's current FTE; the FTE adj is filled from the amount's share of the line's budget (or its actuals + encumbrances when it has no budget)" aria-label="Current FTE for ${esc(l.code)}"><div class="muted fnote" data-i="${i}">${esc(fteNote(l))}</div>` : '<span class="muted">N/A</span>'}</td>
   <td class="r">${salary ? `<input type="number" step="0.0001" class="fte" data-in="bbFte" data-i="${i}" value="${l.fte || 0}" aria-label="FTE for ${esc(l.code)}">` : '<span class="muted">N/A</span>'}</td>
   <td class="r"><button class="linkbtn" data-act="bbDel" data-i="${i}" aria-label="Remove ${esc(l.code)}">Remove</button></td></tr>`;
 }

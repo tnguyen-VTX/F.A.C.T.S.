@@ -44,6 +44,7 @@ import {
   bbNarrFill,
   keep,
   refreshFte,
+  fteNote,
   bbOpen,
   bbRemove,
   bbAddStatus,
@@ -97,10 +98,15 @@ const LITE = new Set(['import', 'schools', 'about', 'help']);
 const navList = () => (barOnly() ? NAV.filter(([k]) => BAR_SCREENS.has(k)) : NAV);
 const keepBB = keep;
 // Put the computed FTE adj back into the boxes without redrawing the screen (keeps the cursor).
-const syncFte = () =>
+const syncFte = () => {
   document.querySelectorAll('input.fte').forEach((el) => {
     el.value = bb().draft.lines[+el.dataset.i]?.fte || 0;
   });
+  document.querySelectorAll('.fnote').forEach((el) => {
+    const l = bb().draft.lines[+el.dataset.i];
+    el.textContent = l ? fteNote(l) : '';
+  });
+};
 const wbKey = () => 'workbook:' + PF.active;
 const LEGACY_KEY = 'workbook';
 export function render() {

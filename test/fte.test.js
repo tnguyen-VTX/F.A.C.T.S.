@@ -64,3 +64,18 @@ describe('suggestFte from a line budget and the position FTE', () => {
     expect(out[3].fte).toBeUndefined();
   });
 });
+
+describe('suggestFte when a line has no budget', () => {
+  const line = { code: 'a', obj: '51100', amount: 21065 };
+  it('works from actuals + encumbrances when that is the base and says so', () => {
+    const [o] = suggestFte([line], () => ({ salary: 21065, fte: 1.3, basis: 'spent' }));
+    expect(o.fte).toBe(1.3);
+    expect(o.fteBasis).toBe('spent');
+  });
+  it('records budget as the basis by default and null when there is no base', () => {
+    expect(suggestFte([line], () => ({ salary: 100000, fte: 1 }))[0].fteBasis).toBe('budget');
+    const [n] = suggestFte([line], () => ({ salary: null, fte: 1, basis: null }));
+    expect(n.fteBasis).toBeNull();
+    expect(n.fte).toBeUndefined();
+  });
+});

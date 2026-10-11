@@ -90,6 +90,20 @@ describe('BAR Builder screen', () => {
     expect(st.UI.bb.lineFte[d.lines[i].code]).toBe(3);
     expect(d.lines[i].fte).toBe(-0.18);
   });
+  it('works the FTE adj from actuals + encumbrances when the line has no budget, and says so', () => {
+    const d = st.UI.bb.draft,
+      i = d.lines.findIndex((l) => l.amount > 0);
+    const acct = st.D.asr.funds.get('11000').lines.find((x) => x.code === d.lines[i].code);
+    const was = acct.budget;
+    acct.budget = 0;
+    input($(`input[data-in="bbLineFte"][data-i="${i}"]`), '2');
+    // +300 of 1,300 spent x 2 FTE
+    expect(d.lines[i].fte).toBe(0.4615);
+    expect($(`.fnote[data-i="${i}"]`).textContent).toContain('actuals + encumbrances');
+    acct.budget = was;
+    input($(`input[data-in="bbLineFte"][data-i="${i}"]`), '2');
+    expect($(`.fnote[data-i="${i}"]`).textContent).toContain('line budget');
+  });
   it('blocks the download while the justification would break the file, then allows it', () => {
     const dl = () => $('button[data-act="bbDownload"]');
     const ta = $('textarea[data-k="justification"]');
