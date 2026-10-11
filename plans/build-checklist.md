@@ -42,6 +42,17 @@ Environment note: `cdn.sheetjs.com` is blocked in the cloud session, so `npm ins
 - [x] FTE for salary lines: a Line FTE box (the position's current FTE, typed once); FTE adj = amount / the line's budget x Line FTE (`suggestFte`), hand-typed FTE adj is kept. A Line FTE typed once is remembered per account (school and year, in the backup) and fills the FTE adj of later BARs on build and add line. A line with no budget uses its actuals + encumbrances as the base, and each salary line shows which base was used (or that none exists). Formula unconfirmed until an accepted BAR matches it (Title I example 2,073.00 gives 0.0400).
 - [x] Narrative templates for every BAR type (`plans/narrative-templates.md`): Transfer negative/positive function, Maintenance, Increase/Initial Budget, Decrease; the list opens on the suggested Transfer template; a warning when the BAR's lines change after the narrative was filled.
 
+## Journal Entry Maker (plan: `plans/journal-entry-maker.md`)
+
+- [x] 1. `src/lib/je.js`: entry model, reclass and BAR lines, bank lines across funds, month-end dating, balance checks.
+- [x] 2. `src/lib/reclass.js`: vendor charges (account code, then date), what is left, reclass choices to entries.
+- [x] 3. `src/lib/barReport.js`: approved BAR report (Excel) reader with school, year and net-zero checks; tested on a made-up sheet and the real report.
+- [x] 4. `src/lib/chartOfAccounts.js`: school chart reader and the "add in AptaFund" check. [ ] PED Chart Line Listing check (waiting for the file).
+- [x] 5. Bank account setting on the school profile (pattern and per-fund override).
+- [x] 6. `src/lib/jeLog.js`: saved entries with status and AptaFund number; charges already reclassed are not offered twice.
+- [x] 7. Journal Entry Maker screen (reclass, entry for an approved BAR, saved entries, copy and Excel download); saved entries are in the backup.
+- [ ] 8. Open: PED Chart Line Listing file; the suite page's new name; wording of same-fund reclass comments; a Chromium look.
+
 ## Milestone 5: later
 
 - [x] Brand colors as tokens (Vertex Blue on primary buttons, focus, headings). [x] Logos and favicon: reversed wordmark on a Vertex Blue band, mountain icon favicon (checked in Chromium, light and dark, no outside requests). Repository is public; user accepted the logos in it.

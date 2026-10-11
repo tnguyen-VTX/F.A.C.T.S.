@@ -30,6 +30,11 @@ export function viewHelp() {
   <section class="panel"><h2>6. Back up</h2><ol>
   <li>Your BARs live only in this browser. Choose "Download a backup" on the BAR Builder regularly and keep the file safe.</li>
   <li>To restore, choose "Restore from a backup". If a BAR differs from the one here, you choose which to keep. Reports are not in the backup: load them again.</li></ol></section>
+  <section class="panel"><h2>Journal Entry Maker</h2><ol>
+  <li>For a reclass of actuals: choose a name or vendor, type only the parts of each account code that change, type how much of each charge to move, and choose Make the entries. Each entry is dated the last day of the charge's month, and a reclass between funds goes through each fund's bank account (set on the Schools screen).</li>
+  <li>For an approved BAR: load PED's approved Budget Adjustment Request Report as an Excel file. Decreases are credits and increases are debits, dated with the last PED approval date.</li>
+  <li>Load the school's AptaFund Chart Of Accounts report once per year; FACTS then lists any account strings you must add in AptaFund first.</li>
+  <li>Copy the lines or download the Excel, key the entry into AptaFund, then save it here and add its status and AptaFund number. Charges you already reclassed are not offered twice. FACTS does not make Encumbrance entries; AptaFund does those.</li></ol></section>
   <section class="panel"><h2>7. If OBMS rejects a file</h2><ol>
   <li>Write down OBMS's message word for word.</li>
   <li>Fix the BAR in FACTS, download again and upload again.</li>

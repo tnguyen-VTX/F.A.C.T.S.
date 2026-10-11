@@ -58,6 +58,15 @@ describe('backup', () => {
     expect(b.schools['a/FY2027'].je).toBeUndefined();
     expect(checkBackup(b)).toBe('');
   });
+  it('keeps saved journal entries and lists a school that has only those', () => {
+    const b = exportBackup({
+      profiles: [],
+      store: { 'c/FY2027': { jes: [{ id: 'j1' }], je: [{ secret: 1 }] } },
+      now: T0,
+    });
+    expect(b.schools['c/FY2027'].jes).toEqual([{ id: 'j1' }]);
+    expect(b.schools['c/FY2027'].je).toBeUndefined();
+  });
   it('refuses other files', () => {
     expect(checkBackup({ hello: 1 })).toContain('not a FACTS backup');
     expect(checkBackup({ app: 'FACTS', version: 9, schools: {} })).toContain('newer');

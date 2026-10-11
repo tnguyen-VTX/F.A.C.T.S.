@@ -72,6 +72,17 @@ Maintenance BARs. A function never gives more than its Available. `bar.js` check
 code layout, one fund, never over budget, flowthrough fields, justification and contact limits. Amounts are whole dollars. Salary lines (profile `fteObjects`, default `511`) get a Line FTE box; the FTE adj is amount / the line's budget (or its actuals + encumbrances when it has no budget) x Line FTE (`suggestFte`), and a salary line with no FTE gets a warning because OBMS rejected them ("Missing projected FTE"). Saved BARs live in `S().bars` (school and year); a BAR is frozen once it reaches an OBMS status (Uploaded - Staging Validated or later; statuses use OBMS's own action names).
 The backup file (profiles, saved BARs, drafts, settings only) restores with a per-BAR comparison; nothing is replaced silently.
 
+## Journal Entry Maker (added after v0.1; screen: Journal Entry Maker)
+
+Makes the debits and credits to key into AptaFund (nothing is sent anywhere); rules in `context/journal-entries.md`, plan in
+`plans/journal-entry-maker.md`. Two kinds: **reclass of actuals** (pick a Fund Audit name/vendor, per account code type only the
+segments that change, then amounts per charge; an entry per month and fund pair, dated the last day of the month; reclasses
+between funds go through each fund's bank account, set on the Schools screen as a pattern with per-fund overrides) and **the Budget
+entry for an approved BAR** (PED's approved BAR report as Excel; decrease = credit, increase = debit; dated the last signature).
+Every code is checked against the school's AptaFund Chart Of Accounts report (loaded per school and year, kept in IndexedDB as
+`chart:<school>:<fy>`); codes missing there are listed as strings to add in AptaFund. The PED Chart Line Listing check is not built
+yet (file not supplied). Saved entries live in `S().jes` and the backup. Encumbrance entries are out of scope (AptaFund makes them).
+
 ## Hosting (ledgersandlearning.com)
 
 The built app is static files for the ledgerandlearning.com suite (facts.ledgerandlearning.com). Decisions: no sign-in and no
@@ -120,6 +131,11 @@ src/lib/justify.js    Rule-based justification wording per BAR type (no commas, 
 src/lib/barCsv.js     OBMS BAR upload file (UBH 15 fields, UBL 9, CRLF) and its name (SCHOOL_-_OBMS_UPLOAD_-_FUND_FUNCTION_TYPE.csv, editable per BAR); none is made while a check says stop (pure)
 src/lib/barLog.js     Saved BARs, status log, freeze/lock rules, backup export and restore planning (pure)
 src/lib/narrativeTemplates.js  Longer-narrative wording for every BAR type (Transfer negative/positive function, Maintenance, Increase/Initial Budget, Decrease; same for all schools), the Transfer suggestion and the stale-text check (pure; never in the upload file)
+src/lib/je.js         AptaFund journal entries: reclass of actuals (Type Actual, bank lines across funds, dated the last day of the charge's month) and Budget entries for approved BARs; balance checks (pure)
+src/lib/reclass.js    Vendor charges grouped by account code then date, what is left to reclass, reclass choices to entries (pure)
+src/lib/barReport.js  Reads PED's approved Budget Adjustment Request Report (.xlsx): lines, Doc ID, signature dates, checks (pure)
+src/lib/chartOfAccounts.js  The school's AptaFund Chart Of Accounts report and the "add this string in AptaFund" check (pure)
+src/lib/jeLog.js      Saved journal entries, status log (Prepared, Entered in AptaFund, Posted, Cancelled), what is already reclassed (pure)
 src/lib/fte.js        FTE change for salary lines (proportional to dollars; assumption to confirm) (pure)
 src/lib/format.js     Formatting, math, and account-code helpers
 src/lib/idb.js        IndexedDB cache for the last workbook

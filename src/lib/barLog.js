@@ -70,8 +70,13 @@ export function addStatus(entry, status, date, note = '', now = Date.now()) {
 export function exportBackup({ profiles, store, now = Date.now() }) {
   const schools = {};
   for (const [key, v] of Object.entries(store || {}))
-    if (v && (v.bars?.length || v.bbDraft || v.bb))
-      schools[key] = clone({ bars: v.bars || [], bbDraft: v.bbDraft || null, bb: v.bb || null });
+    if (v && (v.bars?.length || v.jes?.length || v.bbDraft || v.bb))
+      schools[key] = clone({
+        bars: v.bars || [],
+        jes: v.jes || [],
+        bbDraft: v.bbDraft || null,
+        bb: v.bb || null,
+      });
   return {
     app: 'FACTS',
     version: BACKUP_VERSION,

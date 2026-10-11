@@ -425,6 +425,9 @@ export function bbRestoreApply() {
     st.bar ??= {};
     st.bars ??= [];
     st.bars.push(...plan.added);
+    // Saved journal entries: ones not here yet are added; one with the same id is left as it is (never replaced silently).
+    st.jes ??= [];
+    for (const e of data.jes || []) if (!st.jes.some((x) => x.id === e.id)) st.jes.push(e);
     for (const c of plan.conflicts) {
       const pick = document.querySelector(`input[name="rs-${key}-${c.id}"]:checked`)?.value || 'keep';
       const frozen = isFrozen(c.current);
