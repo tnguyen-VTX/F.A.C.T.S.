@@ -11,7 +11,7 @@ describe('Help screen', () => {
     await new Promise((r) => setTimeout(r, 100));
     $('.nav button[data-v="help"]').dispatchEvent(new MouseEvent('click', { bubbles: true }));
   });
-  it('opens before any report is loaded with all seven steps', () => {
+  it('opens before any report is loaded with all eight steps', () => {
     expect($('#main h1').textContent).toContain('How to use');
     expect([...document.querySelectorAll('#main h2')].map((h) => h.textContent[0])).toEqual([
       '1',
@@ -21,6 +21,7 @@ describe('Help screen', () => {
       '5',
       '6',
       '7',
+      '8',
     ]);
   });
   it('links only to screens that exist', () => {
