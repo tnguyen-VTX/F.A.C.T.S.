@@ -162,4 +162,35 @@ describe('Journal Entry Maker screen', () => {
     click($('button[data-act="jemSave"]'));
     expect(st.S().jes.some((e) => e.kind === 'bar' && e.docId === '001-707-2627-0009-T')).toBe(true);
   });
+  it('loads a PED listing and checks the codes against it, leaving bank lines out', async () => {
+    const H2 =
+      'ChartOfAccountsName,AccountType,FundCode,FundName,FunctionCode,FunctionName,ObjectCode,ObjectName,ProgramCode,ProgramName,JobClassCode,JobClassName';
+    const csv = [
+      H2,
+      'PED Uniform 2026-2027,Expenditure,31400,Special,4000,Capital,56119,Supplies,0000,No Program,0000,No Job',
+    ].join('\n');
+    const f = new File([csv], 'listing.csv');
+    f.stream = () =>
+      new ReadableStream({
+        start(c) {
+          c.enqueue(new TextEncoder().encode(csv));
+          c.close();
+        },
+      });
+    click($('[data-act="jemTab"][data-tab="reclass"]'));
+    const el = $('input[data-in="jemPedFile"]');
+    Object.defineProperty(el, 'files', { value: [f], configurable: true });
+    el.dispatchEvent(new Event('input', { bubbles: true }));
+    await flush(300);
+    expect($('#jemchart').textContent).toContain('PED listing loaded');
+    expect($('#jemchart').textContent).toContain('31400');
+    input($('input[data-in="jemFilter"][data-k="fund"]'), '31400');
+    input($('input[data-in="jemFilter"][data-k="text"]'), 'vendor one');
+    input($('input[data-in="jemChg"][data-k="fund"]'), '31400');
+    input($('input[data-in="jemChg"][data-k="func"]'), '4000');
+    input($('input[data-in="jemChg"][data-k="obj"]'), '56119');
+    click($('button[data-act="jemAll"]'));
+    click($('button[data-act="jemMake"]'));
+    expect($('#jemout').textContent).toContain('PED does not allow');
+  });
 });

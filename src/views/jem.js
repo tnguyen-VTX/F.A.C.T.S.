@@ -4,7 +4,9 @@ import * as XLSX from 'xlsx';
 import { $, esc, fmtD, fmtM, missingMsg, num, r2 } from '../lib/format.js';
 import { D, FY, PF, S, UI, profile, saveStore } from '../state.js';
 import { IDB } from '../lib/idb.js';
-import { barJE, checkJE, jeTotals } from '../lib/je.js';
+import { bankCode, barJE, checkJE, jeTotals } from '../lib/je.js';
+import { makePedCheck, mergeKept, pedYear } from '../lib/pedListing.js';
+import { readPedFile } from '../lib/pedZip.js';
 import { FILTER_KEYS, buildReclassJEs, chargeKey, hasFilter, matchingCharges } from '../lib/reclass.js';
 import { checkAccounts, chartDesc, checkChartReport, parseChart } from '../lib/chartOfAccounts.js';
 import { checkBarReport, parseBarReport } from '../lib/barReport.js';
@@ -54,6 +56,35 @@ async function ensureChart() {
     /* no stored chart */
   }
 }
+// The PED Chart Line Listing for this year (statewide, so not tied to a school), restored from storage.
+const pedKey = () => `ped:${FY.value}`;
+async function ensurePed() {
+  if (D.pedData?.key === pedKey()) return;
+  D.pedData = null;
+  try {
+    const rec = await IDB.get(pedKey());
+    if (rec && (rec.v ?? 1) <= 1) D.pedData = { key: pedKey(), at: rec.at, funds: rec.funds };
+  } catch {
+    /* none stored */
+  }
+}
+let pedCache = null;
+function pedCheck() {
+  if (!D.pedData) return null;
+  const id = `${D.pedData.key}|${D.pedData.at}|${PF.active}`;
+  if (pedCache?.id !== id)
+    pedCache = { id, fn: makePedCheck(new Map(Object.entries(D.pedData.funds)), profile().segments) };
+  return pedCache.fn;
+}
+// Funds worth keeping from the listing: everything this school's data mentions.
+function wantedFunds() {
+  const set = new Set((profile().funds || []).map((f) => f.code));
+  for (const c of D.chart?.codes.keys() || []) set.add(c.split('-')[0]);
+  for (const c of D.asr?.funds.keys() || []) set.add(c);
+  for (const r of D.fa || []) set.add(r.fund);
+  set.delete(undefined);
+  return set;
+}
 const descOf = (code) =>
   chartDesc(D.chart, code) ||
   D.fa.find((r) => r.code === code)?.acctDesc ||
@@ -61,7 +92,9 @@ const descOf = (code) =>
   '';
 
 function acctChecks(list) {
-  const r = checkAccounts(list, { chart: D.chart, ped: null });
+  const p = profile();
+  const bank = new Set([...new Set(list.map((c) => c.split('-')[0]))].map((f) => bankCode(p, f)));
+  const r = checkAccounts(list, { chart: D.chart, ped: pedCheck(), skip: bank });
   let h = '';
   if (r.adds.length)
     h += `<div class="warn"><b>Add these account strings in AptaFund first:</b><ul>${r.adds
@@ -115,7 +148,7 @@ export function viewJEM() {
   <div id="jemchart"></div>
   <div class="tabs" role="tablist">${TABS.map(([k, n]) => `<button class="btn${j.tab === k ? ' primary' : ''}" role="tab" data-act="jemTab" data-tab="${k}">${n}</button>`).join(' ')}</div>
   <div id="jembody"></div>`;
-  ensureChart().then(() => {
+  Promise.all([ensureChart(), ensurePed()]).then(() => {
     chartPanel();
     body();
   });
@@ -127,9 +160,11 @@ function chartPanel() {
   if (!el) return;
   const c = D.chart;
   el.innerHTML = `<section class="panel"><h2>Account checks</h2>
-  <p class="muted">Every account code in an entry is checked against the school's AptaFund Chart Of Accounts report, so you know which strings to add in AptaFund first. Codes are also meant to be checked against the PED Chart Line Listing; that file is not loaded yet.</p>
+  <p class="muted">Every account code in an entry is checked against the school's AptaFund Chart Of Accounts report, so you know which strings to add in AptaFund first. Codes are also checked against the PED Chart Line Listing (bank accounts are not in it, so they are checked against the school's chart only).</p>
   <p class="${c ? 'loaded' : 'muted'}">${c ? `<b>Chart loaded</b> · ${esc(c.school)} · FY${esc(String(c.fiscalYear))} · ${c.codes.size.toLocaleString()} account codes` : 'No chart loaded for this school and year.'}</p>
-  <label class="btn">Load the chart of accounts…<input type="file" accept=".xlsx,.xls" data-in="jemChartFile" hidden></label> ${esc(jem().msg)}</section>`;
+  <label class="btn">Load the chart of accounts…<input type="file" accept=".xlsx,.xls" data-in="jemChartFile" hidden></label> ${esc(jem().msg)}
+  <p class="${D.pedData ? 'loaded' : 'muted'}">${D.pedData ? `<b>PED listing loaded</b> · FY${FY.value} · funds ${esc(Object.keys(D.pedData.funds).sort().join(', '))}` : `No PED Chart Line Listing loaded for FY${FY.value}.`}</p>
+  <label class="btn">Load the PED Chart Line Listing (zip or CSVs)…<input type="file" accept=".zip,.csv" multiple data-in="jemPedFile" hidden></label> <span class="muted" id="jempedmsg">${esc(jem().pedMsg || '')}</span></section>`;
 }
 function body() {
   const el = $('#jembody'),
@@ -422,15 +457,63 @@ export const JEM_IN = {
       if (checks.some((c) => c.level === 'stop')) jem().msg = checks[0].msg;
       else {
         D.chart = { key: chartKey(), ...chart };
-        await IDB.put(chartKey(), {
-          v: 1,
-          at: Date.now(),
-          chart: { school: chart.school, fiscalYear: chart.fiscalYear, codes: [...chart.codes] },
-        });
+        try {
+          await IDB.put(chartKey(), {
+            v: 1,
+            at: Date.now(),
+            chart: { school: chart.school, fiscalYear: chart.fiscalYear, codes: [...chart.codes] },
+          });
+        } catch {
+          /* storage unavailable: keep it for this session */
+        }
         jem().msg = '';
       }
     } catch (e) {
       jem().msg = `Could not read that file: ${e.message}`;
+    }
+    t.value = '';
+    chartPanel();
+    body();
+  },
+  jemPedFile: async (t) => {
+    const files = [...(t.files || [])];
+    if (!files.length) return;
+    const j = jem(),
+      say = (m) => {
+        j.pedMsg = m;
+        const el = $('#jempedmsg');
+        if (el) el.textContent = m;
+      };
+    try {
+      const funds = wantedFunds();
+      if (!funds.size)
+        throw new Error('Load the school’s reports or chart first so FACTS knows which funds to keep.');
+      let merged = {},
+        year = null,
+        rows = 0;
+      await ensurePed();
+      merged = { ...(D.pedData?.funds || {}) };
+      for (const f of files) {
+        const results = await readPedFile(f, funds, (n) => say(`Reading ${n}…`));
+        for (const r of results) {
+          const y = pedYear(r.chartName);
+          if (y && year && y !== year) throw new Error('These files are for different fiscal years.');
+          year = y || year;
+          rows += r.rows;
+          merged = mergeKept(merged, r.kept);
+        }
+      }
+      if (year && year !== +FY.value)
+        throw new Error(`This listing is for FY${year}, but the selected year is FY${FY.value}.`);
+      try {
+        await IDB.put(pedKey(), { v: 1, at: Date.now(), funds: merged });
+      } catch {
+        /* storage unavailable: keep it for this session */
+      }
+      D.pedData = { key: pedKey(), at: Date.now(), funds: merged };
+      say(`Read ${rows.toLocaleString()} rows; kept ${Object.keys(merged).length} fund(s).`);
+    } catch (e) {
+      say(`Could not read that: ${e.message}`);
     }
     t.value = '';
     chartPanel();

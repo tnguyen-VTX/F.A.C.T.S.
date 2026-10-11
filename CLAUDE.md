@@ -75,13 +75,12 @@ The backup file (profiles, saved BARs, drafts, settings only) restores with a pe
 ## Journal Entry Maker (added after v0.1; screen: Journal Entry Maker)
 
 Makes the debits and credits to key into AptaFund (nothing is sent anywhere); rules in `context/journal-entries.md`, plan in
-`plans/journal-entry-maker.md`. Two kinds: **reclass of actuals** (pick a Fund Audit name/vendor, per account code type only the
+`plans/journal-entry-maker.md`. It is its own suite page (`npm run build:jem`) and also a screen in the full app. Two kinds: **reclass of actuals** (filter the Fund Audit by any account code parts, each optional and matched by its start, plus a name/detail text; per account code type only the
 segments that change, then amounts per charge; an entry per month and fund pair, dated the last day of the month; reclasses
 between funds go through each fund's bank account, set on the Schools screen as a pattern with per-fund overrides) and **the Budget
 entry for an approved BAR** (PED's approved BAR report as Excel; decrease = credit, increase = debit; dated the last signature).
 Every code is checked against the school's AptaFund Chart Of Accounts report (loaded per school and year, kept in IndexedDB as
-`chart:<school>:<fy>`); codes missing there are listed as strings to add in AptaFund. The PED Chart Line Listing check is not built
-yet (file not supplied). Saved entries live in `S().jes` and the backup. Encumbrance entries are out of scope (AptaFund makes them).
+`chart:<school>:<fy>`); codes missing there are listed as strings to add in AptaFund. Codes are also checked against the PED Chart Line Listing (zip or CSVs, read as a stream and kept only for the funds the school uses, stored as `ped:<fy>`; no location in it; bank lines are skipped because the listing has object 11111, not 11011). Saved entries live in `S().jes` and the backup. Encumbrance entries are out of scope (AptaFund makes them).
 
 ## Hosting (ledgersandlearning.com)
 
@@ -135,6 +134,8 @@ src/lib/je.js         AptaFund journal entries: reclass of actuals (Type Actual,
 src/lib/reclass.js    Vendor charges grouped by account code then date, what is left to reclass, reclass choices to entries (pure)
 src/lib/barReport.js  Reads PED's approved Budget Adjustment Request Report (.xlsx): lines, Doc ID, signature dates, checks (pure)
 src/lib/chartOfAccounts.js  The school's AptaFund Chart Of Accounts report and the "add this string in AptaFund" check (pure)
+src/lib/pedListing.js  PED Chart Line Listing stream parser (kept per fund as func|obj|prog|job) and the allowed-string check (pure)
+src/lib/pedZip.js     Reads the listing from a CSV or zip byte stream, a piece at a time (fflate)
 src/lib/jeLog.js      Saved journal entries, status log (Prepared, Entered in AptaFund, Posted, Cancelled), what is already reclassed (pure)
 src/lib/fte.js        FTE change for salary lines (proportional to dollars; assumption to confirm) (pure)
 src/lib/format.js     Formatting, math, and account-code helpers

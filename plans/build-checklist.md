@@ -47,11 +47,11 @@ Environment note: `cdn.sheetjs.com` is blocked in the cloud session, so `npm ins
 - [x] 1. `src/lib/je.js`: entry model, reclass and BAR lines, bank lines across funds, month-end dating, balance checks.
 - [x] 2. `src/lib/reclass.js`: vendor charges (account code, then date), what is left, reclass choices to entries.
 - [x] 3. `src/lib/barReport.js`: approved BAR report (Excel) reader with school, year and net-zero checks; tested on a made-up sheet and the real report.
-- [x] 4. `src/lib/chartOfAccounts.js`: school chart reader and the "add in AptaFund" check. [ ] PED Chart Line Listing check (waiting for the file).
+- [x] 4. `src/lib/chartOfAccounts.js`: school chart reader and the "add in AptaFund" check. [x] PED Chart Line Listing check (zip or CSVs, streamed, kept per fund; bank lines skipped).
 - [x] 5. Bank account setting on the school profile (pattern and per-fund override).
 - [x] 6. `src/lib/jeLog.js`: saved entries with status and AptaFund number; charges already reclassed are not offered twice.
 - [x] 7. Journal Entry Maker screen (reclass, entry for an approved BAR, saved entries, copy and Excel download); saved entries are in the backup.
-- [ ] 8. Open: PED Chart Line Listing file; the suite page's new name; wording of same-fund reclass comments; a Chromium look.
+- [x] 8. Reclass picks charges by account code parts plus text (not by vendor); the Journal Entry Maker is its own suite page (`build:jem`); same-fund comment wording approved. [ ] A Chromium look with real Gilbert data.
 
 ## Milestone 5: later
 
