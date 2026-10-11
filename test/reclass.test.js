@@ -72,3 +72,86 @@ describe('building reclass entries', () => {
     expect(errors.join(' | ')).toContain('5 digits');
   });
 });
+
+import { chargeFilter, hasFilter, matchingCharges } from '../src/lib/reclass.js';
+describe('choosing charges by account code section', () => {
+  const rows = [
+    {
+      code: A,
+      fund: '31400',
+      func: '4000',
+      obj: '53414',
+      prog: '0000',
+      loc: '001707',
+      job: '0000',
+      name: 'Vendor One',
+      detail: 'PO27-021',
+      acctDesc: 'Other',
+      date: '2026-09-15',
+      actual: 100,
+    },
+    {
+      code: B,
+      fund: '31400',
+      func: '4000',
+      obj: '56119',
+      prog: '0000',
+      loc: '001707',
+      job: '0000',
+      name: 'Vendor Two',
+      detail: '',
+      acctDesc: 'Supplies',
+      date: '2026-08-06',
+      actual: 50,
+    },
+    {
+      code: '11000-1000-53414-0000-001707-1411',
+      fund: '11000',
+      func: '1000',
+      obj: '53414',
+      prog: '0000',
+      loc: '001707',
+      job: '1411',
+      name: 'Vendor One',
+      detail: '',
+      acctDesc: 'Other',
+      date: '2026-09-01',
+      actual: 10,
+    },
+    {
+      code: A,
+      fund: '31400',
+      func: '4000',
+      obj: '53414',
+      prog: '0000',
+      loc: '001707',
+      job: '0000',
+      name: 'Vendor One',
+      detail: '',
+      acctDesc: 'Other',
+      date: '2026-09-02',
+      actual: 0,
+    },
+  ];
+  it('matches nothing when no filter is given', () => {
+    expect(hasFilter({})).toBe(false);
+    expect(chargeFilter(rows, {})).toEqual([]);
+    expect(chargeFilter(rows, { fund: '  ' })).toEqual([]);
+  });
+  it('matches a segment by its start, across names', () => {
+    expect(chargeFilter(rows, { obj: '53' }).map((r) => r.fund)).toEqual(['31400', '11000']);
+    expect(chargeFilter(rows, { fund: '31400', func: '4000' })).toHaveLength(2);
+    expect(chargeFilter(rows, { job: '1411' })).toHaveLength(1);
+  });
+  it('combines segments with text on name, detail or description, and skips zero actuals', () => {
+    expect(chargeFilter(rows, { fund: '31400', text: 'po27' })).toHaveLength(1);
+    expect(chargeFilter(rows, { text: 'supplies' })[0].name).toBe('Vendor Two');
+    expect(chargeFilter(rows, { obj: '53414', fund: '31400' }).every((r) => r.actual !== 0)).toBe(true);
+  });
+  it('groups the matches and reports what a cap leaves out', () => {
+    const m = matchingCharges(rows, { obj: '53' }, { [chargeKey(A, '2026-09-15')]: 40 });
+    expect(m.codes).toBe(2);
+    expect(m.groups[1].charges[0]).toMatchObject({ actual: 100, reclassed: 40, remaining: 60 });
+    expect(matchingCharges(rows, { obj: '53' }, {}, { maxCodes: 1 })).toMatchObject({ codes: 2, more: 1 });
+  });
+});
