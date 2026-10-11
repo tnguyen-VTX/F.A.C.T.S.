@@ -5,7 +5,7 @@ import { $, esc, fmtD, fmtM, missingMsg, num, r2 } from '../lib/format.js';
 import { D, FY, PF, S, UI, profile, saveStore } from '../state.js';
 import { IDB } from '../lib/idb.js';
 import { barJE, checkJE, jeTotals } from '../lib/je.js';
-import { buildReclassJEs, chargeKey, vendorCharges, vendorNames } from '../lib/reclass.js';
+import { FILTER_KEYS, buildReclassJEs, chargeKey, hasFilter, matchingCharges } from '../lib/reclass.js';
 import { checkAccounts, chartDesc, checkChartReport, parseChart } from '../lib/chartOfAccounts.js';
 import { checkBarReport, parseBarReport } from '../lib/barReport.js';
 import { JE_STATUSES, addJEStatus, isJEFrozen, reclassedMap, removeJE, saveJE } from '../lib/jeLog.js';
@@ -29,7 +29,7 @@ export function jem() {
   UI.jem ??= {
     tab: 'reclass',
     q: '',
-    vendor: '',
+    filter: {},
     changes: {},
     amounts: {},
     made: null,
@@ -142,20 +142,36 @@ function body() {
 
 // ---- Reclass ----
 function reclassHTML() {
-  const j = jem();
+  const j = jem(),
+    p = profile();
   if (!D.fa.length) return missingMsg('Fund Audit Report');
-  const names = vendorNames(D.fa, j.q).slice(0, 200);
-  let h = `<section class="panel"><h2>Choose a name or vendor</h2><div class="filters"><label>Search<input type="search" data-in="jemQ" value="${esc(j.q)}" placeholder="part of a vendor name"></label>
-  <label>Name / vendor<select data-in="jemVendor"><option value="">Choose…</option>${names.map((v) => `<option value="${esc(v.name)}"${j.vendor === v.name ? ' selected' : ''}>${esc(v.name)} (${fmtM(v.total)})</option>`).join('')}</select></label></div></section>`;
-  if (j.vendor) h += chargesHTML();
-  h += '<div id="jemout">' + madeHTML() + '</div>';
-  return h;
+  const boxes = p.segments
+    .filter((x) => FILTER_KEYS.includes(x.key))
+    .map(
+      (x) =>
+        `<label>${SEG_LABEL[x.key]}<input type="text" size="${x.len + 1}" maxlength="${x.len}" inputmode="numeric" data-in="jemFilter" data-k="${x.key}" value="${esc(j.filter[x.key] || '')}" placeholder="any"></label>`,
+    )
+    .join('');
+  return `<section class="panel"><h2>Choose the charges</h2><p class="muted">Fill in any of the account code parts; a part you leave empty matches everything, and a short value matches everything that starts with it (53 matches 53414). The text box also searches names, detail and the account description.</p>
+  <div class="filters">${boxes}<label>Name, detail or description<input type="search" data-in="jemFilter" data-k="text" value="${esc(j.filter.text || '')}" placeholder="optional"></label></div></section>
+  <div id="jemcharges">${chargesHTML()}</div><div id="jemout">${madeHTML()}</div>`;
 }
+const filterText = (f) =>
+  [
+    ...FILTER_KEYS.filter((k) => f[k]).map((k) => `${SEG_LABEL[k].toLowerCase()} ${f[k]}`),
+    f.text ? `"${f.text}"` : '',
+  ]
+    .filter(Boolean)
+    .join(', ');
 function chargesHTML() {
   const j = jem(),
     p = profile();
-  const groups = vendorCharges(D.fa, j.vendor, reclassedMap(jes()));
-  return `<section class="panel"><h2>${esc(j.vendor)}</h2><p class="muted">For each account code, type only the parts that change; the rest stay the same. Then type how much of each charge to move. Entries are dated the last day of the charge's month.</p>
+  if (!hasFilter(j.filter))
+    return '<section class="panel"><p class="muted">Fill in at least one box above to list charges.</p></section>';
+  const found = matchingCharges(D.fa, j.filter, reclassedMap(jes()));
+  const groups = found.groups;
+  if (!groups.length) return '<section class="panel"><p class="muted">No charges match.</p></section>';
+  return `<section class="panel"><h2>${esc(filterText(j.filter))}</h2>${found.more ? `<div class="warn">${found.codes} account codes match; only the first ${groups.length} are shown. Narrow the filter to see the rest.</div>` : ''}<p class="muted">For each account code, type only the parts that change; the rest stay the same. Then type how much of each charge to move. Entries are dated the last day of the charge's month.</p>
   ${groups
     .map((g) => {
       const parts = g.code.split('-');
@@ -302,7 +318,7 @@ export const JEM_ACT = {
   },
   jemMake: () => {
     const j = jem();
-    const groups = vendorCharges(D.fa, j.vendor, reclassedMap(jes()));
+    const groups = matchingCharges(D.fa, j.filter, reclassedMap(jes()), { maxCodes: 100000 }).groups;
     const remaining = {},
       choices = [];
     for (const g of groups)
@@ -327,7 +343,7 @@ export const JEM_ACT = {
         : {
             kind: 'reclass',
             je,
-            vendor: j.vendor,
+            vendor: filterText(j.filter),
             moves: je.moves || [],
           };
     const r = saveJE(jes(), src);
@@ -381,18 +397,14 @@ async function readRows(file) {
   return XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]], { header: 1, defval: '' });
 }
 export const JEM_IN = {
-  jemQ: (t) => {
-    jem().q = t.value;
-    body();
-    const el = document.querySelector('[data-in="jemQ"]');
-    el?.focus();
-    el?.setSelectionRange(el.value.length, el.value.length);
-  },
-  jemVendor: (t) => {
-    jem().vendor = t.value;
-    jem().amounts = {};
-    jem().made = null;
-    body();
+  jemFilter: (t) => {
+    const j = jem();
+    j.filter[t.dataset.k] = t.value.trim();
+    j.made = null;
+    const el = $('#jemcharges');
+    if (el) el.innerHTML = chargesHTML();
+    const out = $('#jemout');
+    if (out) out.innerHTML = '';
   },
   jemChg: (t) => {
     const j = jem();

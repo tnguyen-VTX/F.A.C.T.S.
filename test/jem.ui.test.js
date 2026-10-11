@@ -22,6 +22,15 @@ const H = [
   'Available (YTD)',
 ];
 const A = '31400-4000-53414-0000-001707-0000';
+const SEG = {
+  fund: '31400',
+  func: '4000',
+  obj: '53414',
+  prog: '0000',
+  loc: '001707',
+  job: '0000',
+  detail: '',
+};
 const xlsx = () => {
   const rows = [
     ['Gilbert L. Sena Charter High School'],
@@ -57,8 +66,8 @@ describe('Journal Entry Maker screen', () => {
     if ($('button[data-act="impAccept"][data-kind="asr"]'))
       click($('button[data-act="impAccept"][data-kind="asr"]'));
     st.D.fa = [
-      { code: A, name: 'Vendor One', date: '2026-09-15', actual: 2332, acctDesc: 'Other Charges' },
-      { code: A, name: 'Vendor One', date: '2026-08-20', actual: 375, acctDesc: 'Other Charges' },
+      { ...SEG, code: A, name: 'Vendor One', date: '2026-09-15', actual: 2332, acctDesc: 'Other Charges' },
+      { ...SEG, code: A, name: 'Vendor One', date: '2026-08-20', actual: 375, acctDesc: 'Other Charges' },
     ];
     click($('.nav button[data-v="jem"]'));
   });
@@ -67,8 +76,8 @@ describe('Journal Entry Maker screen', () => {
     expect([...document.querySelectorAll('[data-act="jemTab"]')].length).toBe(3);
   });
   it('makes one entry per month for a reclass between funds, balanced', () => {
-    input($('select[data-in="jemQ"], input[data-in="jemQ"]'), 'vendor');
-    input($('select[data-in="jemVendor"]'), 'Vendor One');
+    input($('input[data-in="jemFilter"][data-k="fund"]'), '31400');
+    input($('input[data-in="jemFilter"][data-k="text"]'), 'vendor one');
     input($('input[data-in="jemChg"][data-k="fund"]'), '11000');
     input($('input[data-in="jemChg"][data-k="func"]'), '2600');
     const amts = [...document.querySelectorAll('input[data-in="jemAmt"]')];
@@ -95,7 +104,7 @@ describe('Journal Entry Maker screen', () => {
     expect(st.S().jes[0].status).toBe('Posted');
     expect(st.S().jes[0].number).toBe('00047858');
     click($('[data-act="jemTab"][data-tab="reclass"]'));
-    input($('select[data-in="jemVendor"]'), 'Vendor One');
+    input($('input[data-in="jemFilter"][data-k="obj"]'), '534');
     expect($('#jembody').textContent).toContain('0.00'); // 375 fully reclassed: nothing left on 8/20
   });
   it('makes the Budget entry from an approved BAR Excel report, dated with the last signature', async () => {
