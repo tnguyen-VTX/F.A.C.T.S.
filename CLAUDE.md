@@ -115,7 +115,7 @@ built page and builds with relative paths. See `context/hosting.md` and `DEPLOY.
 index.html            Vite entry
 vite.config.js        Relative base path and the build-time Content-Security-Policy
 src/main.js           App shell, navigation, event delegation (data-act = clicks, data-in = inputs), file loading
-src/mode.js           barOnly(): the BAR Builder-only build mode (vite --mode bar-builder)
+src/mode.js           Suite page builds: barOnly() is true for --mode bar-builder and --mode jem; pageTitle(), pageScreens()
 src/state.js          D (parsed data), UI (view state), PF (school profiles), S()/saveStore (localStorage), loadBuffer()
 src/lib/parse.js      Sheet parsers (pure; also run in Node tests). Account codes are read through a school profile
 src/lib/profile.js    School profile model: segments, code pattern, 3-digit OBMS upload location rule, validation (pure)
@@ -152,6 +152,7 @@ handler to `ACT` (clicks on `[data-act]`) or `IN` (inputs on `[data-in]`) in `ma
 
 - `npm install`, `npm run dev`, `npm run build`, `npm test`
 - `npm run build:bar` / `npm run dev:bar`: BAR Builder-only build (`src/mode.js`; five screens, no FACTS header) for the ledgerandlearning.com suite page. Browser storage names start with `barbuilder`.
+- `npm run build:jem` / `npm run dev:jem`: the Journal Entry Maker as its own suite page (`--mode jem`: Load reports, Journal Entry Maker, Schools, How to use, About). It shares the browser storage (profiles, stored reports) with the BAR Builder page.
 - Data tests are skipped unless `fixtures/facts.xlsx` exists. `EXPECTED` in `test/parse.test.js` holds totals
   from the 9/29/2026 workbook; update them when the fixture changes.
 

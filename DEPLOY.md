@@ -9,6 +9,7 @@ Needs Node 18 or newer.
 ```bash
 npm install
 npm run build:bar      # writes dist-bar-builder/  (BAR Builder only; use this one for the suite)
+npm run build:jem      # writes dist-jem/  (Journal Entry Maker only; a second tool page for the suite)
 npm run build          # writes dist/  (the whole FACTS app, including the older v0.1 screens)
 ```
 

@@ -1,4 +1,4 @@
-import { barOnly } from '../mode.js';
+import { barOnly, homeLabel, homeScreen } from '../mode.js';
 import { $, esc } from '../lib/format.js';
 import { D, FY, PF, REP, UI, profile } from '../state.js';
 
@@ -68,7 +68,7 @@ export function viewImport() {
     )
     .join('')}</select></label></div>
   <div class="grid2">${slotHTML('asr')}${slotHTML('fa')}</div>
-  ${ready ? `<div class="toolbar"><button class="btn primary" data-act="nav" data-v="${barOnly() ? 'bars' : 'budget'}">${barOnly() ? 'Open the BAR Builder' : 'Open the budget'}</button></div>` : ''}
+  ${ready ? `<div class="toolbar"><button class="btn primary" data-act="nav" data-v="${homeScreen()}">${homeLabel()}</button></div>` : ''}
   <section class="panel" id="earlier" hidden></section>
   ${
     barOnly()

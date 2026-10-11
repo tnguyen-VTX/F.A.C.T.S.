@@ -1,3 +1,4 @@
+import { barOnly, pageScreens } from '../mode.js';
 import { $ } from '../lib/format.js';
 
 const go = (v, label) => `<button class="linkbtn" data-act="nav" data-v="${v}">${label}</button>`;
@@ -34,9 +35,13 @@ export function viewHelp() {
   <li>Write down OBMS's message word for word.</li>
   <li>Fix the BAR in FACTS, download again and upload again.</li>
   <li>Email the message to <a href="mailto:tim.nguyen@vertexeducation.com">tim.nguyen@vertexeducation.com</a>, so the check can be added. See ${go('about', 'About and privacy')} for what FACTS cannot promise.</li></ol></section>
-  <section class="panel"><h2>8. Journal Entry Maker</h2><ol>
+${
+  !barOnly() || pageScreens().has('jem')
+    ? `<section class="panel"><h2>8. Journal Entry Maker</h2><ol>
   <li>For a reclass of actuals: choose a name or vendor, type only the parts of each account code that change, type how much of each charge to move, and choose Make the entries. Each entry is dated the last day of the charge's month, and a reclass between funds goes through each fund's bank account (set on the Schools screen).</li>
   <li>For an approved BAR: load PED's approved Budget Adjustment Request Report as an Excel file. Decreases are credits and increases are debits, dated with the last PED approval date.</li>
   <li>Load the school's AptaFund Chart Of Accounts report once per year; FACTS then lists any account strings you must add in AptaFund first.</li>
-  <li>Copy the lines or download the Excel, key the entry into AptaFund, then save it here and add its status and AptaFund number. Charges you already reclassed are not offered twice. FACTS does not make Encumbrance entries; AptaFund does those.</li></ol></section>`;
+  <li>Copy the lines or download the Excel, key the entry into AptaFund, then save it here and add its status and AptaFund number. Charges you already reclassed are not offered twice. FACTS does not make Encumbrance entries; AptaFund does those.</li></ol></section>`
+    : ''
+}`;
 }
