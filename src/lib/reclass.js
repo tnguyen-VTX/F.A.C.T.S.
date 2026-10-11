@@ -111,3 +111,66 @@ export function buildReclassJEs(choices, { profile, desc = () => '', remaining =
   const jes = [...groups.keys()].sort().map((k) => reclassJE(groups.get(k), { desc }, profile));
   return { jes, errors };
 }
+
+// ---- Summary of actuals, grouped like the pivot ----
+export const DIMS = [
+  ['code', 'Account code'],
+  ['date', 'Date'],
+  ['month', 'Month'],
+  ['fund', 'Fund'],
+  ['func', 'Function'],
+  ['obj', 'Object'],
+  ['prog', 'Program'],
+  ['loc', 'Location'],
+  ['job', 'Job class'],
+  ['detail', 'Detail'],
+  ['name', 'Name / vendor'],
+];
+const dimValue = (r, d) =>
+  d === 'month' ? String(r.date || '').slice(0, 7) : String(r[d] ?? '') || '(none)';
+
+// Sum the actuals of the given expenditures (rows), grouped by a first and an optional second dimension.
+// sort: 'key' (ascending), 'high' (largest total first) or 'low' (smallest first), at both levels.
+// names = { func: {code: name}, fund: {code: name} } adds titles to labels. Returns
+// { groups: [{ key, label, total, count, children: [{ key, label, total, count }] }], total, count }.
+export function summarize(rows, { first = 'code', second = '', sort = 'key', names = {} } = {}) {
+  const label = (d, v) => {
+    const n = names[d]?.[v];
+    return n ? `${v} ${n}` : v;
+  };
+  const order = (a, b) =>
+    sort === 'high'
+      ? b.total - a.total || a.key.localeCompare(b.key)
+      : sort === 'low'
+        ? a.total - b.total || a.key.localeCompare(b.key)
+        : a.key.localeCompare(b.key);
+  const top = new Map();
+  let total = 0,
+    count = 0;
+  for (const r of rows) {
+    if (!r.actual) continue;
+    const k1 = dimValue(r, first);
+    if (!top.has(k1)) top.set(k1, { key: k1, label: label(first, k1), total: 0, count: 0, kids: new Map() });
+    const g = top.get(k1);
+    g.total += r.actual;
+    g.count++;
+    total += r.actual;
+    count++;
+    if (second) {
+      const k2 = dimValue(r, second);
+      if (!g.kids.has(k2)) g.kids.set(k2, { key: k2, label: label(second, k2), total: 0, count: 0 });
+      const c = g.kids.get(k2);
+      c.total += r.actual;
+      c.count++;
+    }
+  }
+  const groups = [...top.values()].map((g) => ({
+    key: g.key,
+    label: g.label,
+    total: r2(g.total),
+    count: g.count,
+    children: [...g.kids.values()].map((c) => ({ ...c, total: r2(c.total) })).sort(order),
+  }));
+  groups.sort(order);
+  return { groups, total: r2(total), count };
+}

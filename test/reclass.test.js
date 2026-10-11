@@ -179,3 +179,64 @@ describe('choosing by name or vendor', () => {
     expect(chargeFilter(rows, { name: 'Vendor' })).toEqual([]);
   });
 });
+
+import { summarize } from '../src/lib/reclass.js';
+describe('summary of actuals', () => {
+  const row = (code, obj, date, actual, name = 'Vendor One') => ({
+    code,
+    fund: code.split('-')[0],
+    func: code.split('-')[1],
+    obj,
+    prog: '0000',
+    loc: '001707',
+    job: '0000',
+    name,
+    detail: 'PO1',
+    date,
+    actual,
+  });
+  const C1 = '31400-4000-53414-0000-001707-0000';
+  const C2 = '31400-4000-56119-0000-001707-0000';
+  const rows = [
+    row(C1, '53414', '2026-09-15', 100),
+    row(C1, '53414', '2026-09-03', 50.5),
+    row(C1, '53414', '2026-08-20', 20),
+    row(C2, '56119', '2026-08-06', 30),
+    row(C2, '56119', '2026-08-06', -5),
+    row(C2, '56119', '2026-08-07', 0),
+  ];
+  it('groups by account code then date and ties to the sum of the rows', () => {
+    const s = summarize(rows, { first: 'code', second: 'date' });
+    expect(s.total).toBe(195.5);
+    expect(s.count).toBe(5);
+    expect(s.groups.map((g) => [g.key, g.total])).toEqual([
+      [C1, 170.5],
+      [C2, 25],
+    ]);
+    expect(s.groups[0].children.map((c) => [c.key, c.total])).toEqual([
+      ['2026-08-20', 20],
+      ['2026-09-03', 50.5],
+      ['2026-09-15', 100],
+    ]);
+    expect(s.groups.reduce((t, g) => t + g.total, 0)).toBe(s.total);
+  });
+  it('groups by date then account code, by month, or by one level only', () => {
+    const d = summarize(rows, { first: 'date', second: 'code' });
+    expect(d.groups.map((g) => g.key)).toEqual(['2026-08-06', '2026-08-20', '2026-09-03', '2026-09-15']);
+    expect(d.groups[0].children).toHaveLength(1);
+    const m = summarize(rows, { first: 'month' });
+    expect(m.groups.map((g) => [g.key, g.total])).toEqual([
+      ['2026-08', 45],
+      ['2026-09', 150.5],
+    ]);
+    expect(m.groups[0].children).toEqual([]);
+  });
+  it('sorts by amount at both levels and adds names to labels', () => {
+    const h = summarize(rows, { first: 'code', second: 'date', sort: 'high' });
+    expect(h.groups.map((g) => g.key)).toEqual([C1, C2]);
+    expect(h.groups[0].children.map((c) => c.total)).toEqual([100, 50.5, 20]);
+    const l = summarize(rows, { first: 'func', sort: 'low', names: { func: { 4000: 'Capital Outlay' } } });
+    expect(l.groups[0].label).toBe('4000 Capital Outlay');
+    expect(summarize([], {}).groups).toEqual([]);
+  });
+});
