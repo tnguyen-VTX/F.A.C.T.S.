@@ -22,7 +22,7 @@ export function viewHelp() {
   <li>Read the checks under the lines. Every item marked Stop must be fixed before the file can be made.</li>
   <li>Add the contact name and the justification (the Suggest wording button gives a start). Use plain words: no commas, quotes or pipes, 255 characters at most.</li>
   <li>Check the file name (it starts with the school's short name from the Schools screen; you can type a different one), then choose "Download the OBMS upload file".</li>
-  <li>Optional: under "Longer narrative", pick a template and press "Fill from this BAR", then edit the wording. The narrative is for your records and the PED explanation; it is not part of the upload file.</li></ol></section>
+  <li>Optional: under "Longer narrative", there is a template for each BAR type (for a Transfer FACTS suggests one; you can change it). Press "Fill from this BAR", then edit the wording. If you change the BAR's lines afterward, a warning says the narrative may be out of date. The narrative is for your records and the PED explanation; it is not part of the upload file.</li></ol></section>
   <section class="panel"><h2>5. Upload in OBMS</h2><ol>
   <li>In OBMS, open BAR Uploads and upload the file.</li>
   <li>Back in FACTS, choose Save BAR, type the Document ID OBMS gives you, and add statuses as it moves through OBMS (Uploaded - Staging Validated, Create Direct BAR, BM Approved ... BS Approval - PED Approval).</li>

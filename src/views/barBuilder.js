@@ -1,5 +1,5 @@
 import { barFileName, makeBarFile } from '../lib/barCsv.js';
-import { fillTemplate, templatesFor } from '../lib/narrativeTemplates.js';
+import { fillTemplate, narrativeStale, suggestTemplate, templatesFor } from '../lib/narrativeTemplates.js';
 import {
   STATUSES,
   addStatus,
@@ -229,6 +229,8 @@ export function bbDraft() {
 
 // Totals, checks and the download button: redrawn on every edit, without touching the inputs.
 export function bbSummary() {
+  const ns = $('#bbnarrstale');
+  if (ns && bb().draft) ns.hidden = !narrativeStale(bb().draft, narrativeCtx());
   const b = bb(),
     bar = b.draft,
     el = $('#bbsum');
@@ -476,21 +478,34 @@ function narrativePanel(bar) {
   if (!list.length)
     return `<section class="ai"><h3>Longer narrative</h3><p class="muted">No template for this BAR type yet. Write it below if you need one. It is not part of the upload file.</p>
   <label class="fld"><span>Narrative</span><textarea rows="6" data-in="bbField" data-k="narrative">${esc(bar.narrative || '')}</textarea></label></section>`;
-  const sel = list.find((t) => t.id === b.tpl)?.id || list[0].id;
+  const sel = chosenTemplate(bar, list);
+  const ctx = narrativeCtx();
+  const stale = `<p class="warn" id="bbnarrstale" role="alert"${narrativeStale(bar, ctx) ? '' : ' hidden'}>The narrative may be out of date: the BAR's lines changed since it was filled. Fill it again, or check the amounts in the text.</p>`;
   return `<section class="ai"><h3>Longer narrative</h3>
   <p class="muted">Pick a template and fill it from this BAR, then edit it. It is for your records and the PED explanation; it is not part of the upload file.</p>
   <div class="filters"><label>Template<select data-in="bbNarrTpl">${list.map((t) => `<option value="${esc(t.id)}"${t.id === sel ? ' selected' : ''}>${esc(t.title)}</option>`).join('')}</select></label>
   <button class="btn" data-act="bbNarrFill">Fill from this BAR</button> <span class="muted" id="bbnarrmsg">${esc(b.narrMsg || '')}</span></div>
+  ${stale}
   <label class="fld"><span>Narrative</span><textarea rows="7" data-in="bbField" data-k="narrative">${esc(bar.narrative || '')}</textarea></label>
   <div class="toolbar"><button class="btn" data-act="bbNarrCopy">Copy narrative</button></div></section>`;
 }
+// The user's pick for this BAR, else the one FACTS suggests for a Transfer, else the first.
+const chosenTemplate = (bar, list) =>
+  list.find((t) => t.id === bar.narrTpl)?.id ||
+  list.find((t) => t.id === suggestTemplate(bar, D.asr))?.id ||
+  list[0].id;
+const narrativeCtx = () => ({
+  school: profile().name,
+  funcNames: D.asr?.funcNames,
+  fundNames: D.fundNames,
+});
 export function bbNarrFill() {
   const b = bb(),
     bar = b.draft;
   if (!bar) return;
   const list = templatesFor(bar.type),
-    id = list.find((t) => t.id === b.tpl)?.id || list[0]?.id;
-  const r = fillTemplate(id, bar, { school: profile().name, funcNames: D.asr.funcNames });
+    id = list.length ? chosenTemplate(bar, list) : null;
+  const r = fillTemplate(id, bar, narrativeCtx());
   if (r.error) {
     b.narrMsg = r.error;
     return bbDraft();
@@ -498,6 +513,7 @@ export function bbNarrFill() {
   if (bar.narrative && bar.narrative !== r.text && !confirm('Replace the narrative you have written?'))
     return;
   bar.narrative = r.text;
+  bar.narrativeFill = { id, text: r.text };
   b.narrMsg = 'Filled from this BAR. Check the wording and edit it.';
   keep();
   bbDraft();

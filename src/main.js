@@ -502,8 +502,9 @@ const IN = {
     t.value = '';
   },
   bbNarrTpl: (t) => {
-    bb().tpl = t.value;
+    if (bb().draft) bb().draft.narrTpl = t.value;
     bb().narrMsg = '';
+    keepBB();
   },
   bbFund: (t) => {
     const b = bb();

@@ -111,6 +111,17 @@ describe('BAR Builder screen', () => {
     input($('textarea[data-k="narrative"]'), t + ' Edited.');
     expect(st.UI.bb.draft.narrative.endsWith('Edited.')).toBe(true);
   });
+  it('suggests the negative-function template, stores the fill and warns when the lines change', () => {
+    expect($('select[data-in="bbNarrTpl"]').value).toBe('transfer-negative');
+    expect(st.UI.bb.draft.narrativeFill.id).toBe('transfer-negative');
+    expect($('#bbnarrstale').hidden).toBe(true);
+    const amt = $('input[data-in="bbAmt"][data-i="0"]');
+    const was = amt.value;
+    input(amt, String(Number(was) + 50));
+    expect($('#bbnarrstale').hidden).toBe(false);
+    input(amt, was);
+    expect($('#bbnarrstale').hidden).toBe(true);
+  });
   it('suggests an OBMS-style file name and lets it be edited', () => {
     const f = $('input[data-k="fileName"]');
     expect(f.placeholder).toMatch(/^[A-Za-z0-9-]+_-_OBMS_UPLOAD_-_11000_T\.csv$/);

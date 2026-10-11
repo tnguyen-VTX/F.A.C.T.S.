@@ -119,7 +119,7 @@ src/lib/bar.js        BAR model, totals and validation for T, M, I, IB, D (stop/
 src/lib/justify.js    Rule-based justification wording per BAR type (no commas, quotes or pipes; max 255) (pure)
 src/lib/barCsv.js     OBMS BAR upload file (UBH 15 fields, UBL 9, CRLF) and its name (SCHOOL_-_OBMS_UPLOAD_-_FUND_FUNCTION_TYPE.csv, editable per BAR); none is made while a check says stop (pure)
 src/lib/barLog.js     Saved BARs, status log, freeze/lock rules, backup export and restore planning (pure)
-src/lib/narrativeTemplates.js  Longer-narrative wording templates filled from the BAR (pure; never in the upload file)
+src/lib/narrativeTemplates.js  Longer-narrative wording for every BAR type (Transfer negative/positive function, Maintenance, Increase/Initial Budget, Decrease; same for all schools), the Transfer suggestion and the stale-text check (pure; never in the upload file)
 src/lib/fte.js        FTE change for salary lines (proportional to dollars; assumption to confirm) (pure)
 src/lib/format.js     Formatting, math, and account-code helpers
 src/lib/idb.js        IndexedDB cache for the last workbook

@@ -1,6 +1,6 @@
-# Narrative templates for the BAR Builder (DRAFT, not approved)
+# Narrative templates for the BAR Builder
 
-Status: planning in progress. Do not build until the user says "Plan approved."
+Status: plan approved 10/10/2026; built 10/11/2026.
 
 ## Problem
 The BAR Builder has one longer-narrative template (Transfer, negative function). Every BAR type the business manager sends needs
