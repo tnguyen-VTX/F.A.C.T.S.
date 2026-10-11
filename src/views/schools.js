@@ -110,6 +110,20 @@ export function scForm() {
   ${field('Short name for file names', `<input type="text" size="8" maxlength="12" data-in="sc" data-k="abbrev" value="${esc(d.abbrev || '')}">`, "Starts the upload file name, for example GSC. Empty uses the school name's initials.")}
   ${field('PED location ID(s)', `<input type="text" data-in="scLocIds" size="12" value="${esc((d.locationIds || []).join(', '))}">`, '3 digits each, separated by commas. A BAR line at any other location gets a warning.')}
   </div>
+  <h3>Bank account for journal entries</h3>
+  <p class="muted">A reclass between funds goes through each fund's bank account. Leave the pattern empty to use the fund, function 0000, object 11011 and zeros in the other segments. {fund} stands for the fund code.</p>
+  <div class="grid2">
+  ${field('Bank account pattern', `<input type="text" size="34" data-in="scBank" value="${esc(d.bankAccount?.pattern || '')}" placeholder="{fund}-0000-11011-0000-000000-0000">`)}
+  ${field(
+    'Bank account for particular funds',
+    `<textarea rows="2" data-in="scBankFunds" placeholder="One per line: fund code, then the full account code">${esc(
+      Object.entries(d.bankAccount?.byFund || {})
+        .map(([f, c]) => `${f}, ${c}`)
+        .join('\n'),
+    )}</textarea>`,
+    'Only for funds that do not follow the pattern.',
+  )}
+  </div>
   <h3>Account code segments</h3>
   <p class="muted">Digits in each segment, in order. The code looks like ${d.segments.map((s) => '9'.repeat(Math.min(s.len, 12))).join('-')}.</p>
   <div class="filters">${SEGMENT_KEYS.map((k) => `<label>${SEGMENT_LABELS[k]}<input type="number" min="1" max="12" size="3" data-in="scSeg" data-k="${k}" value="${seg(d, k)?.len ?? ''}"></label>`).join('')}

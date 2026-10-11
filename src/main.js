@@ -588,6 +588,21 @@ const IN = {
     $('#scerr').innerHTML = scErrors();
   },
   scDirQ: (t) => scDirSearch(t.value),
+  scBank: (t) => {
+    const d = UI.sc.draft;
+    d.bankAccount = { pattern: t.value.trim(), byFund: d.bankAccount?.byFund || {} };
+    $('#scerr').innerHTML = scErrors();
+  },
+  scBankFunds: (t) => {
+    const d = UI.sc.draft,
+      byFund = {};
+    for (const l of t.value.split('\n')) {
+      const m = l.match(/^\s*(\d{5})\s*[,\s]\s*(\S+)\s*$/);
+      if (m) byFund[m[1]] = m[2];
+    }
+    d.bankAccount = { pattern: d.bankAccount?.pattern || '', byFund };
+    $('#scerr').innerHTML = scErrors();
+  },
   scLocIds: (t) => {
     UI.sc.draft.locationIds = t.value
       .split(/[,\s]+/)

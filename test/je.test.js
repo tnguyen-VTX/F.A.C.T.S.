@@ -140,3 +140,35 @@ describe('the Budget JE for an approved BAR', () => {
     expect(checkJE(bad)[0].msg).toContain('do not equal');
   });
 });
+
+import { newProfile, validateProfile } from '../src/lib/profile.js';
+describe('the bank account setting on a profile', () => {
+  const base = { ...newProfile({ id: 'x', name: 'X', districtCode: '1' }) };
+  it('starts empty and passes', () => {
+    expect(base.bankAccount).toEqual({ pattern: '', byFund: {} });
+    expect(validateProfile(base)).toEqual([]);
+  });
+  it('wants {fund} and a code that fits the layout', () => {
+    expect(
+      validateProfile({
+        ...base,
+        bankAccount: { pattern: '11000-0000-11011-0000-000000-0000', byFund: {} },
+      }).join(),
+    ).toContain('{fund}');
+    expect(
+      validateProfile({ ...base, bankAccount: { pattern: '{fund}-0000', byFund: {} } }).join(),
+    ).toContain('does not fit');
+    expect(
+      validateProfile({
+        ...base,
+        bankAccount: {
+          pattern: '{fund}-0000-11011-0000-000000-0000',
+          byFund: { 27901: '27901-0000-11011-0000-000000-0000' },
+        },
+      }),
+    ).toEqual([]);
+    expect(
+      validateProfile({ ...base, bankAccount: { pattern: '', byFund: { 27901: 'nope' } } }).join(),
+    ).toContain('fund 27901');
+  });
+});

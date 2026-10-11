@@ -33,6 +33,9 @@ export function newProfile(over = {}) {
     locationRule: { type: 'lastN', n: UPLOAD_LOCATION_LEN, confirmed: false },
     funds: [], // { code, name, flowthrough, reimbursable }
     donorPriority: [], // function codes, first = take from first
+    // The cash account a reclass between funds goes through: a pattern with {fund} (empty = built from the layout:
+    // the fund, function 0000, object 11011, zeros elsewhere) and optional full codes for particular funds.
+    bankAccount: { pattern: '', byFund: {} },
     fteObjects: ['511'], // object prefixes whose BAR lines carry an FTE change (salaries)
     defaultCushion: { type: 'amount', value: 0 },
     contacts: [], // { name, title }: typed by the user, never committed
@@ -66,6 +69,15 @@ export function validateProfile(p) {
     errs.push('PED location IDs are 3 digits each.');
   if (p.abbrev && !/^[A-Za-z0-9-]{1,12}$/.test(String(p.abbrev)))
     errs.push('The short name for file names is letters, digits and dashes, up to 12 characters.');
+  const ba = p.bankAccount || {};
+  if (ba.pattern && !String(ba.pattern).includes('{fund}'))
+    errs.push('The bank account pattern must contain {fund}, which is replaced by the fund code.');
+  const re = (p.segments || []).length ? codePattern(p) : null;
+  if (ba.pattern && re && !re.test(String(ba.pattern).replace('{fund}', '0'.repeat(5))))
+    errs.push("The bank account pattern does not fit this school's account code layout.");
+  for (const [f, c] of Object.entries(ba.byFund || {}))
+    if (re && !re.test(String(c)))
+      errs.push(`The bank account for fund ${f} does not fit the account code layout.`);
   const segs = p.segments || [];
   if (!segs.length) errs.push('Add the account code segments.');
   const keys = segs.map((s) => s.key);
