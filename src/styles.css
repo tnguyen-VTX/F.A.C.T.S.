@@ -1,3 +1,28 @@
+/* Fonts are served from this site (OFL licenses in src/fonts); nothing loads from another host. */
+@font-face {
+  font-family: 'DM Sans';
+  src: url('./fonts/DMSans-Variable.ttf') format('truetype');
+  font-weight: 100 1000;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Red Hat Display';
+  src: url('./fonts/RedHatDisplay-Variable.ttf') format('truetype');
+  font-weight: 300 900;
+  font-style: normal;
+  font-display: swap;
+}
+:root {
+  --font-body: 'DM Sans', Arial, sans-serif;
+  --font-head: 'Red Hat Display', Arial, sans-serif;
+  /* Vertex Education palette (context/style.md). Green stays out of status colors. */
+  --vx-blue: #003865;
+  --vx-gray: #707372;
+  --vx-gold: #cba052;
+  --vx-dark: #404342;
+  --vx-light: #c0c3c2;
+}
 :root {
   --bg: #edf0ef;
   --surface: #ffffff;
@@ -5,12 +30,13 @@
   --ink: #172130;
   --muted: #586677;
   --line: #d3dad7;
-  --spent: #2d5b8a;
+  --head: var(--vx-blue);
+  --spent: var(--vx-blue);
   --enc: #c4892a;
   --avail: #2e7650;
   --over: #b42318;
   --over-bg: #fbeae8;
-  --focus: #2d5b8a;
+  --focus: var(--vx-blue);
   --on-accent: #ffffff;
   color-scheme: light;
   box-sizing: border-box;
@@ -25,6 +51,7 @@
     --ink: #e4eaf0;
     --muted: #99a7b5;
     --line: #2a3642;
+    --head: #e4eaf0;
     --spent: #6ea2d5;
     --enc: #e1ae58;
     --avail: #5cbb88;
@@ -42,6 +69,7 @@
   --ink: #e4eaf0;
   --muted: #99a7b5;
   --line: #2a3642;
+  --head: #e4eaf0;
   --spent: #6ea2d5;
   --enc: #e1ae58;
   --avail: #5cbb88;
@@ -65,13 +93,7 @@ body {
   min-height: 100%;
   background: var(--bg);
   color: var(--ink);
-  font:
-    15px/1.5 'Public Sans',
-    system-ui,
-    -apple-system,
-    'Segoe UI',
-    Roboto,
-    sans-serif;
+  font: 15px/1.5 var(--font-body);
   -webkit-font-smoothing: antialiased;
 }
 button,
@@ -133,6 +155,22 @@ textarea {
   font-weight: 800;
   letter-spacing: 0.04em;
   line-height: 1;
+}
+.brand .band {
+  background: var(--vx-blue);
+  color: #ffffff;
+  border-radius: 10px;
+  padding: 14px 14px 12px;
+}
+.brand .band .logo {
+  display: block;
+  width: 100%;
+  max-width: 170px;
+  height: auto;
+  margin-bottom: 12px;
+}
+.brand .band .expand {
+  color: rgba(255, 255, 255, 0.85);
 }
 .brand .expand {
   font-size: 12px;
@@ -684,6 +722,13 @@ tr.over > td {
   .brand .word {
     font-size: 20px;
   }
+  .brand .band {
+    padding: 8px 12px;
+  }
+  .brand .band .logo {
+    max-width: 110px;
+    margin-bottom: 6px;
+  }
   .nav {
     flex-direction: row;
     overflow-x: auto;
@@ -711,4 +756,124 @@ tr.over > td {
   .caret {
     transition: none;
   }
+}
+
+/* School picker and school form */
+.schoolpick {
+  display: block;
+  margin: 10px 0 6px;
+}
+.schoolpick span {
+  display: block;
+  font-size: 12px;
+  font-weight: 600;
+  margin-bottom: 3px;
+}
+.schoolpick select {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  text-overflow: ellipsis;
+}
+.fld {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin: 0 0 12px;
+}
+.fld > span:first-child {
+  font-weight: 600;
+  font-size: 14px;
+}
+.fld .hint {
+  font-size: 13px;
+}
+.fld textarea {
+  width: 100%;
+}
+
+/* Import slots */
+.slot .drop {
+  display: block;
+  margin: 10px 0;
+}
+.checks {
+  list-style: none;
+  margin: 8px 0;
+  padding: 0;
+}
+.checks li {
+  padding: 6px 10px;
+  border-left: 3px solid var(--line, #c0c3c2);
+  margin: 6px 0;
+  font-size: 14px;
+}
+.checks .chk-stop {
+  border-left-color: #b3261e;
+}
+.checks .chk-warn {
+  border-left-color: #b26a00;
+}
+.loaded {
+  margin: 8px 0;
+}
+
+/* Headlines use Red Hat Display (the brand's alternate for Europa Bold); body text uses DM Sans. */
+h1,
+h2,
+h3,
+.brand .word,
+.imp-card .word {
+  font-family: var(--font-head);
+}
+
+/* BAR Builder */
+.fundpick {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 18px;
+}
+.obms dl.kv {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  gap: 4px 14px;
+  margin: 0 0 12px;
+}
+.obms dl.kv dt {
+  color: var(--muted);
+}
+.obms dl.kv dd {
+  margin: 0;
+}
+input.amt {
+  width: 9em;
+  text-align: right;
+}
+input.fte {
+  width: 6em;
+  text-align: right;
+}
+tr.give td {
+  background: var(--sunk);
+}
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+h1,
+h2 {
+  color: var(--head);
+}
+
+.brand .word.plain {
+  color: var(--head);
+  font-size: 26px;
+  margin-bottom: 14px;
+}
+
+.ai {
+  border-top: 1px solid var(--line);
+  margin-top: 14px;
+  padding-top: 6px;
 }

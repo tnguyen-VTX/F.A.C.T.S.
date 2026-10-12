@@ -1,5 +1,12 @@
 import * as XLSX from 'xlsx';
-import { $, ACCT_RE, T0, addT, num, serialToISO, splitCode } from './format.js';
+import { T0, addT, num, serialToISO } from './format.js';
+import { findColumns, findHeaderRow, missingColumnsMessage } from './columns.js';
+import { parseCSV } from './csv.js';
+import { gilbertPreset, looseSplit, splitWith } from './profile.js';
+
+// Account codes are read through a school profile. Callers that pass none get the
+// v0.1 default (Gilbert L. Sena, 6 segments), so existing behavior is unchanged.
+const DEFAULT_PROFILE = gilbertPreset();
 
 export const SHEETS = [
   'Account Summary Report',
@@ -33,38 +40,52 @@ export const metaField = (meta, k) => {
   return m ? m[1].trim() : '';
 };
 
-export function parseASR(rows) {
-  const out = { funds: new Map(), funcNames: {}, meta: '', school: '' };
+export function parseASR(rows, profile = DEFAULT_PROFILE) {
+  const out = { funds: new Map(), funcNames: {}, meta: '', school: '', grand: null, headerOk: true };
   if (!rows) return out;
   out.school = (rows[0] || []).find((v) => typeof v === 'string') || '';
   const hi = rows.findIndex((r) => r && r[0] === 'Account Code');
   if (hi < 0) return out;
+  // Amounts are read from columns 4-7 as in v0.1; flag it when the header text there is not what we expect.
+  const hd = rows[hi].map((v) => String(v ?? '').toLowerCase());
+  out.headerOk = /budget/.test(hd[3]) && /actual/.test(hd[4]) && /encumb/.test(hd[5]) && /avail/.test(hd[6]);
   out.meta =
     rows
       .slice(0, hi)
       .map((r) => r && r[0])
       .find((v) => typeof v === 'string' && /Cycle:/.test(v)) || '';
   const getFund = (code, name) => {
-    if (!out.funds.has(code)) out.funds.set(code, { code, name: name || '', lines: [], sub: null });
+    if (!out.funds.has(code))
+      out.funds.set(code, { code, name: name || '', lines: [], sub: null, funcs: [] });
     const f = out.funds.get(code);
     if (name && !f.name) f.name = name;
     return f;
   };
+  let block = []; // account lines since the last [Function] subtotal; the subtotal row follows its lines
   for (let i = hi + 1; i < rows.length; i++) {
     const r = rows[i];
     if (!r) continue;
     const a = String(r[0] ?? '').trim();
     if (!a) continue;
-    if (/^Grand Total/i.test(a)) break;
     const v = { budget: num(r[3]), actual: num(r[4]), enc: num(r[5]), avail: num(r[6]) };
+    if (/^Grand Total/i.test(a)) {
+      out.grand = v;
+      break;
+    }
     let m;
-    if (ACCT_RE.test(a)) {
-      const s = splitCode(a);
-      getFund(s.fund).lines.push({ code: a, desc: String(r[1] ?? '').trim(), ...s, ...v });
+    const s = splitWith(profile, a);
+    if (s) {
+      const line = { code: a, desc: String(r[1] ?? '').trim(), ...s, ...v };
+      getFund(s.fund).lines.push(line);
+      block.push(line);
     } else if ((m = a.match(/\[Fund\]\s*(\d+)\s*-\s*(.*)$/))) {
       getFund(m[1], m[2].trim()).sub = v;
     } else if ((m = a.match(/\[Function\]\s*(\d+)\s*-\s*(.*)$/))) {
       out.funcNames[m[1]] = m[2].trim();
+      // Keep the function's own subtotal (Budget, Actual, Encumbrance, Available) with its fund.
+      if (block.length)
+        getFund(block[0].fund).funcs.push({ code: m[1], name: m[2].trim(), tot: v, lines: block });
+      block = [];
     }
   }
   for (const f of out.funds.values()) {
@@ -72,33 +93,74 @@ export function parseASR(rows) {
   }
   return out;
 }
-export function parseFA(rows) {
+// Fund Audit columns, found by header name. The workbook table and the AptaFund CSV export
+// spell some headers differently and the CSV has no Src, Trans. No. or Trans. Desc.
+export const FA_SPEC = {
+  code: { names: ['Account Code'], required: true },
+  date: { names: ['Trans. Date', 'Transaction Date'], required: true },
+  budget: { names: ['Budget'], required: true },
+  actual: { names: ['Actuals', 'Actual'], required: true },
+  enc: { names: ['Encumbrance'], required: true },
+  avail: { names: ['Available'], required: true },
+  acctDesc: { names: ['Acct. Desc.'] },
+  tno: { names: ['Trans. No.'] },
+  tdesc: { names: ['Trans. Desc.'] },
+  src: { names: ['Src'] },
+  name: { names: ['Name'] },
+  number: { names: ['Number'] },
+  desc: { names: ['Description'] },
+  detail: { names: ['Detail'] },
+  check: { names: ['Check'] },
+};
+// Source for exports with no Src column, from the Number prefix and Detail text:
+// Reg = payroll register, Inv = invoice, Rec = a fee inside a cash receipt (the report lists
+// expenditures only), J/E = journal entry. Rows with none of these are encumbrance-only lines
+// (purchase orders, jobs and payroll encumbrances cannot be told apart).
+export function deriveSource(number, detail) {
+  const n = String(number ?? '').trim();
+  if (/^Reg:/i.test(n)) return 'PR';
+  if (/^Inv:/i.test(n)) return 'IN';
+  if (/^Rec:/i.test(n)) return 'RF';
+  if (/^J\/E/i.test(String(detail ?? '').trim())) return 'JE';
+  return 'EN';
+}
+export function parseFA(rows, profile = DEFAULT_PROFILE) {
   if (!rows) return [];
+  const hi = findHeaderRow(rows, { code: FA_SPEC.code });
+  if (hi < 0) return [];
+  const { map, missing, found } = findColumns(rows[hi], FA_SPEC);
+  if (missing.length) throw new Error(missingColumnsMessage('The Fund Audit Report', missing, found));
+  const get = (r, k) => (map[k] == null ? undefined : r[map[k]]);
   const out = [];
-  for (const o of objectsFrom(rows, 'Account Code')) {
-    const code = String(o['Account Code'] ?? '').trim();
-    if (!ACCT_RE.test(code)) continue;
+  for (const r of rows.slice(hi + 1)) {
+    if (!r) continue;
+    const code = String(get(r, 'code') ?? '').trim();
+    const s = splitWith(profile, code);
+    if (!s) continue;
+    const number = get(r, 'number') ?? '',
+      detail = String(get(r, 'detail') ?? '').trim();
     out.push({
       code,
-      ...splitCode(code),
-      acctDesc: String(o['Acct. Desc.'] ?? '').trim(),
-      date: serialToISO(o['Trans. Date']),
-      tno: o['Trans. No.'] ?? '',
-      tdesc: String(o['Trans. Desc.'] ?? ''),
-      src: String(o['Src'] ?? ''),
-      name: String(o['Name'] ?? '').trim(),
-      number: o['Number'] ?? '',
-      desc: String(o['Description'] ?? ''),
-      detail: String(o['Detail'] ?? '').trim(),
-      check: o['Check'] ?? '',
-      budget: num(o['Budget']),
-      actual: num(o['Actuals']),
-      enc: num(o['Encumbrance']),
-      avail: num(o['Available']),
+      ...s,
+      acctDesc: String(get(r, 'acctDesc') ?? '').trim(),
+      date: serialToISO(get(r, 'date')),
+      tno: get(r, 'tno') ?? '',
+      tdesc: String(get(r, 'tdesc') ?? ''),
+      src: map.src == null ? deriveSource(number, detail) : String(get(r, 'src') ?? ''),
+      name: String(get(r, 'name') ?? '').trim(),
+      number,
+      desc: String(get(r, 'desc') ?? ''),
+      detail,
+      check: get(r, 'check') ?? '',
+      budget: num(get(r, 'budget')),
+      actual: num(get(r, 'actual')),
+      enc: num(get(r, 'enc')),
+      avail: num(get(r, 'avail')),
     });
   }
   return out;
 }
+export const parseFACSV = (text, profile) => parseFA(parseCSV(text), profile);
 export function parseRfR(rows) {
   if (!rows) return [];
   return objectsFrom(rows, 'ReimbursementName')
@@ -125,13 +187,13 @@ export function rfrState(s) {
   if (s.includes('approved')) return 'approved';
   return 'review';
 }
-export function parseCR(rows) {
+export function parseCR(rows, profile = DEFAULT_PROFILE) {
   if (!rows) return [];
   return objectsFrom(rows, 'BatchStatus')
     .filter((o) => o.AccountCode)
     .map((o) => {
       const code = String(o.AccountCode).trim();
-      const s = splitCode(code);
+      const s = looseSplit(profile, code);
       return {
         status: String(o.BatchStatus ?? ''),
         batch: String(o.BatchNumber ?? ''),

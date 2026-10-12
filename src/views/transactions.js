@@ -8,6 +8,10 @@ export const SRC = {
   IN: 'Vouchers',
   JE: 'Journal entries',
   CR: 'Cash receipts',
+  // Derived for CSV exports that have no Src column (see deriveSource in lib/parse.js).
+  PR: 'Payroll registers',
+  RF: 'Cash receipt fees',
+  EN: 'Encumbrances',
 };
 export const TXF = [
   ['fund', 'Fund'],
@@ -113,20 +117,24 @@ export function txResults() {
   );
   const T = rows.reduce(addT, T0());
   const LIMIT = 600;
+  // Some exports carry no budget amounts (zero in every row). Budget and Available would then mislead.
+  const hasBudget = D.fa.some((r) => r.budget);
+  const cols = hasBudget ? 6 : 4;
   const th = (k, l, r) =>
     `<th class="${r ? 'r' : ''}" data-act="txSort" data-k="${k}" aria-sort="${s === k ? (dir > 0 ? 'ascending' : 'descending') : 'none'}">${l}${s === k ? (dir > 0 ? ' ▲' : ' ▼') : ''}</th>`;
   el.innerHTML = `<p class="note">${rows.length.toLocaleString()} lines in ${groups.length.toLocaleString()} groups.</p>
-  <div class="scroll"><table class="t"><thead><tr>${th('key', G.label)}${th('n', 'Lines', 1)}${th('budget', 'Budget', 1)}${th('actual', 'Actual', 1)}${th('enc', 'Encumbrance', 1)}${th('avail', 'Available', 1)}</tr></thead>
+  <div class="scroll"><table class="t"><thead><tr>${th('key', G.label)}${th('n', 'Lines', 1)}${hasBudget ? th('budget', 'Budget', 1) : ''}${th('actual', 'Actual', 1)}${th('enc', 'Encumbrance', 1)}${hasBudget ? th('avail', 'Available', 1) : ''}</tr></thead>
   ${groups
     .slice(0, LIMIT)
     .map((g) => {
       const open = UI.tx.open.has(g.key);
       return `<tbody><tr class="click" data-act="txOpen" data-k="${esc(g.key)}" tabindex="0" aria-expanded="${open}"><td><span class="caret"></span>${esc(G.key === GROUPS.fund.key ? g.key : g.key)}${g.sub ? ` <span class="muted">${esc(g.sub)}</span>` : ''}</td>
-    <td class="r num">${g.rows.length}</td><td class="r">${money(g.budget)}</td><td class="r">${money(g.actual)}</td><td class="r">${money(g.enc)}</td><td class="r">${money(g.avail)}</td></tr>
-    ${open ? `<tr><td colspan="6" class="nest">${txTable(g.rows)}</td></tr>` : ''}</tbody>`;
+    <td class="r num">${g.rows.length}</td>${hasBudget ? `<td class="r">${money(g.budget)}</td>` : ''}<td class="r">${money(g.actual)}</td><td class="r">${money(g.enc)}</td>${hasBudget ? `<td class="r">${money(g.avail)}</td>` : ''}</tr>
+    ${open ? `<tr><td colspan="${cols}" class="nest">${txTable(g.rows)}</td></tr>` : ''}</tbody>`;
     })
     .join('')}
-  <tfoot><tr><th>Total</th><td class="r num">${rows.length.toLocaleString()}</td><td class="r">${money(T.budget)}</td><td class="r">${money(T.actual)}</td><td class="r">${money(T.enc)}</td><td class="r">${money(T.avail)}</td></tr></tfoot></table></div>
+  <tfoot><tr><th>Total</th><td class="r num">${rows.length.toLocaleString()}</td>${hasBudget ? `<td class="r">${money(T.budget)}</td>` : ''}<td class="r">${money(T.actual)}</td><td class="r">${money(T.enc)}</td>${hasBudget ? `<td class="r">${money(T.avail)}</td>` : ''}</tr></tfoot></table></div>
+  ${hasBudget ? '' : '<p class="note">This Fund Audit has no budget amounts, so Budget and Available are not shown. Budget by fund has them.</p>'}
   ${groups.length > LIMIT ? `<p class="note">Showing the first ${LIMIT} groups. Narrow the filters to see the rest.</p>` : ''}`;
 }
 export function txTable(rows) {
@@ -139,7 +147,7 @@ export function txTable(rows) {
     .slice(0, LIM)
     .map(
       (r) =>
-        `<tr><td class="num">${fmtD(r.date)}</td><td>${esc(r.src)}</td><td>${esc(r.tdesc)} <span class="muted">#${esc(r.tno)}</span></td><td>${esc(r.name)}</td><td>${esc([r.number, r.desc].filter(Boolean).join(' '))}</td><td>${esc(r.detail)}</td><td class="code">${r.code}</td><td class="r">${money(r.actual)}</td><td class="r">${money(r.enc)}</td></tr>`,
+        `<tr><td class="num">${fmtD(r.date)}</td><td>${esc(r.src)}</td><td>${esc(r.tdesc)} ${r.tno !== '' ? `<span class="muted">#${esc(r.tno)}</span>` : ''}</td><td>${esc(r.name)}</td><td>${esc([r.number, r.desc].filter(Boolean).join(' '))}</td><td>${esc(r.detail)}</td><td class="code">${r.code}</td><td class="r">${money(r.actual)}</td><td class="r">${money(r.enc)}</td></tr>`,
     )
     .join('')}
   </tbody></table></div>${list.length > LIM ? `<p class="note">First ${LIM} of ${list.length} lines. Add a filter to narrow this group.</p>` : ''}`;

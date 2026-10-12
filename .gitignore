@@ -4,3 +4,14 @@ dist/
 fixtures/*.xlsx
 fixtures/*.xlsm
 *.xlsx
+# Real report exports (Fund Audit, Cash Receipts, RfR) contain employee names and payroll. Never commit them.
+*.csv
+fixtures/*.csv
+# Made-up test data is fine to commit.
+!test/data/*.csv
+dist-bar-builder/
+
+# A ZIP downloaded from GitHub and extracted here would duplicate the whole app
+F.A.C.T.S.-claude-new-session-*/
+dist-jem/
+fixtures/*.zip

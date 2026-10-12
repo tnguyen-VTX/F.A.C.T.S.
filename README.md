@@ -9,4 +9,6 @@ npm test         # put a copy of the workbook at fixtures/facts.xlsx first for t
 npm run build    # static site in dist/
 ```
 
-The workbook is read in the browser and never uploaded. See CLAUDE.md for architecture and domain notes.
+The workbook is read in the browser and never uploaded. See CLAUDE.md for architecture and domain notes, and DEPLOY.md for putting the BAR Builder on a website.
+
+On Windows, double-click `start-bar-builder.bat` to get the latest version (needs Git and Node.js installed) and start the BAR Builder. While it is running, `git pull` alone updates the open page.
