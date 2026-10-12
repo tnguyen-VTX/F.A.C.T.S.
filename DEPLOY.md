@@ -1,6 +1,6 @@
-# Deploying the BAR Builder (for the site owner)
+# Deploying the BAR Builder and the Journal Entry Maker (for the site owner)
 
-The BAR Builder is static files. There is no server code, no database and nothing is uploaded: every report is read in the user's browser.
+Both tools are static files, built from the same code (repository `tnguyen-VTX/F.A.C.T.S.`, branch `facts-tools`). There is no server code, no database and nothing is uploaded: every report is read in the user's browser.
 
 ## Build
 
@@ -17,8 +17,8 @@ If `npm install` cannot reach `cdn.sheetjs.com` (the spreadsheet reader is downl
 
 ## Put it on the site
 
-1. Copy the whole `dist-bar-builder/` folder to the web server, for example to `/bar-builder/` on `facts.ledgerandlearning.com`. Keep its files together; the page loads `assets/` and `brand/` next to `index.html`.
-2. Add a link to it in the suite's sidebar. The page has its own menu (Load reports, BAR Builder, Schools, How to use, About) and its own title; it does not draw a site header.
+1. Copy the whole `dist-bar-builder/` folder to the web server, for example to `/bar-builder/` on `facts.ledgerandlearning.com`, and the whole `dist-jem/` folder to, for example, `/journal-entry-maker/` on the **same subdomain** (the two pages share browser storage: school profiles and loaded reports). Keep each folder's files together; a page loads `assets/` and `brand/` next to its `index.html`.
+2. Add a link to each in the suite's sidebar. The BAR Builder page has its own menu (Load reports, BAR Builder, Schools, How to use, About) and the Journal Entry Maker page has its own (Load reports, Journal Entry Maker, Schools, How to use, About); each has its own title and neither draws a site header.
 3. Paths are relative, so any folder works. Serve it over HTTPS.
 
 ## Security notes
@@ -30,6 +30,6 @@ If `npm install` cannot reach `cdn.sheetjs.com` (the spreadsheet reader is downl
 
 ## Check after deploying
 
-- The page loads, the menu shows five items and the title is "BAR Builder".
-- Load reports accepts an Account Summary (.xlsx) and a Fund Audit (.csv) and nothing is sent anywhere (browser developer tools, Network tab: only requests to the same site).
+- Each page loads, its menu shows five items, and the title is "BAR Builder" or "Journal Entry Maker".
+- Load reports accepts an Account Summary (.xlsx) and a Fund Audit (.csv), on either page, and nothing is sent anywhere (browser developer tools, Network tab: only requests to the same site).
 - Contact for problems: tim.nguyen@vertexeducation.com.
