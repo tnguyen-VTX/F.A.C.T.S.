@@ -16,8 +16,9 @@
     "build:jem": "vite build --mode jem --outDir dist-jem"
   },
   "dependencies": {
-    "xlsx": "https://cdn.sheetjs.com/xlsx-0.20.3/xlsx-0.20.3.tgz",
-    "fflate": "0.8.2"
+    "fflate": "0.8.2",
+    "pdfjs-dist": "4.10.38",
+    "xlsx": "https://cdn.sheetjs.com/xlsx-0.20.3/xlsx-0.20.3.tgz"
   },
   "devDependencies": {
     "jsdom": "^25.0.0",
