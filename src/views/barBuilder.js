@@ -119,7 +119,9 @@ export function viewBarBuilder() {
   <section class="panel"><h2>Start a BAR</h2><div class="filters">
   <label>BAR type<select data-in="bbType">${TYPES.map((t) => `<option value="${t}"${b.type === t ? ' selected' : ''}>${esc(BAR_TYPES[t])} (${t})</option>`).join('')}</select></label>
   <label>Fund<select data-in="bbStartFund"><option value="">Choose…</option>${funds.map((f) => `<option value="${esc(f.code)}"${b.startFund === f.code ? ' selected' : ''}>${esc(fundLabel(f.code))}</option>`).join('')}</select></label>
-  <button class="btn" data-act="bbStart">Start an empty ${esc(BAR_TYPES[b.type])} BAR</button></div></section>
+  <button class="btn" data-act="bbStart">Start an empty ${esc(BAR_TYPES[b.type])} BAR</button></div>${
+    TYPE_HELP[b.type] ? `<p class="muted">${esc(TYPE_HELP[b.type])}</p>` : ''
+  }</section>
   <div id="bbdef"></div><div id="bbdraft"></div><div id="bbsaved"></div><div id="bbbackup"></div>`;
   bbDeficits();
   bbDraft();
@@ -489,6 +491,10 @@ export function bbBackup() {
   <label class="btn">Restore from a backup…<input type="file" accept=".json,application/json" data-in="bbRestoreFile" hidden></label></div>${panel}</section>`;
 }
 
+const TYPE_HELP = {
+  IB: 'Initial Budget: a new award in a fund that has no budget yet for this year.',
+  I: 'Increase: more award money added to a budget that already exists.',
+};
 // ---- Longer narrative: templates ----
 function narrativePanel(bar) {
   const list = templatesFor(bar.type),

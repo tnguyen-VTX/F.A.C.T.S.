@@ -129,7 +129,7 @@ src/lib/bar.js        BAR model, totals and validation for T, M, I, IB, D (stop/
 src/lib/justify.js    Rule-based justification wording per BAR type (no commas, quotes or pipes; max 255) (pure)
 src/lib/barCsv.js     OBMS BAR upload file (UBH 15 fields, UBL 9, CRLF) and its name (SCHOOL_-_OBMS_UPLOAD_-_FUND_FUNCTION_TYPE.csv, editable per BAR); none is made while a check says stop (pure)
 src/lib/barLog.js     Saved BARs, status log, freeze/lock rules, backup export and restore planning (pure)
-src/lib/narrativeTemplates.js  Longer-narrative wording for every BAR type (Transfer negative/positive function, Maintenance, Increase/Initial Budget, Decrease; same for all schools), the Transfer suggestion and the stale-text check (pure; never in the upload file)
+src/lib/narrativeTemplates.js  Longer-narrative wording for every BAR type (Transfer negative/positive function, Maintenance, separate Initial Budget and Increase, Decrease; same for all schools), the Transfer suggestion and the stale-text check (pure; never in the upload file)
 src/lib/je.js         AptaFund journal entries: reclass of actuals (Type Actual, bank lines across funds, dated the last day of the charge's month) and Budget entries for approved BARs; balance checks (pure)
 src/lib/reclass.js    Vendor charges grouped by account code then date, what is left to reclass, reclass choices to entries (pure)
 src/lib/barReport.js  Reads PED's approved Budget Adjustment Request Report (.xlsx): lines, Doc ID, signature dates, checks (pure)

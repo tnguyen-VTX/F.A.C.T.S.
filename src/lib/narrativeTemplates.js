@@ -102,14 +102,26 @@ export const TEMPLATES = [
     },
   },
   {
-    id: 'increase',
-    title: 'Increase / Initial Budget',
-    types: ['I', 'IB'],
+    id: 'initial-budget',
+    title: 'Initial Budget',
+    types: ['IB'],
     build(bar, { school, fundNames }) {
       const r = revenue(bar);
       if (r <= 0) return { error: 'This template needs the revenue line for the award. Add it first.' };
       return {
-        text: `${school} is requesting ${bar.type === 'IB' ? 'an initial budget' : 'an increase'} of ${usd(r)} in the ${fundTitle(bar.fund, fundNames)} fund to budget the award received.`,
+        text: `${school} is requesting an initial budget of ${usd(r)} in the ${fundTitle(bar.fund, fundNames)} fund to budget the award received.`,
+      };
+    },
+  },
+  {
+    id: 'increase',
+    title: 'Increase',
+    types: ['I'],
+    build(bar, { school, fundNames }) {
+      const r = revenue(bar);
+      if (r <= 0) return { error: 'This template needs the revenue line for the award. Add it first.' };
+      return {
+        text: `${school} is requesting an increase of ${usd(r)} in the ${fundTitle(bar.fund, fundNames)} fund to budget additional award funds received.`,
       };
     },
   },

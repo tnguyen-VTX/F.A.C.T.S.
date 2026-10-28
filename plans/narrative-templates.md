@@ -17,8 +17,9 @@ Blanks: `[School Name]` (profile name), `[Function Title (function code)]`, `[Fu
 3. **Maintenance** (version A), one wording for a move within one function and between functions of one series:
    "[School Name] is requesting a maintenance transfer of [$amount] from the [Function Title (function code)] function to [Function Title (function code)] function to align the budget with actual expenditures and encumbrances."
    When every line is in one function: "[School Name] is requesting a maintenance transfer of [$amount] within the [Function Title (function code)] function to align the budget with actual expenditures and encumbrances."
-4. **Increase / Initial Budget** (version A, without the last sentence); "initial budget" or "increase" follows the BAR type:
-   "[School Name] is requesting an [initial budget / increase] of [$amount] in the [Fund Name (fund code)] fund to budget the award received."
+4. **Initial Budget** (type IB) and **Increase** (type I) are separate templates (10/28/2026):
+   IB: "[School Name] is requesting an initial budget of [$amount] in the [Fund Name (fund code)] fund to budget the award received."
+   I: "[School Name] is requesting an increase of [$amount] in the [Fund Name (fund code)] fund to budget additional award funds received." (Increase wording to confirm with the business manager.)
 5. **Decrease** (version A, "to reduce the budget to the award" removed because a decrease is not always caused by an award):
    "[School Name] is requesting a decrease of [$amount] in the [Fund Name (fund code)] fund."
 
