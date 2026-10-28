@@ -56,6 +56,7 @@ import {
   viewBarBuilder,
 } from './views/barBuilder.js';
 import { barLine } from './lib/bar.js';
+import { AWARD_ACT, AWARD_IN } from './views/awardPanel.js';
 import { suggestJustification } from './lib/justify.js';
 import { splitWith } from './lib/profile.js';
 import { viewBudget } from './views/budget.js';
@@ -96,7 +97,7 @@ const NAV = [
   ['about', 'About and privacy'],
 ];
 // Screens that work before any report is loaded.
-const LITE = new Set(['import', 'schools', 'about', 'help']);
+const LITE = new Set(['import', 'schools', 'about', 'help', 'bars']);
 const navList = () => (barOnly() ? NAV.filter(([k]) => pageScreens().has(k)) : NAV);
 const keepBB = keep;
 // Put the computed FTE adj back into the boxes without redrawing the screen (keeps the cursor).
@@ -290,6 +291,12 @@ const ACT = {
   bbBuild: (t) => {
     bbBuildTransfer(t.dataset.fund, t.dataset.func, t.dataset.kind || 'T');
     bbDraft();
+    $('#bbdraft')?.scrollIntoView?.({ behavior: 'smooth', block: 'start' });
+  },
+  ...AWARD_ACT,
+  awardBuild: () => {
+    if (AWARD_ACT.awardBuild() !== 'built') return;
+    viewBarBuilder();
     $('#bbdraft')?.scrollIntoView?.({ behavior: 'smooth', block: 'start' });
   },
   bbStart: () => {
@@ -507,6 +514,7 @@ const IN = {
     UI.cr.q = t.value;
     crResults();
   },
+  ...AWARD_IN,
   bbRestoreFile: async (t) => {
     const f = t.files?.[0];
     if (f) bbRestoreRead(await f.text());

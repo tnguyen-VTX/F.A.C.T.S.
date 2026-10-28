@@ -10,6 +10,7 @@ const CSP = [
   "img-src 'self' data: blob:",
   "font-src 'self'",
   "connect-src 'self'",
+  "worker-src 'self'", // pdf.js reads award letters in a worker file bundled with the app
   "object-src 'none'",
   "base-uri 'self'",
   "form-action 'self'",

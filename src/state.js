@@ -199,5 +199,8 @@ export function loadBuffer(buf, name) {
   UI.bar.fund = '';
   UI.openFunds.clear();
 }
-export const fundLabel = (c) => `${c}${D.fundNames[c] ? ' ' + D.fundNames[c] : ''}`;
-export const funcLabel = (c) => `${c}${D.asr.funcNames[c] ? ' ' + D.asr.funcNames[c] : ''}`;
+export const fundLabel = (c) => {
+  const n = D.fundNames?.[c] || profile().funds?.find((f) => f.code === c)?.name;
+  return `${c}${n ? ' ' + n : ''}`;
+};
+export const funcLabel = (c) => `${c}${D.asr?.funcNames?.[c] ? ' ' + D.asr.funcNames[c] : ''}`;

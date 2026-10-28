@@ -2,6 +2,8 @@ node_modules/
 dist/
 # Real workbooks contain employee names and payroll. Never commit them.
 fixtures/*.xlsx
+# Real award letters and other PDFs (grant and employee details). Never commit them.
+*.pdf
 fixtures/*.xlsm
 *.xlsx
 # Real report exports (Fund Audit, Cash Receipts, RfR) contain employee names and payroll. Never commit them.

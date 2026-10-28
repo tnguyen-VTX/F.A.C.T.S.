@@ -59,3 +59,58 @@ describe('award letter suggestions', () => {
     expect(toMDY('7/1/2026'.match(/(\d{1,2})\/(\d{1,2})\/(\d{4})/))).toBe('07/01/2026');
   });
 });
+
+import { buildAwardBar, awardCode, defaultLocationSegment } from '../src/lib/awardLetter.js';
+import { validateBar } from '../src/lib/bar.js';
+import { makeBarFile } from '../src/lib/barCsv.js';
+
+const gil = newProfile({
+  id: 't', name: 'Test School', districtCode: '001', locationIds: ['707'],
+  funds: [{ code: '24101', name: 'Title I', flowthrough: false }, { code: '25184', name: 'IDEA B', flowthrough: true }],
+});
+describe('building the BAR from the confirmed form', () => {
+  const form = (o = {}) => ({
+    type: 'IB', fund: '24101', award: '2350', revObj: '44000', loc: '001707',
+    rows: [
+      { on: true, func: '1000', obj: '51100', amount: '800' },
+      { on: true, func: '2100', obj: '52311', amount: '900' },
+      { on: true, func: '2300', obj: '53414', amount: '650' },
+      { on: false, func: '2400', obj: '53414', amount: '999' },
+    ],
+    ...o,
+  });
+  it('derives the location segment from district and PED location', () => {
+    expect(defaultLocationSegment(gil)).toBe('001707');
+    expect(awardCode(gil, { fund: '24101', func: '1000', obj: '51100', loc: '001707' })).toBe('24101-1000-51100-0000-001707-0000');
+  });
+  it('builds a balanced IB BAR with the revenue line first', () => {
+    const { bar, errors } = buildAwardBar(gil, form());
+    expect(errors).toBeUndefined();
+    expect(bar.type).toBe('IB');
+    expect(bar.lines.map((l) => [l.func, l.obj, l.amount])).toEqual([
+      ['0000', '44000', 2350], ['1000', '51100', 800], ['2100', '52311', 900], ['2300', '53414', 650],
+    ]);
+    const checks = validateBar(bar, { profile: gil });
+    expect(checks.filter((c) => c.level === 'stop' && /balance|equal|revenue/i.test(c.msg))).toEqual([]);
+    expect(bar.justification).toMatch(/^Initial budget of/);
+  });
+  it('fills flowthrough fields only for flowthrough funds', () => {
+    const f = buildAwardBar(gil, form({ fund: '25184', from: '07/01/2026', to: '06/30/2027', carryover: '0', allocation: '2350', total: '2350' }));
+    expect(f.bar.flowthrough).toMatchObject({ scope: 'N', from: '07/01/2026', total: '2350' });
+    expect(buildAwardBar(gil, form()).bar.flowthrough.from).toBe('');
+  });
+  it('asks for what is missing', () => {
+    const { errors } = buildAwardBar(gil, form({ award: '', revObj: '51100', rows: [] }));
+    expect(errors.join(' ')).toMatch(/award amount/);
+    expect(errors.join(' ')).toMatch(/revenue object/);
+    expect(errors.join(' ')).toMatch(/Check at least one/);
+  });
+  it('writes the IB upload file when the lines balance', () => {
+    const { bar } = buildAwardBar(gil, form());
+    bar.contact = { first: 'A', middle: '', last: 'B' };
+    const f = makeBarFile(bar, { profile: gil, fiscalYear: 2027 });
+    expect(f.ok).toBe(true);
+    expect(f.csv).toMatch(/^UBH,001,2027,24101,IB,/);
+    expect(f.csv.split('\r\n')[1]).toBe('UBL,24101,0000,44000,0000,707,0000,2350,0');
+  });
+});

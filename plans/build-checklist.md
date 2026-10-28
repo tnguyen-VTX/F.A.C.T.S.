@@ -71,4 +71,5 @@ Environment note: `cdn.sheetjs.com` is blocked in the cloud session, so `npm ins
 - [x] A How to use screen (`src/views/help.js`, seven steps for business managers).
 - [x] An About, privacy and limits page inside the app (`src/views/about.js`); contact for reporting problems: tim.nguyen@vertexeducation.com.
 - [x] Stored data is versioned (`src/lib/migrate.js`, key `facts.dataVersion`); newer or unreadable data is never overwritten. Saved report records carry a version too and newer ones are skipped, not deleted.
-
+- [x] Initial Budget and Increase narrative and justification templates are separate (10/28/2026).
+- [x] Start an IB or Increase BAR from an award letter PDF (`src/lib/awardLetter.js`, `pdfText.js`, `src/views/awardPanel.js`): pdf.js bundled and lazy loaded, worker same-origin (`worker-src 'self'`), suggestions with source text, user confirms, revenue object remembered per fund (`awardRevenue`); works without an Account Summary. Parsing is tuned only on made-up letters: [ ] try real award letters (kept in git-ignored `fixtures/`) and extend the label tables.

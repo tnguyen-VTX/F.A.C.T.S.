@@ -126,3 +126,70 @@ export function parseAward(text, profile) {
     lineCount: lines.length,
   };
 }
+
+// ---- From the confirmed form to a BAR ----
+import { newBar, barLine } from './bar.js';
+import { isAccountCode, parseFundLines } from './profile.js';
+import { suggestJustification } from './justify.js';
+
+// The location segment a school's account codes use, from its district code and PED location ID
+// (district + location, left padded to the segment length: Gilbert 001 + 707 = 001707). '' when unknown.
+export function defaultLocationSegment(profile) {
+  const len = profile?.segments?.find((s) => s.key === 'loc')?.len;
+  const id = (profile?.locationIds || [])[0];
+  if (!len || !id) return '';
+  if (len <= 3) return String(id).slice(-len);
+  const dist = String(profile.districtCode || '').padStart(len - 3, '0');
+  return dist.length + 3 === len ? dist + id : '';
+}
+
+// An account code in the profile's segment order; segments that are not standard get zeros.
+export function awardCode(profile, { fund, func, obj, prog = '0000', loc, job = '0000' }) {
+  const v = { fund, func, obj, prog, loc, job };
+  const code = profile.segments.map((s) => v[s.key] ?? '0'.repeat(s.len)).join('-');
+  return isAccountCode(profile, code) ? code : null;
+}
+
+const num = (v) => {
+  const n = parseFloat(String(v ?? '').replace(/[$,\s]/g, ''));
+  return Number.isFinite(n) ? n : NaN;
+};
+
+// form: { type 'IB'|'I', fund, award, revObj, loc, from, to, carryover, allocation, total,
+//         rows: [{ on, func, obj, prog, job, amount }] }. Returns { bar } or { errors }.
+export function buildAwardBar(profile, form, ctx = {}) {
+  const errors = [];
+  const type = form.type === 'I' ? 'I' : 'IB';
+  const fund = String(form.fund || '');
+  if (!/^\d{5}$/.test(fund)) errors.push('Choose the fund.');
+  const award = num(form.award);
+  if (!(award > 0)) errors.push('Enter the award amount.');
+  if (!/^4\d{4}$/.test(String(form.revObj || ''))) errors.push('The revenue object is 5 digits starting with 4.');
+  if (!String(form.loc || '').trim()) errors.push('Enter the location segment of the account code.');
+  const rows = (form.rows || []).filter((r) => r.on && num(r.amount) !== 0);
+  if (!rows.length) errors.push('Check at least one expenditure line.');
+  if (errors.length) return { errors };
+  const bar = newBar(type, fund);
+  bar.award = String(award);
+  const rev = awardCode(profile, { fund, func: '0000', obj: form.revObj, prog: '0000', loc: form.loc, job: '0000' });
+  if (!rev) return { errors: ["The revenue line does not fit this school's account code layout. Check the location segment."] };
+  bar.lines.push(barLine(profile, rev, award));
+  rows.forEach((r, i) => {
+    const code = awardCode(profile, { fund, func: r.func, obj: r.obj, prog: r.prog || '0000', loc: form.loc, job: r.job || '0000' });
+    if (!code) errors.push(`Expenditure line ${i + 1} (${r.func || '?'} ${r.obj || '?'}) does not fit the account code layout.`);
+    else bar.lines.push(barLine(profile, code, num(r.amount)));
+  });
+  if (errors.length) return { errors };
+  if (profile.funds?.find((f) => f.code === fund)?.flowthrough) {
+    bar.flowthrough = {
+      scope: 'N',
+      from: form.from || '',
+      to: form.to || '',
+      carryover: form.carryover === '' || form.carryover == null ? '' : String(num(form.carryover)),
+      allocation: form.allocation === '' || form.allocation == null ? '' : String(num(form.allocation)),
+      total: form.total === '' || form.total == null ? '' : String(num(form.total)),
+    };
+  }
+  bar.justification = suggestJustification(bar, ctx);
+  return { bar };
+}
