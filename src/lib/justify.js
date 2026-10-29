@@ -57,9 +57,12 @@ export function suggestJustification(bar, { funcNames = {}, fundNames = {} } = {
       ex.map((l) => l.func),
       funcNames,
     )} to align the budget with actual expenditures.`;
-  } else if (bar.type === 'I' || bar.type === 'IB') {
+  } else if (bar.type === 'IB') {
     if (!rev) return '';
-    t = `${bar.type === 'IB' ? 'Initial budget' : 'Increase'} of ${dollarsText(rev)} in ${fund} to budget the award received.`;
+    t = `Initial budget of ${dollarsText(rev)} in ${fund} to budget the award received.`;
+  } else if (bar.type === 'I') {
+    if (!rev) return '';
+    t = `Increase of ${dollarsText(rev)} in ${fund} to budget additional award funds received.`;
   } else if (bar.type === 'D') {
     if (!rev) return '';
     t = `Decrease of ${dollarsText(-rev)} in ${fund}.`;

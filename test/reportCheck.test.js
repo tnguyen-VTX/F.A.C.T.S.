@@ -162,6 +162,8 @@ describe('Fund Audit checks and tie-out', () => {
 const XL = new URL('../fixtures/cesar-account-summary.xlsx', import.meta.url);
 const CS = new URL('../fixtures/cesar-fund-audit.csv', import.meta.url);
 describe.skipIf(!existsSync(XL) || !existsSync(CS))('real Cesar Chavez exports', () => {
+  // The suite body runs even when skipped, so do not read the missing fixture files.
+  if (!existsSync(XL) || !existsSync(CS)) return;
   const wb = XLSX.read(readFileSync(XL), { type: 'buffer' });
   const asr = parseASR(rowsOf(wb, 'Account Summary Report'), cesar);
   const fa = parseFACSV(readFileSync(CS, 'utf8'), cesar);

@@ -20,7 +20,7 @@ describe('BAR Builder-only mode', () => {
   });
   it('offers only the screens the BAR Builder needs', () => {
     const v = [...document.querySelectorAll('.nav button')].map((b) => b.dataset.v);
-    expect(v).toEqual(['import', 'schools', 'help', 'about']);
+    expect(v).toEqual(['import', 'bars', 'schools', 'help', 'about']);
   });
   it('hides the version 0.1 workbook import', () => {
     expect($('#drop')).toBeNull();

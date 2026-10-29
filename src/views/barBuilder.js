@@ -28,6 +28,7 @@ import { buildTransfer, findDeficits } from '../lib/barLogic.js';
 import { isSalaryObject, suggestFte } from '../lib/fte.js';
 import { $, esc, fmtM, missingMsg, num } from '../lib/format.js';
 import { suggestJustification } from '../lib/justify.js';
+import { awardPanelHTML } from './awardPanel.js';
 import { D, FY, PF, REP, S, STORE, UI, fundLabel, profile, saveStore, storage } from '../state.js';
 
 const TYPES = ['T', 'M', 'I', 'IB', 'D'];
@@ -91,17 +92,19 @@ export const keep = () => {
 };
 const ctx = () => ({ profile: profile(), asr: D.asr, fiscalYear: FY.value });
 const descOf = (code) => {
-  for (const f of D.asr.funds.values()) for (const l of f.lines) if (l.code === code) return l.desc;
+  for (const f of D.asr?.funds.values() || []) for (const l of f.lines) if (l.code === code) return l.desc;
   return '';
 };
 export const bbFile = () => makeBarFile(bb().draft, ctx());
 
 export function viewBarBuilder() {
   const main = $('#main');
-  const funds = [...D.asr.funds.values()]
-    .filter((f) => f.lines.length)
-    .sort((a, b) => a.code.localeCompare(b.code));
-  if (!funds.length) {
+  // Without an Account Summary only Initial Budget and Increase BARs can be started (nothing to tie them to).
+  const hasAsr = !!D.asr;
+  const funds = hasAsr
+    ? [...D.asr.funds.values()].filter((f) => f.lines.length).sort((a, b) => a.code.localeCompare(b.code))
+    : profile().funds.map((f) => ({ code: f.code, lines: [] }));
+  if (hasAsr && !funds.length) {
     main.innerHTML =
       `<header class="ph"><h1>BAR Builder</h1></header>` + missingMsg('Account Summary Report');
     return;
@@ -119,8 +122,10 @@ export function viewBarBuilder() {
   <section class="panel"><h2>Start a BAR</h2><div class="filters">
   <label>BAR type<select data-in="bbType">${TYPES.map((t) => `<option value="${t}"${b.type === t ? ' selected' : ''}>${esc(BAR_TYPES[t])} (${t})</option>`).join('')}</select></label>
   <label>Fund<select data-in="bbStartFund"><option value="">Choose…</option>${funds.map((f) => `<option value="${esc(f.code)}"${b.startFund === f.code ? ' selected' : ''}>${esc(fundLabel(f.code))}</option>`).join('')}</select></label>
-  <button class="btn" data-act="bbStart">Start an empty ${esc(BAR_TYPES[b.type])} BAR</button></div></section>
-  <div id="bbdef"></div><div id="bbdraft"></div><div id="bbsaved"></div><div id="bbbackup"></div>`;
+  <button class="btn" data-act="bbStart">Start an empty ${esc(BAR_TYPES[b.type])} BAR</button></div>${
+    TYPE_HELP[b.type] ? `<p class="muted">${esc(TYPE_HELP[b.type])}</p>` : ''
+  }</section>
+  <div id="bbaward">${awardPanelHTML()}</div><div id="bbdef"></div><div id="bbdraft"></div><div id="bbsaved"></div><div id="bbbackup"></div>`;
   bbDeficits();
   bbDraft();
   bbSaved();
@@ -130,6 +135,11 @@ export function viewBarBuilder() {
 export function bbDeficits() {
   const el = $('#bbdef');
   if (!el) return;
+  if (!D.asr) {
+    el.innerHTML =
+      '<section class="panel"><h2>Over budget</h2><p class="muted">Load the Account Summary on Load reports to see over-budget functions and build transfers. Initial Budget and Increase BARs do not need it.</p></section>';
+    return;
+  }
   const b = bb(),
     list = findDeficits(D.asr, [...b.funds]);
   el.innerHTML = `<section class="panel"><h2>Over budget</h2><p class="muted">Functions whose Available is below zero. A transfer adds the deficit plus a cushion and takes it from functions in other series (the first digit of the function) of the same fund. OBMS rejects a Transfer within one series; a maintenance BAR takes it from other functions of the same series instead.</p>
@@ -171,7 +181,7 @@ export function bbBuildTransfer(fund, func, kind = 'T') {
   const bar = newBar(kind, fund);
   bar.lines = t.lines.map((l) => barLine(profile(), l.code, l.amount));
   refreshFte(bar);
-  bar.justification = suggestJustification(bar, { funcNames: D.asr.funcNames, fundNames: D.fundNames });
+  bar.justification = suggestJustification(bar, { funcNames: D.asr?.funcNames, fundNames: D.fundNames });
   b.draft = bar;
   b.note = t.shortfall
     ? `${kind === 'M' ? 'The other functions of the same series' : 'The functions of other series'} in this fund can cover only $${(t.amount - t.shortfall).toLocaleString()} of the $${t.amount.toLocaleString()} needed; $${t.shortfall.toLocaleString()} is short. Add lines, lower the amount, or reduce the cushion, or the BAR will not balance.`
@@ -489,6 +499,10 @@ export function bbBackup() {
   <label class="btn">Restore from a backup…<input type="file" accept=".json,application/json" data-in="bbRestoreFile" hidden></label></div>${panel}</section>`;
 }
 
+const TYPE_HELP = {
+  IB: 'Initial Budget: a new award in a fund that has no budget yet for this year.',
+  I: 'Increase: more award money added to a budget that already exists.',
+};
 // ---- Longer narrative: templates ----
 function narrativePanel(bar) {
   const list = templatesFor(bar.type),

@@ -70,6 +70,7 @@ Real exports go in `fixtures/` (git-ignored: `*.xlsx`, `*.csv`); tests that use 
 over-budget lines first, then donors from other functions of the same fund. OBMS rejects a Transfer between functions of one series (first digit; `Same Func Xfer`) but accepts the same move as a Maintenance BAR, so a Transfer takes donors from other series only (`kind: 'T'`) and "Build a maintenance BAR" takes same-series donors (`kind: 'M'`). There is no object rule on Transfer and
 Maintenance BARs. A function never gives more than its Available. `bar.js` checks a BAR before download: balance by type,
 code layout, one fund, never over budget, flowthrough fields, justification and contact limits. Amounts are whole dollars. Salary lines (profile `fteObjects`, default `511`) get a Line FTE box; the FTE adj is amount / the line's budget (or its actuals + encumbrances when it has no budget) x Line FTE (`suggestFte`), and a salary line with no FTE gets a warning because OBMS rejected them ("Missing projected FTE"). Saved BARs live in `S().bars` (school and year); a BAR is frozen once it reaches an OBMS status (Uploaded - Staging Validated or later; statuses use OBMS's own action names).
+"Start from an award letter" (`views/awardPanel.js`) reads a PDF (or pasted text) in the browser (APS allocation-letter tables incl. Planning/Increase BAR/Final Award columns, PED's SEG BAR memo row for the school, an agreement's "not to exceed" amount), suggests an IB, Increase or Decrease BAR's values with the text each came from (several revenue lines allowed; expenditure lines start as a split of the award over the fund's existing budget when the Account Summary is loaded), and builds the BAR after the user confirms; the revenue object is remembered per fund on the profile (`awardRevenue`) and the Account Summary is not needed. Real award letters are git-ignored (`*.pdf`).
 The backup file (profiles, saved BARs, drafts, settings only) restores with a per-BAR comparison; nothing is replaced silently.
 
 ## Journal Entry Maker (added after v0.1; screen: Journal Entry Maker)
@@ -129,7 +130,7 @@ src/lib/bar.js        BAR model, totals and validation for T, M, I, IB, D (stop/
 src/lib/justify.js    Rule-based justification wording per BAR type (no commas, quotes or pipes; max 255) (pure)
 src/lib/barCsv.js     OBMS BAR upload file (UBH 15 fields, UBL 9, CRLF) and its name (SCHOOL_-_OBMS_UPLOAD_-_FUND_FUNCTION_TYPE.csv, editable per BAR); none is made while a check says stop (pure)
 src/lib/barLog.js     Saved BARs, status log, freeze/lock rules, backup export and restore planning (pure)
-src/lib/narrativeTemplates.js  Longer-narrative wording for every BAR type (Transfer negative/positive function, Maintenance, Increase/Initial Budget, Decrease; same for all schools), the Transfer suggestion and the stale-text check (pure; never in the upload file)
+src/lib/narrativeTemplates.js  Longer-narrative wording for every BAR type (Transfer negative/positive function, Maintenance, separate Initial Budget and Increase, Decrease; same for all schools), the Transfer suggestion and the stale-text check (pure; never in the upload file)
 src/lib/je.js         AptaFund journal entries: reclass of actuals (Type Actual, bank lines across funds, dated the last day of the charge's month) and Budget entries for approved BARs; balance checks (pure)
 src/lib/reclass.js    Vendor charges grouped by account code then date, what is left to reclass, reclass choices to entries (pure)
 src/lib/barReport.js  Reads PED's approved Budget Adjustment Request Report (.xlsx): lines, Doc ID, signature dates, checks (pure)
@@ -137,6 +138,8 @@ src/lib/chartOfAccounts.js  The school's AptaFund Chart Of Accounts report and t
 src/lib/pedListing.js  PED Chart Line Listing stream parser (kept per fund as func|obj|prog|job) and the allowed-string check (pure)
 src/lib/pedZip.js     Reads the listing from a CSV or zip byte stream, a piece at a time (fflate)
 src/lib/jeLog.js      Saved journal entries, status log (Prepared, Entered in AptaFund, Posted, Cancelled), what is already reclassed (pure)
+src/lib/awardLetter.js  Award letter text to suggestions (fund, award, dates, flowthrough amounts, budget rows) and the confirmed form to an IB/Increase BAR (pure)
+src/lib/pdfText.js    PDF text as lines with pdf.js (lazy loaded; worker file bundled, `worker-src 'self'`)
 src/lib/fte.js        FTE change for salary lines (proportional to dollars; assumption to confirm) (pure)
 src/lib/format.js     Formatting, math, and account-code helpers
 src/lib/idb.js        IndexedDB cache for the last workbook

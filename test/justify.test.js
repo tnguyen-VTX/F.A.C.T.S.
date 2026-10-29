@@ -59,7 +59,7 @@ describe('suggested justification', () => {
       ['21000-3100-56116-0000-033-0000', 2350],
     ]);
     expect(suggestJustification(inc, { fundNames: { 21000: 'Title II' } })).toBe(
-      'Increase of $2350 in fund 21000 (Title II) to budget the award received.',
+      'Increase of $2350 in fund 21000 (Title II) to budget additional award funds received.',
     );
     const dec = mk('D', '21000', [
       ['21000-0000-41604-0000-000-0000', -100],

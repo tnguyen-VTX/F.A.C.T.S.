@@ -122,3 +122,13 @@ describe('PED location IDs on a profile', () => {
     expect(gilbertPreset()).toMatchObject({ districtCode: '001', locationIds: ['707'] });
   });
 });
+
+describe('award letter revenue objects on a profile', () => {
+  it('are 4xxxx objects per fund and default to none', async () => {
+    const { newProfile, validateProfile } = await import('../src/lib/profile.js');
+    const p = newProfile({ id: 'x', name: 'X', districtCode: '1' });
+    expect(p.awardRevenue).toEqual({});
+    expect(validateProfile({ ...p, awardRevenue: { 24101: '41110' } })).toEqual([]);
+    expect(validateProfile({ ...p, awardRevenue: { 24101: '51100' } }).join()).toContain('24101');
+  });
+});

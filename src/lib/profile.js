@@ -36,6 +36,7 @@ export function newProfile(over = {}) {
     // The cash account a reclass between funds goes through: a pattern with {fund} (empty = built from the layout:
     // the fund, function 0000, object 11011, zeros elsewhere) and optional full codes for particular funds.
     bankAccount: { pattern: '', byFund: {} },
+    awardRevenue: {}, // fund code -> revenue object (4xxxx) used on the revenue line when a BAR is built from an award letter
     fteObjects: ['511'], // object prefixes whose BAR lines carry an FTE change (salaries)
     defaultCushion: { type: 'amount', value: 0 },
     contacts: [], // { name, title }: typed by the user, never committed
@@ -103,6 +104,8 @@ export function validateProfile(p) {
   const codes = (p.funds || []).map((f) => f.code);
   if (codes.some((c) => !/^\d{5}$/.test(String(c)))) errs.push('Fund codes are 5 digits.');
   if (new Set(codes).size !== codes.length) errs.push('A fund is listed twice.');
+  for (const [f, o] of Object.entries(p.awardRevenue || {}))
+    if (!/^4\d{4}$/.test(String(o))) errs.push(`The revenue object for fund ${f} is 5 digits starting with 4.`);
   if ((p.fteObjects || []).some((x) => !/^\d{1,5}$/.test(String(x))))
     errs.push('FTE objects are digits, like 511.');
   if ((p.donorPriority || []).some((c) => !/^\d{4}$/.test(String(c))))

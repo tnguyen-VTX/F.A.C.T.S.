@@ -137,9 +137,12 @@ describe('the other four narratives', () => {
   });
   it('Increase and Initial Budget', () => {
     expect(fillTemplate('increase', rev('I', 12000), c).text).toBe(
-      'Test School is requesting an increase of $12,000 in the Title I (24101) fund to budget the award received.',
+      'Test School is requesting an increase of $12,000 in the Title I (24101) fund to budget additional award funds received.',
     );
-    expect(fillTemplate('increase', rev('IB', 12000), c).text).toContain('an initial budget of $12,000');
+    expect(fillTemplate('initial-budget', rev('IB', 12000), c).text).toContain('an initial budget of $12,000');
+    expect(templatesFor('IB').map((t) => t.id)).toEqual(['initial-budget']);
+    expect(templatesFor('I').map((t) => t.id)).toEqual(['increase']);
+    expect(fillTemplate('increase', rev('IB', 12000), c).error).toContain('Increase');
   });
   it('Decrease says nothing about the reason', () => {
     expect(fillTemplate('decrease', rev('D', -800), c).text).toBe(
