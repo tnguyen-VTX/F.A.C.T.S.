@@ -160,6 +160,8 @@ describe('a whole transfer', () => {
 // Invariants on every real deficit (git-ignored fixture; skipped when absent). No numbers are written down.
 const XL = new URL('../fixtures/cesar-account-summary.xlsx', import.meta.url);
 describe.skipIf(!existsSync(XL))('real Cesar Chavez deficits', () => {
+  // The suite body runs even when skipped, so do not read the missing fixture files.
+  if (!existsSync(XL)) return;
   const seg = (key, len) => ({ key, len });
   const cesar = newProfile({
     id: 'c',

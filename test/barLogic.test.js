@@ -98,6 +98,8 @@ describe('deficit finder', () => {
 
 const XL = new URL('../fixtures/cesar-account-summary.xlsx', import.meta.url);
 describe.skipIf(!existsSync(XL))('real Cesar Chavez Account Summary', () => {
+  // The suite body runs even when skipped, so do not read the missing fixture files.
+  if (!existsSync(XL)) return;
   const seg = (key, len) => ({ key, len });
   const cesar = newProfile({
     id: 'c',
