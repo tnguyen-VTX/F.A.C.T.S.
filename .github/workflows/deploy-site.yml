@@ -1,0 +1,88 @@
+# Builds and tests the FACTS tools, and (on main) copies them to the web server over SSH.
+# Setup steps for the site owner: DEPLOY-SETUP.md. Nothing is deployed until the secrets below exist.
+name: Test, build and deploy the FACTS site
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      deploy:
+        description: 'Deploy to the site after building (needs the secrets)'
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+concurrency:
+  group: deploy-site-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - name: Install
+        run: npm ci || npm install --no-audit --no-fund
+      - name: Test
+        run: npm test
+      - name: Build the BAR Builder page
+        run: npm run build:bar
+      - name: Build the Journal Entry Maker page
+        run: npm run build:jem
+      - name: Keep the built pages
+        uses: actions/upload-artifact@v4
+        with:
+          name: facts-site
+          path: |
+            dist-bar-builder
+            dist-jem
+          if-no-files-found: error
+
+  deploy:
+    # Only after a merge to main (or a manual run that asks for it), and only for this repository.
+    needs: build
+    if: github.repository == 'tnguyen-VTX/F.A.C.T.S.' && (github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && inputs.deploy))
+    runs-on: ubuntu-latest
+    environment: production # optional: add required reviewers to this environment (see DEPLOY-SETUP.md)
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: facts-site
+      - name: Check the deploy settings exist
+        env:
+          HOST: ${{ secrets.DEPLOY_HOST }}
+          USER_: ${{ secrets.DEPLOY_USER }}
+          KEY: ${{ secrets.DEPLOY_SSH_KEY }}
+          DPATH: ${{ secrets.DEPLOY_PATH }}
+          KNOWN: ${{ secrets.DEPLOY_KNOWN_HOSTS }}
+        run: |
+          for v in HOST USER_ KEY DPATH KNOWN; do
+            if [ -z "${!v}" ]; then echo "::error::Missing deploy secret for $v. See DEPLOY-SETUP.md."; exit 1; fi
+          done
+      - name: Copy the pages to the server
+        env:
+          HOST: ${{ secrets.DEPLOY_HOST }}
+          USER_: ${{ secrets.DEPLOY_USER }}
+          KEY: ${{ secrets.DEPLOY_SSH_KEY }}
+          DPATH: ${{ secrets.DEPLOY_PATH }}
+          KNOWN: ${{ secrets.DEPLOY_KNOWN_HOSTS }}
+          PORT: ${{ secrets.DEPLOY_PORT }}
+        run: |
+          set -euo pipefail
+          install -m 700 -d ~/.ssh
+          printf '%s\n' "$KEY" > ~/.ssh/deploy_key && chmod 600 ~/.ssh/deploy_key
+          printf '%s\n' "$KNOWN" > ~/.ssh/known_hosts
+          SSH="ssh -i ~/.ssh/deploy_key -p ${PORT:-22} -o StrictHostKeyChecking=yes -o BatchMode=yes"
+          DEST="${DPATH%/}"
+          # Each page replaces only its own folder (--delete never touches anything else on the site).
+          rsync -rlt --delete -e "$SSH" dist-bar-builder/ "$USER_@$HOST:$DEST/bar-builder/"
+          rsync -rlt --delete -e "$SSH" dist-jem/ "$USER_@$HOST:$DEST/journal-entry-maker/"
+          rm -f ~/.ssh/deploy_key
