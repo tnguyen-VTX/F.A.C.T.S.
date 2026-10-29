@@ -21,7 +21,7 @@ export async function pdfToLines(bytes, { workerSrc } = {}) {
 export function rowsFromItems(items, tolerance = 3) {
   const words = items
     .filter((i) => typeof i.str === 'string' && i.str.trim() !== '')
-    .map((i) => ({ s: i.str, x: i.transform[4], y: i.transform[5] }));
+    .map((i) => ({ s: i.str.trim(), x: i.transform[4], y: i.transform[5], w: i.width }));
   words.sort((a, b) => b.y - a.y || a.x - b.x);
   const rows = [];
   for (const w of words) {
@@ -29,13 +29,18 @@ export function rowsFromItems(items, tolerance = 3) {
     if (row) row.words.push(w);
     else rows.push({ y: w.y, words: [w] });
   }
+  // Some PDFs cut one number into pieces ("241", "90", "$", "192", ",", "224", ".00"): pieces that touch
+  // (a gap of 1 point or less) are joined without a space; real word gaps are wider.
   return rows
     .sort((a, b) => b.y - a.y)
-    .map((r) =>
-      r.words
-        .sort((a, b) => a.x - b.x)
-        .map((w) => w.s.trim())
-        .join(' ')
-        .replace(/\s+/g, ' '),
-    );
+    .map((r) => {
+      const ws = r.words.sort((a, b) => a.x - b.x);
+      let out = '';
+      ws.forEach((w, i) => {
+        const prev = ws[i - 1];
+        const touching = prev && Number.isFinite(prev.w) && w.x - (prev.x + prev.w) <= 1;
+        out += (i && !touching ? ' ' : '') + w.s;
+      });
+      return out.replace(/\s+/g, ' ');
+    });
 }

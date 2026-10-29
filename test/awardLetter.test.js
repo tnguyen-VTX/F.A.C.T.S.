@@ -114,3 +114,79 @@ describe('building the BAR from the confirmed form', () => {
     expect(f.csv.split('\r\n')[1]).toBe('UBL,24101,0000,44000,0000,707,0000,2350,0');
   });
 });
+
+import { parseSegMemo, spreadAwardOverFund } from '../src/lib/awardLetter.js';
+
+describe('shapes of real award documents (made-up names and figures)', () => {
+  const school = newProfile({ id: 's', name: 'Test Charter High School', districtCode: '001', locationIds: ['707'], reportNames: ['Test Charter Hs'], funds: [] });
+  it('reads an allocation letter table (fund, revenue code, total award; initial budget)', () => {
+    const r = parseAward(
+      [
+        'This letter confirms your allocation for Title 1 - CSI (24190) for FY 2026-2027.',
+        'You will need to incorporate the amounts into your initial budget in OBMS.',
+        'Note that all funds managed through APS must use revenue code 41924.',
+        'Grant Name UCOA CFDA# Revenue Account Total Award',
+        'Title I - CSI 24190 84.010A 41924 $192,224.00',
+      ],
+      school,
+    );
+    expect([r.fund.value, r.type, r.award.value, r.revObj.value, r.name.value]).toEqual(['24190', 'IB', 192224, '41924', 'Title I - CSI']);
+    expect(r.revenue).toMatchObject([{ obj: '41924', amount: 192224 }]);
+  });
+  it('reads a revised letter as an Increase for the Increase BAR column, not the final award', () => {
+    const r = parseAward(
+      ['Grant Name UCOA CFDA# Revenue Planning Award Increase BAR Final Award', 'IDEA B 24106 84.0270 41924 $60,435.00 $1,083.61 $61,518.61'],
+      school,
+    );
+    expect([r.fund.value, r.type, r.award.value, r.planning.value, r.final.value]).toEqual(['24106', 'I', 1083.61, 60435, 61518.61]);
+  });
+  it('reads only this school\'s row of the SEG memo table', () => {
+    const lines = [
+      'Please submit a BAR for the applicable object codes in Fund 11000 - Operational, as shown in the enclosed document',
+      '43101- State Equalization Guarantee 43120- Charter School Administrative Revenue',
+      'Other Academy 001-111 LC $1,000,000.00 $9,999.99 $1,009,999.99 $0.00 $0.00 $0.00',
+      'Test Charter Hs 001-707 LC $2,569,755.00 $475,352.53 $3,045,107.53 $0.00 $0.00 $0.00',
+    ];
+    const seg = parseSegMemo(lines, school);
+    expect(seg.fund).toBe('11000');
+    expect(seg.revenue.map((x) => [x.obj, x.amount])).toEqual([['43101', 475352.53]]);
+    const r = parseAward(lines, school);
+    expect([r.type, r.award.value, r.fund.value]).toEqual(['I', 475352.53, '11000']);
+    expect(parseAward(lines, newProfile({ name: 'Nobody', districtCode: '009', locationIds: ['999'], funds: [] })).revenue).toEqual([]);
+  });
+  it('makes a negative SEG adjustment a Decrease', () => {
+    const lines = ['43101- State Equalization Guarantee', 'Test Charter Hs 001-707 LC $100.00 ($50.00) $50.00'];
+    const r = parseAward(lines, school);
+    expect([r.type, r.award.value, r.revenue[0].amount]).toEqual(['D', 50, -50]);
+  });
+  it('reads a not-to-exceed amount and an end date from an agreement', () => {
+    const r = parseAward(
+      ['compensation not to exceed forty four thousand dollars and zero cents ($44,000.00),', 'This Agreement shall terminate on June 24, 2027 unless otherwise terminated.'],
+      school,
+    );
+    expect([r.award.value, r.to.value, r.fund]).toEqual([44000, '06/24/2027', null]);
+  });
+});
+
+describe('spreading an award over a fund and building several revenue lines', () => {
+  it('splits to the cent by budget share with the remainder on the largest line', () => {
+    const fund = { lines: [
+      { func: '1000', obj: '51100', prog: '0000', job: '0000', budget: 600 },
+      { func: '2100', obj: '52311', prog: '0000', job: '0000', budget: 300 },
+      { func: '2300', obj: '53414', prog: '0000', job: '0000', budget: 0 },
+    ] };
+    const rows = spreadAwardOverFund(fund, 1083.61);
+    expect(rows.map((r) => r.amount)).toEqual([722.41, 361.2]);
+    expect(Math.round(rows.reduce((s, r) => s + r.amount, 0) * 100)).toBe(108361);
+    expect(spreadAwardOverFund(null, 100)).toEqual([]);
+  });
+  it('writes one revenue line per row, and a Decrease for negative amounts', () => {
+    const rows = [{ on: true, func: '1000', obj: '51100', amount: '100' }];
+    const inc = buildAwardBar(gil, { type: 'I', fund: '24101', loc: '001707', revenue: [{ obj: '43101', amount: 70 }, { obj: '43120', amount: 30 }], rows });
+    expect(inc.bar.lines.slice(0, 2).map((l) => [l.obj, l.amount])).toEqual([['43101', 70], ['43120', 30]]);
+    expect(inc.bar.award).toBe('100');
+    const dec = buildAwardBar(gil, { type: 'D', fund: '24101', loc: '001707', revenue: [{ obj: '43101', amount: -100 }], rows: [{ on: true, func: '1000', obj: '51100', amount: '-100' }] });
+    expect(dec.bar.type).toBe('D');
+    expect(dec.bar.lines[0].amount).toBe(-100);
+  });
+});
