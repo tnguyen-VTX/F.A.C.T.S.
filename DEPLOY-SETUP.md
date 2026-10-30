@@ -7,6 +7,8 @@
 
 Both tools are plain static files (no server code, no database; every report is read in the user's own browser). The workflow already exists in the repository at `.github/workflows/deploy-site.yml`; the owner only has to do the steps below once.
 
+**Current status (10/30/2026):** the site runs on **Cloudflare Workers with static assets**, with both tools served from the same Worker inside the shared header and footer. The SSH/rsync deploy below does not apply, so the deploy job is **switched off** (it runs only when the repository variable `DEPLOY_ENABLED` is `true`). The owner publishes `main` by hand for now; the tests and builds still run on every pull request and merge. Steps 3 to 4 are only for a server with SSH; a Cloudflare route (for example `wrangler deploy` from the workflow with a Cloudflare API token) is still to be worked out.
+
 **Already done:** the site owner has direct (Write) access to the repository. Nothing to do for access.
 
 > **If you paste this into an AI assistant**, say: "Follow DEPLOY-SETUP.md with me one step at a time. Ask me for anything you need (for example how the site is hosted). Do not ask me to paste private keys into the chat; tell me where to put them instead." The assistant should stop and ask at every step marked **Ask**.
@@ -20,6 +22,7 @@ Ask the owner: *"What does facts.ledgerandlearning.com run on?"* Then choose:
 | Answer | Do this |
 |---|---|
 | A server or VPS where we have SSH (and `rsync` installed) | Continue with Steps 1 to 6 below. |
+| Cloudflare Workers with static assets (the current site) | Deploy job stays off. Publish `main` by hand (`npm run build:bar` and `npm run build:jem`, then add `dist-bar-builder` and `dist-jem` to the Worker's assets at `/bar-builder/` and `/journal-entry-maker/`). Later option: `wrangler deploy` in the workflow with a Cloudflare API token. |
 | Cloudflare Pages, Netlify, Vercel or GitHub Pages | Skip Steps 3 to 4. Create two projects from this repository: build command `npm run build:bar`, output folder `dist-bar-builder`; and `npm run build:jem`, output `dist-jem`. Put them at `/bar-builder/` and `/journal-entry-maker/` of the same address. Then do Steps 5 to 6 and tell Tim, so the upload step in the workflow can be removed. |
 | WordPress or another CMS, or a host with only FTP/SFTP | Tell Tim ("SFTP only" or "CMS"); the upload step needs a small change. Meanwhile use the manual route at the bottom. |
 
@@ -59,6 +62,8 @@ This makes two files: `facts-deploy` (private) and `facts-deploy.pub` (public).
 5. Keep the **private** key file for Step 4, then delete it from the computer. Never paste it into a chat, email or the repository.
 
 ## Step 4. Add the secrets in GitHub
+
+To switch the deploy job on, also add the repository **variable** (not secret) `DEPLOY_ENABLED` = `true` (Settings -> Secrets and variables -> Actions -> Variables).
 
 Repository **Settings -> Secrets and variables -> Actions -> New repository secret**. Add each of these exactly (names are case-sensitive):
 
