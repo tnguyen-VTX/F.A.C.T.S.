@@ -156,6 +156,7 @@ handler to `ACT` (clicks on `[data-act]`) or `IN` (inputs on `[data-in]`) in `ma
 
 - `npm install`, `npm run dev`, `npm run build`, `npm test`
 - `npm run build:bar` / `npm run dev:bar`: BAR Builder-only build (`src/mode.js`; five screens, no FACTS header) for the ledgerandlearning.com suite page. Browser storage names start with `barbuilder`.
+- `npm run build:bar:single`: the BAR Builder as ONE self-contained file, `dist-bar-single/FACTS-BAR-Builder.html` (fonts, images and code inlined; `--mode bar-single`, `scripts/inline-single-file.mjs`; its CSP allows the one inline script by hash and no network; pdf.js runs its worker on the page). Opens by double-click or served from any folder.
 - `npm run build:jem` / `npm run dev:jem`: the Journal Entry Maker as its own suite page (`--mode jem`: Load reports, Journal Entry Maker, Schools, How to use, About). It shares the browser storage (profiles, stored reports) with the BAR Builder page.
 - Data tests are skipped unless `fixtures/facts.xlsx` exists. `EXPECTED` in `test/parse.test.js` holds totals
   from the 9/29/2026 workbook; update them when the fixture changes.

@@ -1,5 +1,4 @@
 // "Start from an award letter": read a PDF (or pasted text), suggest the BAR's values, let the user confirm, build the BAR.
-import workerSrc from 'pdfjs-dist/legacy/build/pdf.worker.min.mjs?url';
 import { buildAwardBar, defaultLocationSegment, parseAward, spreadAwardOverFund } from '../lib/awardLetter.js';
 import { $, esc, fmtM, num } from '../lib/format.js';
 import { saveProfile } from '../lib/profileStore.js';
@@ -130,6 +129,12 @@ export const AWARD_IN = {
     try {
       if (/\.pdf$/i.test(file.name) || file.type === 'application/pdf') {
         const { pdfToLines } = await import('../lib/pdfText.js');
+        // Normal builds load pdf.js's worker as a separate file. The single-file build has no other files, so
+        // pdf.js runs its worker code on the page itself (fine for a letter of a few pages).
+        let workerSrc;
+        // (a literal test, so each build drops the branch it does not use)
+        if (import.meta.env.MODE === 'bar-single') globalThis.pdfjsWorker = await import('pdfjs-dist/legacy/build/pdf.worker.min.mjs');
+        else workerSrc = (await import('pdfjs-dist/legacy/build/pdf.worker.min.mjs?url')).default;
         load(await pdfToLines(new Uint8Array(await file.arrayBuffer()), { workerSrc }), `Read ${file.name}.`);
       } else load((await file.text()).split(/\r?\n/), `Read ${file.name}.`);
     } catch (e) {
