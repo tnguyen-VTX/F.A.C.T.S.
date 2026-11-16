@@ -9,6 +9,7 @@
     "build": "vite build",
     "dev:bar": "vite --mode bar-builder",
     "build:bar": "vite build --mode bar-builder --outDir dist-bar-builder",
+    "build:bar:single": "vite build --mode bar-single --outDir dist-bar-single && node scripts/inline-single-file.mjs dist-bar-single FACTS-BAR-Builder.html",
     "preview": "vite preview",
     "test": "vitest run",
     "format": "prettier --write \"src/**/*.{js,css}\" \"test/**/*.js\" index.html",

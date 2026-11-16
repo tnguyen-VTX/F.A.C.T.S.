@@ -16,9 +16,15 @@ const CSP = [
   "form-action 'self'",
 ].join('; ');
 
-export default defineConfig({
+export default defineConfig(({ mode }) => ({
   // Relative paths, so the build works from the site root, a subdomain or a folder.
   base: './',
+  // The single-file build (--mode bar-single) puts everything in one chunk and turns fonts and images into data URIs;
+  // scripts/inline-single-file.mjs then writes the one .html file.
+  build:
+    mode === 'bar-single'
+      ? { assetsInlineLimit: 100_000_000, cssCodeSplit: false, rollupOptions: { output: { inlineDynamicImports: true } } }
+      : {},
   plugins: [
     {
       name: 'csp-meta',
@@ -27,4 +33,4 @@ export default defineConfig({
         html.replace('<head>', `<head>\n    <meta http-equiv="Content-Security-Policy" content="${CSP}" />`),
     },
   ],
-});
+}));

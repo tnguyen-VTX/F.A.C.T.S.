@@ -16,6 +16,8 @@ const PAGES = {
     screens: ['import', 'jem', 'schools', 'help', 'about'],
   },
 };
+// `bar-single`: the BAR Builder as one self-contained .html file (npm run build:bar:single).
+PAGES['bar-single'] = PAGES['bar-builder'];
 const page = () => PAGES[MODE()] || null;
 export const barOnly = () => !!page(); // true for either suite page
 export const pageTitle = () => page()?.title || '';
