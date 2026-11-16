@@ -29,7 +29,11 @@ export function loadProfiles(storage) {
     // The built-in Gilbert profile gains the report name it was missing; names the user typed are kept.
     const g = gilbertPreset();
     const saved = s.profiles[g.id];
-    if (saved) saved.reportNames = [...new Set([...(saved.reportNames || []), ...g.reportNames])];
+    if (saved) {
+      saved.reportNames = [...new Set([...(saved.reportNames || []), ...g.reportNames])];
+      // Gilbert's benefit rates start from the workbook's; once the user saves their own they are kept.
+      if (!Object.keys(saved.salaryBenefits || {}).length) saved.salaryBenefits = g.salaryBenefits;
+    }
     if (!s.profiles[s.active]) s.active = Object.keys(s.profiles)[0] || '';
     if (s.active) return s;
   }

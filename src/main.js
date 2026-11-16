@@ -58,7 +58,7 @@ import {
 import { barLine } from './lib/bar.js';
 import { AWARD_ACT, AWARD_IN } from './views/awardPanel.js';
 import { suggestJustification } from './lib/justify.js';
-import { splitWith } from './lib/profile.js';
+import { parseBenefitLines, splitWith } from './lib/profile.js';
 import { viewBudget } from './views/budget.js';
 import { viewImport } from './views/import.js';
 import { viewCap } from './views/capitalOutlay.js';
@@ -657,6 +657,11 @@ const IN = {
   scFunds: (t) => {
     UI.sc.fundsText = t.value;
     UI.sc.draft.funds = parseFundLines(t.value);
+    $('#scerr').innerHTML = scErrors();
+  },
+  scBenefits: (t) => {
+    UI.sc.benefitsText = t.value;
+    UI.sc.draft.salaryBenefits = parseBenefitLines(t.value);
     $('#scerr').innerHTML = scErrors();
   },
   scPriority: (t) => {

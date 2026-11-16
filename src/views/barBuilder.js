@@ -176,6 +176,7 @@ export function bbBuildTransfer(fund, func, kind = 'T') {
     cushion: num(b.cushion),
     mode: b.mode,
     priority: profile().donorPriority || [],
+    benefits: profile().salaryBenefits || {},
     kind,
   });
   const bar = newBar(kind, fund);
