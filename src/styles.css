@@ -228,6 +228,12 @@ textarea {
   color: var(--spent);
   font-weight: 600;
 }
+.bad,
+input.bad {
+  outline: 2px solid #d64545;
+  outline-offset: 0;
+  border-color: #d64545;
+}
 .srccell {
   max-width: 190px;
   overflow: hidden;

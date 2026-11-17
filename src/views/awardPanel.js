@@ -7,6 +7,8 @@ import { D, PF, UI, profile, storage } from '../state.js';
 import { bb, keep } from './barBuilder.js';
 
 const aw = () => UI.award;
+// A used salary line with no FTE: OBMS rejects it ("Missing projected FTE").
+const fteBad = (r) => r.on && isSalaryObject(r.obj, profile().fteObjects) && !(num(r.fte) > 0);
 // Small icon buttons for a table row: what each does shows on hover (and to screen readers).
 const ICONS = {
   dup: '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h9"/></svg>',
@@ -75,7 +77,7 @@ export function awardPanelHTML() {
         `<tr><td><input type="checkbox" data-in="awardRow" data-f="on" data-i="${i}"${r.on ? ' checked' : ''} aria-label="Use line ${i + 1}"></td>
     ${['func', 'obj', 'prog', 'job'].map((k) => `<td><input type="text" class="amt" data-in="awardRow" data-f="${k}" data-i="${i}" value="${esc(r[k] ?? '')}" size="6" aria-label="${k} line ${i + 1}"></td>`).join('')}
     <td class="r"><input type="number" step="1" class="amt" data-in="awardRow" data-f="amount" data-i="${i}" value="${esc(r.amount ?? '')}" aria-label="Amount line ${i + 1}"></td>
-    <td class="r"><input type="number" step="0.0001" min="0" class="amt" data-in="awardRow" data-f="fte" data-i="${i}" value="${esc(r.fte ?? '')}" placeholder="FTE" title="Only used on salary lines (${esc(profile().fteObjects.join(', '))}xx)" aria-label="FTE line ${i + 1}"></td>
+    <td class="r"><input type="number" step="0.0001" min="0" class="amt${fteBad(r) ? ' bad' : ''}" data-in="awardRow" data-f="fte" data-i="${i}" value="${esc(r.fte ?? '')}" placeholder="FTE" title="Only used on salary lines (${esc(profile().fteObjects.join(', '))}xx)" aria-label="FTE line ${i + 1}"></td>
     <td class="muted fnote srccell" title="${esc(r.src || '')}">${esc(r.src || '')}</td><td>${iconBtns('Row', i, 'expenditure line')}</td></tr>`,
     )
     .join('')}</tbody></table></div>
@@ -91,7 +93,7 @@ function awardSum() {
   const total = f.rows.filter((r) => r.on).reduce((s, r) => s + num(r.amount), 0),
     award = revTotal(f);
   const diff = Math.round((award - total) * 100) / 100;
-  const noFte = f.rows.filter((r) => r.on && isSalaryObject(r.obj, profile().fteObjects) && !(num(r.fte) > 0)).length;
+  const noFte = f.rows.filter(fteBad).length;
   return `Lines total ${fmtM(total)} of the ${fmtM(award)} revenue${diff ? `; ${fmtM(diff)} not yet assigned` : '; they match'}.${noFte ? ` Enter the FTE on ${noFte} salary line${noFte > 1 ? 's' : ''}: OBMS rejects a salary line with no FTE.` : ''}`;
 }
 const redraw = () => {
@@ -188,6 +190,8 @@ export const AWARD_IN = {
       k = t.dataset.f;
     r[k] = k === 'on' ? t.checked : t.value;
     refreshSum();
+    // mark salary lines with no FTE in red as the user types
+    document.querySelectorAll('input[data-in="awardRow"][data-f="fte"]').forEach((el) => el.classList.toggle('bad', fteBad(aw().form.rows[+el.dataset.i])));
   },
 };
 
@@ -245,6 +249,8 @@ export const AWARD_ACT = {
     const a = aw(),
       b = bb();
     if (b.draft && b.dirty && b.draft.lines.length && !confirm('Replace the BAR you are working on? Unsaved changes will be lost.')) return;
+    const missing = a.form.rows.filter(fteBad).length;
+    if (missing && !confirm(`${missing} salary line${missing > 1 ? 's have' : ' has'} no FTE. OBMS rejects a salary line with no FTE ("Missing projected FTE"). Build the BAR anyway?`)) return;
     const r = buildAwardBar(profile(), a.form, { funcNames: D.asr?.funcNames, fundNames: D.fundNames });
     if (r.errors) {
       a.err = r.errors.join(' ');

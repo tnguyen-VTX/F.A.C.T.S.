@@ -49,7 +49,20 @@ describe('building from the panel', () => {
   it('builds the BAR into the draft and balances', async () => {
     type('input[data-in="awardRev"][data-f="obj"]', '44000');
     type('input[data-k="loc"]', '001707');
+    // a salary line (51100) with no FTE: the FTE box is outlined in red and building asks first
+    const fteBox = document.querySelector('input[data-in="awardRow"][data-f="fte"]');
+    expect(fteBox.classList.contains('bad')).toBe(true);
+    let asked = '';
+    window.confirm = (m) => ((asked = m), false);
     document.querySelector('[data-act="awardBuild"]').click();
+    expect(asked).toContain('no FTE');
+    expect(document.querySelector('#bbdraft').textContent).not.toContain('44000'); // declined: nothing built
+    fteBox.value = '1';
+    fteBox.dispatchEvent(new Event('input', { bubbles: true }));
+    expect(fteBox.classList.contains('bad')).toBe(false);
+    asked = '';
+    document.querySelector('[data-act="awardBuild"]').click();
+    expect(asked).toBe(''); // no question once every salary line has an FTE
     await new Promise((r) => setTimeout(r, 50));
     const text = document.querySelector('#bbdraft').textContent;
     expect(text).toContain('44000');

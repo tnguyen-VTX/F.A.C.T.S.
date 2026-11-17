@@ -29,6 +29,7 @@ import { isSalaryObject, suggestFte } from '../lib/fte.js';
 import { $, esc, fmtM, missingMsg, num } from '../lib/format.js';
 import { suggestJustification } from '../lib/justify.js';
 import { awardPanelHTML } from './awardPanel.js';
+import { parseBarCsv } from '../lib/barImport.js';
 import { D, FY, PF, REP, S, STORE, UI, fundLabel, profile, saveStore, storage } from '../state.js';
 
 const TYPES = ['T', 'M', 'I', 'IB', 'D'];
@@ -123,7 +124,8 @@ export function viewBarBuilder() {
   <label>BAR type<select data-in="bbType">${TYPES.map((t) => `<option value="${t}"${b.type === t ? ' selected' : ''}>${esc(BAR_TYPES[t])} (${t})</option>`).join('')}</select></label>
   <label>Fund<input type="text" list="bbfundlist" data-in="bbStartFund" value="${esc(b.startFund || '')}" maxlength="5" inputmode="numeric" placeholder="5-digit code" autocomplete="off" size="14"></label>
   <datalist id="bbfundlist">${funds.map((f) => `<option value="${esc(f.code)}">${esc(fundLabel(f.code))}</option>`).join('')}</datalist>
-  <button class="btn" data-act="bbStart">Start an empty ${esc(BAR_TYPES[b.type])} BAR</button></div>${
+  <button class="btn" data-act="bbStart">Start an empty ${esc(BAR_TYPES[b.type])} BAR</button>
+  <label class="btn" title="Load an OBMS BAR upload file (.csv) to change it and build it again">Open a BAR file (.csv)…<input type="file" accept=".csv,text/csv" data-in="bbImportCsv" hidden></label></div>${
     TYPE_HELP[b.type] ? `<p class="muted">${esc(TYPE_HELP[b.type])}</p>` : ''
   }<p class="warn" id="bbstartmsg" role="alert" hidden></p></section>
   <div id="bbaward">${awardPanelHTML()}</div><div id="bbdef"></div><div id="bbdraft"></div><div id="bbsaved"></div><div id="bbbackup"></div>`;
@@ -190,6 +192,32 @@ export function bbBuildTransfer(fund, func, kind = 'T') {
     : '';
   keep();
 }
+// Open an OBMS BAR upload file as the working draft. Errors are shown under Start a BAR; warnings go on the draft.
+export function bbImportRead(text, fileName = '') {
+  const b = bb();
+  const r = parseBarCsv(text, profile(), FY.value);
+  const msg = $('#bbstartmsg');
+  if (r.errors.length) {
+    if (msg) {
+      msg.textContent = `Could not open ${fileName || 'the file'}: ${r.errors.slice(0, 4).join(' ')}${r.errors.length > 4 ? ` (and ${r.errors.length - 4} more)` : ''}`;
+      msg.hidden = false;
+    }
+    return false;
+  }
+  if (!replaceOk()) return false;
+  if (msg) {
+    msg.textContent = '';
+    msg.hidden = true;
+  }
+  b.draft = r.bar;
+  b.type = r.bar.type;
+  b.startFund = r.bar.fund;
+  b.narrMsg = '';
+  refreshFte(r.bar);
+  b.note = `Opened ${fileName || 'the file'}: ${r.bar.lines.length} lines. Change what you need, then download a new file.${r.warnings.length ? ' ' + r.warnings.join(' ') : ''}`;
+  keep();
+  return true;
+}
 export function bbStartEmpty() {
   const b = bb();
   const msg = $('#bbstartmsg');
@@ -211,7 +239,7 @@ function lineRow(l, i, asrLine) {
   return `<tr class="${l.amount < 0 ? 'give' : ''}"><td><span class="code">${esc(l.code)}</span><br><span class="muted">${esc(descOf(l.code))}</span></td>
   <td>${isRevenueObject(l.obj) ? 'REV' : 'EXP'}</td><td class="num">${esc(l.func)}</td><td class="num">${esc(l.obj)}</td><td class="r"><input type="number" step="1" class="amt" data-in="bbAmt" data-i="${i}" value="${l.amount}" aria-label="Amount for ${esc(l.code)}"></td>
   <td class="r">${salary ? `<input type="number" step="0.01" min="0" class="lfte" data-in="bbLineFte" data-i="${i}" value="${l.lineFte || ''}" placeholder="FTE" title="This position's current FTE; the FTE adj is filled from the amount's share of the line's budget (or its actuals + encumbrances when it has no budget)" aria-label="Current FTE for ${esc(l.code)}"><div class="muted fnote" data-i="${i}">${esc(fteNote(l))}</div>` : '<span class="muted">N/A</span>'}</td>
-  <td class="r">${salary ? `<input type="number" step="0.0001" class="fte" data-in="bbFte" data-i="${i}" value="${l.fte || 0}" aria-label="FTE for ${esc(l.code)}">` : '<span class="muted">N/A</span>'}</td>
+  <td class="r">${salary ? `<input type="number" step="0.0001" class="fte${l.fte > 0 ? '' : ' bad'}" title="${l.fte > 0 ? '' : 'A salary line needs its FTE: OBMS rejects one with none (Missing projected FTE).'}" data-in="bbFte" data-i="${i}" value="${l.fte || 0}" aria-label="FTE for ${esc(l.code)}">` : '<span class="muted">N/A</span>'}</td>
   <td class="r"><button class="linkbtn" data-act="bbDel" data-i="${i}" aria-label="Remove ${esc(l.code)}">Remove</button></td></tr>`;
 }
 const fieldIn = (label, path, val, extra = '') =>
