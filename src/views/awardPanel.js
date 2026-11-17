@@ -253,6 +253,7 @@ export const AWARD_ACT = {
     b.draft = r.bar;
     b.type = r.bar.type;
     b.note = '';
+    b.narrMsg = ''; // a message about the previous draft does not belong to this one
     UI.award = null;
     keep();
     return 'built';

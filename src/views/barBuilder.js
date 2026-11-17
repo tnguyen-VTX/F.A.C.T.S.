@@ -202,6 +202,7 @@ export function bbStartEmpty() {
   b.startFund = fund;
   b.draft = newBar(b.type, b.startFund);
   b.note = '';
+  b.narrMsg = '';
   keep();
 }
 
