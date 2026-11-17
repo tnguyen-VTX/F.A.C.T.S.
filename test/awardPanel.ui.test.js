@@ -67,12 +67,14 @@ describe('typing a fund that is not on the profile', () => {
     box.dispatchEvent(new Event('input', { bubbles: true }));
     document.querySelector('[data-act="bbStart"]').click();
     expect(document.querySelector('#bbstartmsg').textContent).toContain('5-digit');
+    expect(document.querySelector('#bbstartmsg').hidden).toBe(false);
     window.confirm = () => true; // an earlier test left a draft
     box.value = '24190';
     box.dispatchEvent(new Event('input', { bubbles: true }));
     document.querySelector('[data-act="bbStart"]').click();
     await new Promise((r) => setTimeout(r, 30));
     expect(document.querySelector('#bbstartmsg').textContent).toBe('');
+    expect(document.querySelector('#bbstartmsg').hidden).toBe(true);
     expect(document.querySelector('#bbdraft').textContent).toContain('24190');
   });
 });

@@ -125,7 +125,7 @@ export function viewBarBuilder() {
   <datalist id="bbfundlist">${funds.map((f) => `<option value="${esc(f.code)}">${esc(fundLabel(f.code))}</option>`).join('')}</datalist>
   <button class="btn" data-act="bbStart">Start an empty ${esc(BAR_TYPES[b.type])} BAR</button></div>${
     TYPE_HELP[b.type] ? `<p class="muted">${esc(TYPE_HELP[b.type])}</p>` : ''
-  }<p class="warn" id="bbstartmsg" role="alert"></p></section>
+  }<p class="warn" id="bbstartmsg" role="alert" hidden></p></section>
   <div id="bbaward">${awardPanelHTML()}</div><div id="bbdef"></div><div id="bbdraft"></div><div id="bbsaved"></div><div id="bbbackup"></div>`;
   bbDeficits();
   bbDraft();
@@ -194,7 +194,10 @@ export function bbStartEmpty() {
   const b = bb();
   const msg = $('#bbstartmsg');
   const fund = String(b.startFund || '').trim();
-  if (msg) msg.textContent = /^\d{5}$/.test(fund) ? '' : 'Type or choose the 5-digit fund code first.';
+  if (msg) {
+    msg.textContent = /^\d{5}$/.test(fund) ? '' : 'Type or choose the 5-digit fund code first.';
+    msg.hidden = !msg.textContent;
+  }
   if (!/^\d{5}$/.test(fund) || !replaceOk()) return;
   b.startFund = fund;
   b.draft = newBar(b.type, b.startFund);
