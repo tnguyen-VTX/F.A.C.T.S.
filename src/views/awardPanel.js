@@ -2,6 +2,7 @@
 import { buildAwardBar, defaultLocationSegment, parseAward, spreadAwardOverFund } from '../lib/awardLetter.js';
 import { $, esc, fmtM, num } from '../lib/format.js';
 import { saveProfile } from '../lib/profileStore.js';
+import { isSalaryObject } from '../lib/fte.js';
 import { D, PF, UI, profile, storage } from '../state.js';
 import { bb, keep } from './barBuilder.js';
 
@@ -68,12 +69,13 @@ export function awardPanelHTML() {
       : ''
   }
   <h3>Expenditure lines</h3>
-  <div class="scroll"><table class="t"><thead><tr><th>Use</th><th>Function</th><th>Object</th><th>Program</th><th>Job class</th><th class="r">Amount</th><th>From the letter</th><th></th></tr></thead><tbody>${f.rows
+  <div class="scroll"><table class="t"><thead><tr><th>Use</th><th>Function</th><th>Object</th><th>Program</th><th>Job class</th><th class="r">Amount</th><th class="r" title="The FTE this salary line funds. OBMS rejects a salary line with no FTE.">FTE (salary)</th><th>From the letter</th><th></th></tr></thead><tbody>${f.rows
     .map(
       (r, i) =>
         `<tr><td><input type="checkbox" data-in="awardRow" data-f="on" data-i="${i}"${r.on ? ' checked' : ''} aria-label="Use line ${i + 1}"></td>
     ${['func', 'obj', 'prog', 'job'].map((k) => `<td><input type="text" class="amt" data-in="awardRow" data-f="${k}" data-i="${i}" value="${esc(r[k] ?? '')}" size="6" aria-label="${k} line ${i + 1}"></td>`).join('')}
     <td class="r"><input type="number" step="1" class="amt" data-in="awardRow" data-f="amount" data-i="${i}" value="${esc(r.amount ?? '')}" aria-label="Amount line ${i + 1}"></td>
+    <td class="r"><input type="number" step="0.0001" min="0" class="amt" data-in="awardRow" data-f="fte" data-i="${i}" value="${esc(r.fte ?? '')}" placeholder="FTE" title="Only used on salary lines (${esc(profile().fteObjects.join(', '))}xx)" aria-label="FTE line ${i + 1}"></td>
     <td class="muted fnote srccell" title="${esc(r.src || '')}">${esc(r.src || '')}</td><td>${iconBtns('Row', i, 'expenditure line')}</td></tr>`,
     )
     .join('')}</tbody></table></div>
@@ -89,7 +91,8 @@ function awardSum() {
   const total = f.rows.filter((r) => r.on).reduce((s, r) => s + num(r.amount), 0),
     award = revTotal(f);
   const diff = Math.round((award - total) * 100) / 100;
-  return `Lines total ${fmtM(total)} of the ${fmtM(award)} revenue${diff ? `; ${fmtM(diff)} not yet assigned` : '; they match'}.`;
+  const noFte = f.rows.filter((r) => r.on && isSalaryObject(r.obj, profile().fteObjects) && !(num(r.fte) > 0)).length;
+  return `Lines total ${fmtM(total)} of the ${fmtM(award)} revenue${diff ? `; ${fmtM(diff)} not yet assigned` : '; they match'}.${noFte ? ` Enter the FTE on ${noFte} salary line${noFte > 1 ? 's' : ''}: OBMS rejects a salary line with no FTE.` : ''}`;
 }
 const redraw = () => {
   const el = $('#bbaward');
@@ -227,7 +230,7 @@ export const AWARD_ACT = {
     redraw();
   },
   awardClearRow: (t) => {
-    Object.assign(aw().form.rows[+t.dataset.i], { func: '', obj: '', prog: '0000', job: '0000', amount: '', src: '' });
+    Object.assign(aw().form.rows[+t.dataset.i], { func: '', obj: '', prog: '0000', job: '0000', amount: '', fte: '', src: '' });
     redraw();
   },
   awardDelRow: (t) => {

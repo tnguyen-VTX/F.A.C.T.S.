@@ -268,6 +268,7 @@ export function parseAward(text, profile) {
 import { newBar, barLine } from './bar.js';
 import { isAccountCode, parseFundLines } from './profile.js';
 import { suggestJustification } from './justify.js';
+import { isSalaryObject } from './fte.js';
 
 // The location segment a school's account codes use, from its district code and PED location ID
 // (district + location, left padded to the segment length: Gilbert 001 + 707 = 001707). '' when unknown.
@@ -321,7 +322,13 @@ export function buildAwardBar(profile, form, ctx = {}) {
   rows.forEach((r, i) => {
     const code = awardCode(profile, { fund, func: r.func, obj: r.obj, prog: r.prog || '0000', loc: form.loc, job: r.job || '0000' });
     if (!code) errors.push(`Expenditure line ${i + 1} (${r.func || '?'} ${r.obj || '?'}) does not fit the account code layout.`);
-    else bar.lines.push(barLine(profile, code, num(r.amount)));
+    else {
+      // A salary line carries the FTE it funds (OBMS rejects one with none: "Missing projected FTE").
+      const fte = isSalaryObject(r.obj, profile.fteObjects) ? Math.max(0, num(r.fte) || 0) : 0;
+      const line = barLine(profile, code, num(r.amount), fte);
+      if (fte > 0) line.fteManual = true;
+      bar.lines.push(line);
+    }
   });
   if (errors.length) return { errors };
   if (profile.funds?.find((f) => f.code === fund)?.flowthrough) {

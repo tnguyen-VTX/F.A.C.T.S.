@@ -228,3 +228,22 @@ describe('a memo that lists every school (made-up names)', () => {
     expect(r.award).toBeNull();
   });
 });
+
+describe('salary lines built from an award letter carry their FTE', () => {
+  it('puts the typed FTE on a salary line (and ignores it on other lines)', () => {
+    const { bar } = buildAwardBar(gil, {
+      type: 'IB', fund: '24101', loc: '001707',
+      revenue: [{ obj: '44000', amount: 100000 }],
+      rows: [
+        { on: true, func: '2200', obj: '51100', prog: '1010', job: '1211', amount: 80000, fte: '1' },
+        { on: true, func: '2200', obj: '52111', prog: '1010', job: '1211', amount: 20000, fte: '1' },
+      ],
+    });
+    const sal = bar.lines.find((l) => l.obj === '51100');
+    expect(sal.fte).toBe(1);
+    expect(sal.fteManual).toBe(true);
+    expect(bar.lines.find((l) => l.obj === '52111').fte).toBe(0);
+    const csv = makeBarFile(Object.assign(bar, { contact: { first: 'A', middle: '', last: 'B' } }), { profile: gil, fiscalYear: 2027 }).csv;
+    expect(csv).toContain('UBL,24101,2200,51100,1010,707,1211,80000,1');
+  });
+});
