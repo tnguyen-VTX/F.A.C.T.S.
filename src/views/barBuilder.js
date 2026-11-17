@@ -218,6 +218,20 @@ export function bbImportRead(text, fileName = '') {
   keep();
   return true;
 }
+// Change the working BAR's type (for example an opened Initial Budget file to an Increase). The wording follows the type:
+// a justification that was only the suggested one is replaced by the new type's suggestion; one the user edited is kept.
+export function bbChangeType(type) {
+  const b = bb(),
+    bar = b.draft;
+  if (!bar || !BAR_TYPES[type] || type === bar.type) return;
+  const wording = { funcNames: D.asr?.funcNames, fundNames: D.fundNames };
+  const untouched = !bar.justification || bar.justification === suggestJustification(bar, wording);
+  bar.type = type;
+  bar.narrTpl = '';
+  b.narrMsg = '';
+  if (untouched) bar.justification = suggestJustification(bar, wording);
+  keep();
+}
 export function bbStartEmpty() {
   const b = bb();
   const msg = $('#bbstartmsg');
@@ -260,7 +274,7 @@ export function bbDraft() {
   ${b.note ? `<div class="warn">${esc(b.note)}</div>` : ''}
   <div class="grid2"><div>
   <dl class="kv"><dt>Document ID</dt><dd><input type="text" data-in="bbField" data-k="docId" value="${esc(bar.docId || '')}" placeholder="Assigned by OBMS after upload"></dd>
-  <dt>Fiscal year</dt><dd>${FY.value - 1}-${FY.value}</dd><dt>BAR type</dt><dd>${esc(BAR_TYPES[bar.type])}${flow ? ' (flowthrough fund)' : ''}</dd>
+  <dt>Fiscal year</dt><dd>${FY.value - 1}-${FY.value}</dd><dt>BAR type</dt><dd><select data-in="bbDraftType" aria-label="BAR type of this BAR" title="Change the type, for example from Initial Budget to Increase">${TYPES.map((t) => `<option value="${t}"${bar.type === t ? ' selected' : ''}>${esc(BAR_TYPES[t])} (${t})</option>`).join('')}</select>${flow ? ' (flowthrough fund)' : ''}</dd>
   <dt>Fund</dt><dd>${esc(fundLabel(bar.fund))}</dd><dt>Entity</dt><dd>${esc(p.entityName || p.name)}</dd><dt>District code</dt><dd>${esc(p.districtCode || '—')}</dd></dl></div>
   <div>${fieldIn('Contact first name', 'contact.first', bar.contact.first)}${fieldIn('Contact middle name', 'contact.middle', bar.contact.middle)}${fieldIn('Contact last name', 'contact.last', bar.contact.last)}</div></div>
   ${

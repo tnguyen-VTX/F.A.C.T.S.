@@ -142,3 +142,38 @@ describe('row icons: duplicate, clear and remove', () => {
     expect(document.querySelectorAll('input[data-in="awardRev"][data-f="amount"]').length).toBe(2);
   });
 });
+
+describe('changing the type of the working BAR', () => {
+  it('switches Initial Budget to Increase and updates the suggested wording, keeping edited wording', async () => {
+    document.querySelector('.nav button[data-v="bars"]').click();
+    window.confirm = () => true;
+    const box = document.querySelector('input[data-in="bbStartFund"]');
+    box.value = '24190';
+    box.dispatchEvent(new Event('input', { bubbles: true }));
+    document.querySelector('[data-act="bbStart"]').click();
+    await new Promise((r) => setTimeout(r, 30));
+    const code = document.querySelector('input[data-in="bbAddCode"]');
+    code.value = '24190-0000-44000-0000-001707-0000';
+    code.dispatchEvent(new Event('input', { bubbles: true }));
+    const amt = document.querySelector('input[data-in="bbAddAmt"]');
+    amt.value = '1000';
+    amt.dispatchEvent(new Event('input', { bubbles: true }));
+    document.querySelector('[data-act="bbAddLine"]').click();
+    document.querySelector('[data-act="bbSuggest"]').click();
+    const just = () => document.querySelector('textarea[data-k="justification"]').value;
+    expect(just()).toMatch(/^Initial budget of/);
+    const sel = () => document.querySelector('select[data-in="bbDraftType"]');
+    sel().value = 'I';
+    sel().dispatchEvent(new Event('input', { bubbles: true }));
+    expect(document.querySelector('#bbdraft h2').textContent).toContain('Increase');
+    expect(just()).toMatch(/^Increase of \$1000/);
+    // wording the user edited stays
+    const ta = document.querySelector('textarea[data-k="justification"]');
+    ta.value = 'My own words.';
+    ta.dispatchEvent(new Event('input', { bubbles: true }));
+    sel().value = 'IB';
+    sel().dispatchEvent(new Event('input', { bubbles: true }));
+    expect(just()).toBe('My own words.');
+    expect(document.querySelector('#bbdraft h2').textContent).toContain('Initial budget');
+  });
+});

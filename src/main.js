@@ -52,6 +52,7 @@ import {
   backupFile,
   bbRestoreRead,
   bbImportRead,
+  bbChangeType,
   bbRestoreApply,
   bbBackup,
   viewBarBuilder,
@@ -527,6 +528,10 @@ const IN = {
     crResults();
   },
   ...AWARD_IN,
+  bbDraftType: (t) => {
+    bbChangeType(t.value);
+    bbDraft();
+  },
   bbImportCsv: async (t) => {
     const f = t.files?.[0];
     t.value = '';
