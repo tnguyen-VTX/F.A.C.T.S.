@@ -49,11 +49,142 @@ describe('building from the panel', () => {
   it('builds the BAR into the draft and balances', async () => {
     type('input[data-in="awardRev"][data-f="obj"]', '44000');
     type('input[data-k="loc"]', '001707');
+    // a salary line (51100) with no FTE: the FTE box is outlined in red and building asks first
+    const fteBox = document.querySelector('input[data-in="awardRow"][data-f="fte"]');
+    expect(fteBox.classList.contains('bad')).toBe(true);
+    let asked = '';
+    window.confirm = (m) => ((asked = m), false);
     document.querySelector('[data-act="awardBuild"]').click();
+    expect(asked).toContain('no FTE');
+    expect(document.querySelector('#bbdraft').textContent).not.toContain('44000'); // declined: nothing built
+    fteBox.value = '1';
+    fteBox.dispatchEvent(new Event('input', { bubbles: true }));
+    expect(fteBox.classList.contains('bad')).toBe(false);
+    asked = '';
+    document.querySelector('[data-act="awardBuild"]').click();
+    expect(asked).toBe(''); // no question once every salary line has an FTE
     await new Promise((r) => setTimeout(r, 50));
     const text = document.querySelector('#bbdraft').textContent;
     expect(text).toContain('44000');
     expect(text).toContain('51100');
     expect(document.querySelector('#bbdraft').innerHTML).toContain('53414');
+  });
+});
+
+describe('typing a fund that is not on the profile', () => {
+  it('lets the Start a BAR fund box take any 5-digit code, and refuses a bad one', async () => {
+    document.querySelector('.nav button[data-v="bars"]').click();
+    const box = document.querySelector('input[data-in="bbStartFund"]');
+    expect(box).not.toBeNull();
+    box.value = '2410';
+    box.dispatchEvent(new Event('input', { bubbles: true }));
+    document.querySelector('[data-act="bbStart"]').click();
+    expect(document.querySelector('#bbstartmsg').textContent).toContain('5-digit');
+    expect(document.querySelector('#bbstartmsg').hidden).toBe(false);
+    window.confirm = () => true; // an earlier test left a draft
+    box.value = '24190';
+    box.dispatchEvent(new Event('input', { bubbles: true }));
+    document.querySelector('[data-act="bbStart"]').click();
+    await new Promise((r) => setTimeout(r, 30));
+    expect(document.querySelector('#bbstartmsg').textContent).toBe('');
+    expect(document.querySelector('#bbstartmsg').hidden).toBe(true);
+    expect(document.querySelector('#bbdraft').textContent).toContain('24190');
+  });
+});
+
+describe('Suggest wording without an Account Summary', () => {
+  it('fills the justification from the revenue line, and explains when there is nothing to word', async () => {
+    document.querySelector('.nav button[data-v="bars"]').click();
+    window.confirm = () => true;
+    const box = document.querySelector('input[data-in="bbStartFund"]');
+    box.value = '24190';
+    box.dispatchEvent(new Event('input', { bubbles: true }));
+    document.querySelector('[data-act="bbStart"]').click();
+    await new Promise((r) => setTimeout(r, 30));
+    document.querySelector('[data-act="bbSuggest"]').click();
+    expect(document.querySelector('#bbsuggestmsg').textContent).toContain('revenue line');
+    // add a revenue line (a code that fits Gilbert's layout), then ask again
+    const code = document.querySelector('input[data-in="bbAddCode"]');
+    code.value = '24190-0000-44000-0000-001707-0000';
+    code.dispatchEvent(new Event('input', { bubbles: true }));
+    const amt = document.querySelector('input[data-in="bbAddAmt"]');
+    amt.value = '2350';
+    amt.dispatchEvent(new Event('input', { bubbles: true }));
+    document.querySelector('[data-act="bbAddLine"]').click();
+    document.querySelector('[data-act="bbSuggest"]').click();
+    expect(document.querySelector('textarea[data-k="justification"]').value).toMatch(/^Initial budget of \$2350 in /);
+  });
+});
+
+describe('row icons: duplicate, clear and remove', () => {
+  it('each icon says what it does and works on an expenditure line', async () => {
+    document.querySelector('.nav button[data-v="bars"]').click();
+    const ta = document.querySelector('textarea[data-in="awardPaste"]');
+    ta.value = 'Fund: 24101\nTotal Award: $2,350.00\n1000 51100 Salaries 800.00\n2100 52311 Benefits 900.00';
+    ta.dispatchEvent(new Event('input', { bubbles: true }));
+    document.querySelector('[data-act="awardRead"]').click();
+    const rows = () => document.querySelectorAll('input[data-in="awardRow"][data-f="func"]');
+    expect(rows().length).toBe(2);
+    const dup = document.querySelector('[data-act="awardDupRow"][data-i="0"]');
+    expect(dup.title).toBe('Duplicate this expenditure line');
+    expect(document.querySelector('[data-act="awardClearRow"][data-i="0"]').getAttribute('aria-label')).toBe('Clear the fields of this expenditure line');
+    expect(document.querySelector('[data-act="awardDelRow"][data-i="0"]').title).toBe('Remove this expenditure line');
+    dup.click();
+    expect(rows().length).toBe(3);
+    expect([...rows()].map((x) => x.value)).toEqual(['1000', '1000', '2100']);
+    document.querySelector('[data-act="awardClearRow"][data-i="1"]').click();
+    expect([...rows()].map((x) => x.value)).toEqual(['1000', '', '2100']);
+    expect(document.querySelectorAll('input[data-f="amount"][data-i="1"]')[0].value).toBe('');
+    document.querySelector('[data-act="awardDelRow"][data-i="1"]').click();
+    expect(rows().length).toBe(2);
+    // revenue rows have them too
+    document.querySelector('[data-act="awardDupRev"][data-i="0"]').click();
+    expect(document.querySelectorAll('input[data-in="awardRev"][data-f="amount"]').length).toBe(2);
+  });
+});
+
+describe('changing the type of the working BAR', () => {
+  it('switches Initial Budget to Increase and updates the suggested wording, keeping edited wording', async () => {
+    document.querySelector('.nav button[data-v="bars"]').click();
+    window.confirm = () => true;
+    const box = document.querySelector('input[data-in="bbStartFund"]');
+    box.value = '24190';
+    box.dispatchEvent(new Event('input', { bubbles: true }));
+    document.querySelector('[data-act="bbStart"]').click();
+    await new Promise((r) => setTimeout(r, 30));
+    const code = document.querySelector('input[data-in="bbAddCode"]');
+    code.value = '24190-0000-44000-0000-001707-0000';
+    code.dispatchEvent(new Event('input', { bubbles: true }));
+    const amt = document.querySelector('input[data-in="bbAddAmt"]');
+    amt.value = '1000';
+    amt.dispatchEvent(new Event('input', { bubbles: true }));
+    document.querySelector('[data-act="bbAddLine"]').click();
+    document.querySelector('[data-act="bbSuggest"]').click();
+    const just = () => document.querySelector('textarea[data-k="justification"]').value;
+    expect(just()).toMatch(/^Initial budget of/);
+    const sel = () => document.querySelector('select[data-in="bbDraftType"]');
+    sel().value = 'I';
+    sel().dispatchEvent(new Event('input', { bubbles: true }));
+    expect(document.querySelector('#bbdraft h2').textContent).toContain('Increase');
+    expect(just()).toMatch(/^Increase of \$1000/);
+    // wording the user edited stays
+    const ta = document.querySelector('textarea[data-k="justification"]');
+    ta.value = 'My own words.';
+    ta.dispatchEvent(new Event('input', { bubbles: true }));
+    sel().value = 'IB';
+    sel().dispatchEvent(new Event('input', { bubbles: true }));
+    expect(just()).toBe('My own words.');
+    expect(document.querySelector('#bbdraft h2').textContent).toContain('Initial budget');
+  });
+});
+
+describe('the standard Initial Budget sentence follows a type change even with a fund name in it', () => {
+  it('rewrites it for an Increase', async () => {
+    const { bbChangeType, bb } = await import('../src/views/barBuilder.js');
+    const d = bb().draft;
+    d.type = 'IB';
+    d.justification = 'Initial budget of $80000 in fund 27528 (Community Schools) to budget the award received.';
+    bbChangeType('I');
+    expect(d.justification).toBe('Increase of $80000 in fund 27528 (Community Schools) to budget additional award funds received.');
   });
 });

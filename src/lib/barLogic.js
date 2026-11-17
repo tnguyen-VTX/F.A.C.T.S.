@@ -82,10 +82,70 @@ export function spreadCapped(total, caps) {
   return parts;
 }
 
+// ---- Salary packages ------------------------------------------------------------------------
+// A salary line (profile `benefits`, e.g. 51100 and 51300) moves together with its benefit lines: same fund, function,
+// program, location and job class, with the benefit's object. `spec` is [{ obj, pct }] (pct of the salary). A package of
+// `t` whole dollars is the salary plus each benefit (pct of the salary, rounded like Excel); the rounding difference goes
+// on the salary line, so the lines add up to exactly t.
+const swapObject = (l, obj) => l.code.replace(`-${l.obj}-`, `-${obj}-`);
+export function splitPackage(t, spec) {
+  const P = sumBy(spec, (b) => b.pct);
+  const s0 = t / (1 + P);
+  const bens = spec.map((b) => roundAway(s0 * b.pct));
+  return { salary: t - sumBy(bens, (b) => b), bens };
+}
+// The most a package can give: every line within its room. Searches down from the estimate until the package fits
+// (and keeps fitting for every smaller amount, so any share of the cap is safe).
+function packageCap(roomSalary, bens) {
+  const P = sumBy(bens, (b) => b.pct);
+  const sMax = Math.min(roomSalary, ...bens.map((b) => b.room / b.pct));
+  const fits = (t) => {
+    const p = splitPackage(t, bens);
+    return p.salary >= 0 && p.salary <= roomSalary && p.bens.every((a, i) => a >= 0 && a <= bens[i].room);
+  };
+  let t = Math.floor(sMax * (1 + P));
+  while (t > 0 && !(fits(t) && fits(t - 1) && fits(t - 2))) t--;
+  return Math.max(0, t);
+}
+// A function's donor units: plain lines with room, and salary packages. A benefit line that has room and belongs to a
+// package is used only through it. Each unit: { cap, split(t) -> [{ l, amount }] with positive amounts }.
+export function donorUnits(lines, benefits = {}) {
+  const byCode = new Map(lines.map((l) => [l.code, l]));
+  const inPackage = new Set();
+  const units = [];
+  for (const l of lines) {
+    const room = down(l.avail);
+    const spec = benefits[l.obj];
+    if (!spec || room <= 0) continue;
+    const bens = spec
+      .map((b) => ({ ...b, line: byCode.get(swapObject(l, b.obj)) }))
+      .filter((b) => b.line && down(b.line.avail) > 0)
+      .map((b) => ({ ...b, room: down(b.line.avail) }));
+    if (!bens.length) continue;
+    const cap = packageCap(room, bens);
+    if (cap <= 0) continue;
+    bens.forEach((b) => inPackage.add(b.line.code));
+    inPackage.add(l.code);
+    units.push({
+      cap,
+      package: true,
+      split: (t) => {
+        const p = splitPackage(t, bens);
+        return [{ l, amount: p.salary }, ...bens.map((b, i) => ({ l: b.line, amount: p.bens[i] }))].filter((x) => x.amount);
+      },
+    });
+  }
+  for (const l of lines) {
+    const room = down(l.avail);
+    if (room > 0 && !inPackage.has(l.code)) units.push({ cap: room, split: (t) => [{ l, amount: t }] });
+  }
+  return units;
+}
+
 // Receiving side of a transfer: spread a whole-dollar amount T over a deficit function's lines.
 // Over-budget lines are filled first (up to each line's own deficit, rounded up); if T is short of
 // that, T is shared out pro rata; anything above is spread over the function's lines by budget.
-export function allocateReceiving(deficit, T) {
+export function allocateReceiving(deficit, T, benefits = {}) {
   const over = deficit.lines,
     need = over.map((l) => up(l.deficit)),
     S = sumBy(need, (n) => n);
@@ -101,6 +161,19 @@ export function allocateReceiving(deficit, T) {
     );
     spread.forEach((l, i) => amt.set(l.code, (amt.get(l.code) || 0) + extra[i]));
   }
+  // A salary line that receives money brings its benefit lines with it: its share becomes salary + benefits, adding up
+  // to the same amount. (If a benefit line is already receiving on its own, the salary line is left as it is.)
+  const byCode = new Map(deficit.allLines.map((l) => [l.code, l]));
+  for (const l of deficit.allLines) {
+    const a = amt.get(l.code),
+      spec = benefits[l.obj];
+    if (!a || !spec) continue;
+    const bens = spec.map((b) => ({ ...b, line: byCode.get(swapObject(l, b.obj)) })).filter((b) => b.line);
+    if (!bens.length || bens.some((b) => amt.get(b.line.code))) continue;
+    const p = splitPackage(a, bens);
+    amt.set(l.code, p.salary);
+    bens.forEach((b, i) => p.bens[i] && amt.set(b.line.code, p.bens[i]));
+  }
   return deficit.allLines.filter((l) => amt.get(l.code)).map((l) => ({ ...l, amount: amt.get(l.code) }));
 }
 
@@ -111,7 +184,7 @@ export function allocateReceiving(deficit, T) {
 // kind 'T' takes only from other function series (OBMS rejects a Transfer within a series, "Same Func Xfer"); 'M' only from the same series.
 // Returns the negative lines and the shortfall (dollars the donors could not cover; 0 if none).
 const seriesOk = (kind, a, b) => (kind === 'T' ? a[0] !== b[0] : kind === 'M' ? a[0] === b[0] : true);
-export function allocateDonors(asr, { fund, excludeFunc, need, mode = 'rank', priority = [], kind }) {
+export function allocateDonors(asr, { fund, excludeFunc, need, mode = 'rank', priority = [], kind, benefits = {} }) {
   const f = asr.funds.get(fund);
   const fns = f
     ? fundFunctions(f).filter((x) => x.code !== excludeFunc && seriesOk(kind, x.code, excludeFunc))
@@ -122,13 +195,13 @@ export function allocateDonors(asr, { fund, excludeFunc, need, mode = 'rank', pr
   };
   const cand = fns
     .map((x) => {
-      const rooms = x.lines.filter((l) => down(l.avail) > 0).map((l) => ({ l, room: down(l.avail) }));
+      const units = donorUnits(x.lines, benefits);
       return {
         code: x.code,
-        rooms,
+        units,
         cap: Math.min(
           Math.max(0, down(x.tot.avail)),
-          sumBy(rooms, (r) => r.room),
+          sumBy(units, (u) => u.cap),
         ),
       };
     })
@@ -157,9 +230,9 @@ export function allocateDonors(asr, { fund, excludeFunc, need, mode = 'rank', pr
     if (!take[i]) return;
     const parts = spreadCapped(
       take[i],
-      c.rooms.map((r) => r.room),
+      c.units.map((u) => u.cap),
     );
-    c.rooms.forEach((r, j) => parts[j] && lines.push({ ...r.l, amount: -parts[j] }));
+    c.units.forEach((u, j) => parts[j] && u.split(parts[j]).forEach((x) => lines.push({ ...x.l, amount: -x.amount })));
     got += take[i];
   });
   return { lines, shortfall: need - got };
@@ -170,10 +243,10 @@ export function allocateDonors(asr, { fund, excludeFunc, need, mode = 'rank', pr
 export function buildTransfer(
   asr,
   deficit,
-  { amount, cushion = 0, mode = 'rank', priority = [], kind } = {},
+  { amount, cushion = 0, mode = 'rank', priority = [], kind, benefits = {} } = {},
 ) {
   const T = amount != null ? Math.round(amount) : up(deficit.deficit + cushion);
-  const receiving = allocateReceiving(deficit, T);
+  const receiving = allocateReceiving(deficit, T, benefits);
   const donors = allocateDonors(asr, {
     fund: deficit.fund,
     excludeFunc: deficit.func,
@@ -181,6 +254,7 @@ export function buildTransfer(
     need: sumBy(receiving, (l) => l.amount),
     mode,
     priority,
+    benefits,
   });
   const lines = [...donors.lines, ...receiving];
   return {

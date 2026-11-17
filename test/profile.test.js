@@ -132,3 +132,20 @@ describe('award letter revenue objects on a profile', () => {
     expect(validateProfile({ ...p, awardRevenue: { 24101: '51100' } }).join()).toContain('24101');
   });
 });
+
+describe('benefits that move with a salary', () => {
+  it('reads and writes the Schools text, as percent of salary', async () => {
+    const { parseBenefitLines, benefitLines, validateProfile, newProfile, gilbertPreset } = await import('../src/lib/profile.js');
+    const m = parseBenefitLines('51100: 52111 18.15, 52112 2\n51300: 52111 18.15');
+    expect(m[51100]).toEqual([{ obj: '52111', pct: 0.1815 }, { obj: '52112', pct: 0.02 }]);
+    expect(benefitLines(m)).toBe('51100: 52111 18.15, 52112 2\n51300: 52111 18.15');
+    const p = newProfile({ id: 'x', name: 'X', districtCode: '1' });
+    expect(p.salaryBenefits).toEqual({});
+    expect(validateProfile({ ...p, salaryBenefits: m })).toEqual([]);
+    expect(validateProfile({ ...p, salaryBenefits: { 51100: [{ obj: '5211', pct: 0.1 }] } }).join()).toContain('51100');
+    expect(validateProfile({ ...p, salaryBenefits: { 51100: [{ obj: '52111', pct: 0.7 }, { obj: '52112', pct: 0.4 }] } }).join()).toContain('100% or more');
+    // Gilbert starts with the workbook's four percentage benefits on both salary objects
+    expect(gilbertPreset().salaryBenefits[51100].map((b) => b.obj)).toEqual(['52111', '52112', '52210', '52220']);
+    expect(gilbertPreset().salaryBenefits[51300]).toBeTruthy();
+  });
+});

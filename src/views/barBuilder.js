@@ -29,6 +29,7 @@ import { isSalaryObject, suggestFte } from '../lib/fte.js';
 import { $, esc, fmtM, missingMsg, num } from '../lib/format.js';
 import { suggestJustification } from '../lib/justify.js';
 import { awardPanelHTML } from './awardPanel.js';
+import { parseBarCsv } from '../lib/barImport.js';
 import { D, FY, PF, REP, S, STORE, UI, fundLabel, profile, saveStore, storage } from '../state.js';
 
 const TYPES = ['T', 'M', 'I', 'IB', 'D'];
@@ -121,10 +122,12 @@ export function viewBarBuilder() {
     )}</div><p class="muted">${b.funds.size ? `${b.funds.size} selected.` : 'None picked: all funds are shown.'}</p></section>
   <section class="panel"><h2>Start a BAR</h2><div class="filters">
   <label>BAR type<select data-in="bbType">${TYPES.map((t) => `<option value="${t}"${b.type === t ? ' selected' : ''}>${esc(BAR_TYPES[t])} (${t})</option>`).join('')}</select></label>
-  <label>Fund<select data-in="bbStartFund"><option value="">Choose…</option>${funds.map((f) => `<option value="${esc(f.code)}"${b.startFund === f.code ? ' selected' : ''}>${esc(fundLabel(f.code))}</option>`).join('')}</select></label>
-  <button class="btn" data-act="bbStart">Start an empty ${esc(BAR_TYPES[b.type])} BAR</button></div>${
+  <label>Fund<input type="text" list="bbfundlist" data-in="bbStartFund" value="${esc(b.startFund || '')}" maxlength="5" inputmode="numeric" placeholder="5-digit code" autocomplete="off" size="14"></label>
+  <datalist id="bbfundlist">${funds.map((f) => `<option value="${esc(f.code)}">${esc(fundLabel(f.code))}</option>`).join('')}</datalist>
+  <button class="btn" data-act="bbStart">Start an empty ${esc(BAR_TYPES[b.type])} BAR</button>
+  <label class="btn" title="Load an OBMS BAR upload file (.csv) to change it and build it again">Open a BAR file (.csv)…<input type="file" accept=".csv,text/csv" data-in="bbImportCsv" hidden></label></div>${
     TYPE_HELP[b.type] ? `<p class="muted">${esc(TYPE_HELP[b.type])}</p>` : ''
-  }</section>
+  }<p class="warn" id="bbstartmsg" role="alert" hidden></p></section>
   <div id="bbaward">${awardPanelHTML()}</div><div id="bbdef"></div><div id="bbdraft"></div><div id="bbsaved"></div><div id="bbbackup"></div>`;
   bbDeficits();
   bbDraft();
@@ -176,6 +179,7 @@ export function bbBuildTransfer(fund, func, kind = 'T') {
     cushion: num(b.cushion),
     mode: b.mode,
     priority: profile().donorPriority || [],
+    benefits: profile().salaryBenefits || {},
     kind,
   });
   const bar = newBar(kind, fund);
@@ -188,11 +192,65 @@ export function bbBuildTransfer(fund, func, kind = 'T') {
     : '';
   keep();
 }
+// Open an OBMS BAR upload file as the working draft. Errors are shown under Start a BAR; warnings go on the draft.
+export function bbImportRead(text, fileName = '') {
+  const b = bb();
+  const r = parseBarCsv(text, profile(), FY.value);
+  const msg = $('#bbstartmsg');
+  if (r.errors.length) {
+    if (msg) {
+      msg.textContent = `Could not open ${fileName || 'the file'}: ${r.errors.slice(0, 4).join(' ')}${r.errors.length > 4 ? ` (and ${r.errors.length - 4} more)` : ''}`;
+      msg.hidden = false;
+    }
+    return false;
+  }
+  if (!replaceOk()) return false;
+  if (msg) {
+    msg.textContent = '';
+    msg.hidden = true;
+  }
+  b.draft = r.bar;
+  b.type = r.bar.type;
+  b.startFund = r.bar.fund;
+  b.narrMsg = '';
+  refreshFte(r.bar);
+  b.note = `Opened ${fileName || 'the file'}: ${r.bar.lines.length} lines. Change what you need, then download a new file.${r.warnings.length ? ' ' + r.warnings.join(' ') : ''}`;
+  keep();
+  return true;
+}
+// Change the working BAR's type (for example an opened Initial Budget file to an Increase). The wording follows the type:
+// a justification that was only the suggested one is replaced by the new type's suggestion; one the user edited is kept.
+export function bbChangeType(type) {
+  const b = bb(),
+    bar = b.draft;
+  if (!bar || !BAR_TYPES[type] || type === bar.type) return;
+  const wording = { funcNames: D.asr?.funcNames, fundNames: D.fundNames };
+  const untouched = !bar.justification || bar.justification === suggestJustification(bar, wording);
+  bar.type = type;
+  bar.narrTpl = '';
+  b.narrMsg = '';
+  if (untouched) bar.justification = suggestJustification(bar, wording);
+  else {
+    // The standard sentence for Initial Budget or Increase (even with a fund name added) is switched to the new type's wording.
+    const m = bar.justification.match(/^(?:Initial budget|Increase) of (\$[\d.]+ in .*?) to budget (?:the award|additional award funds) received\.$/);
+    if (m && (type === 'IB' || type === 'I'))
+      bar.justification = `${type === 'IB' ? 'Initial budget' : 'Increase'} of ${m[1]} to budget ${type === 'IB' ? 'the award' : 'additional award funds'} received.`;
+  }
+  keep();
+}
 export function bbStartEmpty() {
   const b = bb();
-  if (!b.startFund || !replaceOk()) return;
+  const msg = $('#bbstartmsg');
+  const fund = String(b.startFund || '').trim();
+  if (msg) {
+    msg.textContent = /^\d{5}$/.test(fund) ? '' : 'Type or choose the 5-digit fund code first.';
+    msg.hidden = !msg.textContent;
+  }
+  if (!/^\d{5}$/.test(fund) || !replaceOk()) return;
+  b.startFund = fund;
   b.draft = newBar(b.type, b.startFund);
   b.note = '';
+  b.narrMsg = '';
   keep();
 }
 
@@ -201,7 +259,7 @@ function lineRow(l, i, asrLine) {
   return `<tr class="${l.amount < 0 ? 'give' : ''}"><td><span class="code">${esc(l.code)}</span><br><span class="muted">${esc(descOf(l.code))}</span></td>
   <td>${isRevenueObject(l.obj) ? 'REV' : 'EXP'}</td><td class="num">${esc(l.func)}</td><td class="num">${esc(l.obj)}</td><td class="r"><input type="number" step="1" class="amt" data-in="bbAmt" data-i="${i}" value="${l.amount}" aria-label="Amount for ${esc(l.code)}"></td>
   <td class="r">${salary ? `<input type="number" step="0.01" min="0" class="lfte" data-in="bbLineFte" data-i="${i}" value="${l.lineFte || ''}" placeholder="FTE" title="This position's current FTE; the FTE adj is filled from the amount's share of the line's budget (or its actuals + encumbrances when it has no budget)" aria-label="Current FTE for ${esc(l.code)}"><div class="muted fnote" data-i="${i}">${esc(fteNote(l))}</div>` : '<span class="muted">N/A</span>'}</td>
-  <td class="r">${salary ? `<input type="number" step="0.0001" class="fte" data-in="bbFte" data-i="${i}" value="${l.fte || 0}" aria-label="FTE for ${esc(l.code)}">` : '<span class="muted">N/A</span>'}</td>
+  <td class="r">${salary ? `<input type="number" step="0.0001" class="fte${l.fte > 0 ? '' : ' bad'}" title="${l.fte > 0 ? '' : 'A salary line needs its FTE: OBMS rejects one with none (Missing projected FTE).'}" data-in="bbFte" data-i="${i}" value="${l.fte || 0}" aria-label="FTE for ${esc(l.code)}">` : '<span class="muted">N/A</span>'}</td>
   <td class="r"><button class="linkbtn" data-act="bbDel" data-i="${i}" aria-label="Remove ${esc(l.code)}">Remove</button></td></tr>`;
 }
 const fieldIn = (label, path, val, extra = '') =>
@@ -222,7 +280,7 @@ export function bbDraft() {
   ${b.note ? `<div class="warn">${esc(b.note)}</div>` : ''}
   <div class="grid2"><div>
   <dl class="kv"><dt>Document ID</dt><dd><input type="text" data-in="bbField" data-k="docId" value="${esc(bar.docId || '')}" placeholder="Assigned by OBMS after upload"></dd>
-  <dt>Fiscal year</dt><dd>${FY.value - 1}-${FY.value}</dd><dt>BAR type</dt><dd>${esc(BAR_TYPES[bar.type])}${flow ? ' (flowthrough fund)' : ''}</dd>
+  <dt>Fiscal year</dt><dd>${FY.value - 1}-${FY.value}</dd><dt>BAR type</dt><dd><select data-in="bbDraftType" aria-label="BAR type of this BAR" title="Change the type, for example from Initial Budget to Increase">${TYPES.map((t) => `<option value="${t}"${bar.type === t ? ' selected' : ''}>${esc(BAR_TYPES[t])} (${t})</option>`).join('')}</select>${flow ? ' (flowthrough fund)' : ''}</dd>
   <dt>Fund</dt><dd>${esc(fundLabel(bar.fund))}</dd><dt>Entity</dt><dd>${esc(p.entityName || p.name)}</dd><dt>District code</dt><dd>${esc(p.districtCode || '—')}</dd></dl></div>
   <div>${fieldIn('Contact first name', 'contact.first', bar.contact.first)}${fieldIn('Contact middle name', 'contact.middle', bar.contact.middle)}${fieldIn('Contact last name', 'contact.last', bar.contact.last)}</div></div>
   ${
@@ -232,7 +290,7 @@ export function bbDraft() {
   }
   ${['I', 'IB', 'D'].includes(bar.type) ? fieldIn(bar.type === 'D' ? 'Amount of the decrease (optional cap)' : 'Award amount (optional cap)', 'award', bar.award, 'inputmode="decimal" size="14"') : ''}
   <label class="fld"><span>Justification <span id="bbcount" class="muted"></span></span><textarea rows="3" data-in="bbField" data-k="justification">${esc(bar.justification)}</textarea></label>
-  <div class="toolbar"><button class="btn" data-act="bbSuggest">Suggest wording</button></div>
+  <div class="toolbar"><button class="btn" data-act="bbSuggest">Suggest wording</button> <span class="muted" id="bbsuggestmsg"></span></div>
   ${narrativePanel(bar)}
   <div class="scroll"><table class="t"><thead><tr><th>Account</th><th>Type</th><th>Func</th><th>Object</th><th class="r">Adj amount</th><th class="r">Line FTE</th><th class="r">FTE adj</th><th></th></tr></thead><tbody>${
     bar.lines.map((l, i) => lineRow(l, i)).join('') ||

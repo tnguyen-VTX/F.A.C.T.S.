@@ -51,14 +51,17 @@ import {
   bbUnlock,
   backupFile,
   bbRestoreRead,
+  bbImportRead,
+  bbChangeType,
   bbRestoreApply,
   bbBackup,
   viewBarBuilder,
 } from './views/barBuilder.js';
-import { barLine } from './lib/bar.js';
+import { barLine, isRevenueObject } from './lib/bar.js';
+import { isSalaryObject } from './lib/fte.js';
 import { AWARD_ACT, AWARD_IN } from './views/awardPanel.js';
 import { suggestJustification } from './lib/justify.js';
-import { splitWith } from './lib/profile.js';
+import { parseBenefitLines, splitWith } from './lib/profile.js';
 import { viewBudget } from './views/budget.js';
 import { viewImport } from './views/import.js';
 import { viewCap } from './views/capitalOutlay.js';
@@ -104,8 +107,9 @@ const keepBB = keep;
 const syncFte = () => {
   document.querySelectorAll('input.fte').forEach((el) => {
     el.value = bb().draft.lines[+el.dataset.i]?.fte || 0;
+    el.classList.toggle('bad', !(bb().draft.lines[+el.dataset.i]?.fte > 0));
   });
-  document.querySelectorAll('.fnote').forEach((el) => {
+  document.querySelectorAll('.fnote[data-i]').forEach((el) => {
     const l = bb().draft.lines[+el.dataset.i];
     el.textContent = l ? fteNote(l) : '';
   });
@@ -356,13 +360,22 @@ const ACT = {
   },
   bbSuggest: () => {
     const d = bb().draft;
-    d.justification = suggestJustification(d, { funcNames: D.asr.funcNames, fundNames: D.fundNames });
+    const text = suggestJustification(d, { funcNames: D.asr?.funcNames, fundNames: D.fundNames });
+    if (!text) {
+      // nothing to word yet: say why instead of doing nothing
+      const m = $('#bbsuggestmsg');
+      if (m) m.textContent = 'Add the revenue line (an Initial Budget, Increase or Decrease) or the transfer lines first; the wording is made from them.';
+      return;
+    }
+    d.justification = text;
     keepBB();
     bbDraft();
   },
   bbDownload: () => {
     const r = bbFile();
     if (!r.ok) return;
+    const noFte = bb().draft.lines.filter((l) => isSalaryObject(l.obj, profile().fteObjects) && !isRevenueObject(l.obj) && l.amount !== 0 && !(l.fte > 0)).length;
+    if (noFte && !confirm(`${noFte} salary line${noFte > 1 ? 's have' : ' has'} no FTE. OBMS rejects a salary line with no FTE ("Missing projected FTE"). Download anyway?`)) return;
     const a = document.createElement('a');
     a.href = URL.createObjectURL(new Blob([r.csv], { type: 'text/csv;charset=utf-8' }));
     a.download = r.name;
@@ -515,6 +528,16 @@ const IN = {
     crResults();
   },
   ...AWARD_IN,
+  bbDraftType: (t) => {
+    bbChangeType(t.value);
+    bbDraft();
+  },
+  bbImportCsv: async (t) => {
+    const f = t.files?.[0];
+    t.value = '';
+    if (!f) return;
+    if (bbImportRead(await f.text(), f.name)) viewBarBuilder();
+  },
   bbRestoreFile: async (t) => {
     const f = t.files?.[0];
     if (f) bbRestoreRead(await f.text());
@@ -568,6 +591,7 @@ const IN = {
     const l = bb().draft.lines[+t.dataset.i];
     l.fte = num(t.value);
     l.fteManual = true;
+    t.classList.toggle('bad', !(l.fte > 0));
     keepBB();
     bbSummary();
   },
@@ -657,6 +681,11 @@ const IN = {
   scFunds: (t) => {
     UI.sc.fundsText = t.value;
     UI.sc.draft.funds = parseFundLines(t.value);
+    $('#scerr').innerHTML = scErrors();
+  },
+  scBenefits: (t) => {
+    UI.sc.benefitsText = t.value;
+    UI.sc.draft.salaryBenefits = parseBenefitLines(t.value);
     $('#scerr').innerHTML = scErrors();
   },
   scPriority: (t) => {

@@ -37,6 +37,9 @@ export function newProfile(over = {}) {
     // the fund, function 0000, object 11011, zeros elsewhere) and optional full codes for particular funds.
     bankAccount: { pattern: '', byFund: {} },
     awardRevenue: {}, // fund code -> revenue object (4xxxx) used on the revenue line when a BAR is built from an award letter
+    // Benefits that move with a salary line in a transfer: salary object -> [{ obj, pct }] (pct as a fraction, 0.1815 = 18.15%).
+    // Empty = salary lines move alone. Rates are the school's, e.g. from its position budget workbook.
+    salaryBenefits: {},
     fteObjects: ['511'], // object prefixes whose BAR lines carry an FTE change (salaries)
     defaultCushion: { type: 'amount', value: 0 },
     contacts: [], // { name, title }: typed by the user, never committed
@@ -54,6 +57,11 @@ export function gilbertPreset() {
     reportNames: ['Gilbert L. Sena High School'], // how Gilbert's own AptaFund reports print the name
     districtCode: '001',
     locationIds: ['707'],
+    // From the school's FY2027 position budget (tabs A and B): ERA, RHC, FICA and Medicare as a share of salary.
+    salaryBenefits: {
+      51100: [{ obj: '52111', pct: 0.1815 }, { obj: '52112', pct: 0.02 }, { obj: '52210', pct: 0.062 }, { obj: '52220', pct: 0.0145 }],
+      51300: [{ obj: '52111', pct: 0.1815 }, { obj: '52112', pct: 0.02 }, { obj: '52210', pct: 0.062 }, { obj: '52220', pct: 0.0145 }],
+    },
   });
 }
 
@@ -106,6 +114,13 @@ export function validateProfile(p) {
   if (new Set(codes).size !== codes.length) errs.push('A fund is listed twice.');
   for (const [f, o] of Object.entries(p.awardRevenue || {}))
     if (!/^4\d{4}$/.test(String(o))) errs.push(`The revenue object for fund ${f} is 5 digits starting with 4.`);
+  for (const [sal, list] of Object.entries(p.salaryBenefits || {})) {
+    if (!/^\d{5}$/.test(sal)) errs.push(`The salary object ${sal} must be 5 digits.`);
+    for (const b of list || [])
+      if (!/^\d{5}$/.test(String(b.obj)) || !(b.pct > 0 && b.pct < 1))
+        errs.push(`Benefit for ${sal}: "${b.obj}" needs a 5-digit object and a percent above 0 and below 100.`);
+    if ((list || []).reduce((x, b) => x + (b.pct || 0), 0) >= 1) errs.push(`The benefits for ${sal} add up to 100% or more.`);
+  }
   if ((p.fteObjects || []).some((x) => !/^\d{1,5}$/.test(String(x))))
     errs.push('FTE objects are digits, like 511.');
   if ((p.donorPriority || []).some((c) => !/^\d{4}$/.test(String(c))))
@@ -166,6 +181,26 @@ export function fundLines(funds) {
         .join(', ')
         .replace(/,\s*$/, ''),
     )
+    .join('\n');
+}
+// "51100: 52111 18.15, 52112 2" per line (percent of salary) <-> { 51100: [{ obj, pct }] }. Bad pieces are kept as obj '' so the
+// validation can say what is wrong.
+export function parseBenefitLines(text) {
+  const out = {};
+  for (const line of String(text || '').split('\n')) {
+    const m = line.match(/^\s*(\d+)\s*[:=]\s*(.*)$/);
+    if (!m) continue;
+    out[m[1]] = m[2]
+      .split(',')
+      .map((x) => x.trim().split(/\s+/))
+      .filter((x) => x[0])
+      .map(([obj, pct]) => ({ obj, pct: Math.round(parseFloat(pct) * 1e4) / 1e6 }));
+  }
+  return out;
+}
+export function benefitLines(map) {
+  return Object.entries(map || {})
+    .map(([sal, list]) => `${sal}: ${list.map((b) => `${b.obj} ${Math.round(b.pct * 1e6) / 1e4}`).join(', ')}`)
     .join('\n');
 }
 export const parseList = (text) =>

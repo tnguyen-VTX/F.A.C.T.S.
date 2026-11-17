@@ -3,6 +3,7 @@ import {
   SEGMENT_KEYS,
   SEGMENT_LABELS,
   UPLOAD_LOCATION_LEN,
+  benefitLines,
   fundLines,
   newProfile,
   uploadLocation,
@@ -54,6 +55,7 @@ export function scOpen(id) {
     draft: base,
     fundsText: fundLines(base.funds),
     priorityText: base.donorPriority.join(', '),
+    benefitsText: benefitLines(base.salaryBenefits),
     errors: [],
   };
 }
@@ -139,6 +141,7 @@ export function scForm() {
   <h3>BAR defaults</h3>
   <div class="grid2">${field('Donor function order', `<input type="text" data-in="scPriority" value="${esc(sc.priorityText)}" placeholder="2600, 2100, 1000">`, 'Functions to take from first, separated by commas.')}
   ${field('Cushion added to each deficit', `<input type="number" min="0" data-in="sc" data-k="cushion" value="${d.defaultCushion.value || 0}">`, 'Dollars. You can change it on each BAR.')}</div>
+  <label class="fld"><span>Benefits that move with a salary (percent of salary)</span><textarea rows="3" data-in="scBenefits" placeholder="51100: 52111 18.15, 52112 2, 52210 6.2, 52220 1.45">${esc(sc.benefitsText)}</textarea><span class="muted">One line per salary object. In a transfer, a salary line (51100, 51300) moves together with these benefit lines when they have room, so the lines add up to the amount needed. Leave empty to move salary lines alone.</span></label>
   <div id="scerr">${scErrors()}</div>
   <div class="toolbar"><button class="btn" data-act="scSave">Save school</button><button class="btn" data-act="scCancel">Cancel</button></div></section>`;
 }

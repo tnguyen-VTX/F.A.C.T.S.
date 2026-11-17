@@ -190,3 +190,60 @@ describe('spreading an award over a fund and building several revenue lines', ()
     expect(dec.bar.lines[0].amount).toBe(-100);
   });
 });
+
+import { parseAllocationTable } from '../src/lib/awardLetter.js';
+describe('a memo that lists every school (made-up names)', () => {
+  const lines = [
+    'EXHIBIT A (27528 - Planning Award - FY26-27)',
+    'Award Name: Community Schools',
+    'OBMS ENTITY LOCAL EDUCATION AGENCY District/State Charter/Local',
+    '(Revenue Code 43202)',
+    '1 Albuquerque Public Schools $ 1,210,017',
+    '68475004 Example School for the Arts $ 80,000',
+    '553-001 Other Charter School $ 99,000',
+    'GRAND TOTAL $ 4,883,225',
+    '8/14/20262:37 PM 27528-Community-School-FY27-Planning-Award-vp-8.14.26-updated',
+  ];
+  const byName = newProfile({ id: 'a', name: 'Example School for the Arts', districtCode: '068', locationIds: ['004'], funds: [] });
+  it('reads the fund from the title and the school row by name', () => {
+    const r = parseAward(lines, byName);
+    expect([r.fund.value, r.type, r.award.value, r.revObj.value]).toEqual(['27528', 'IB', 80000, '43202']);
+    expect(r.revenue).toMatchObject([{ obj: '43202', amount: 80000 }]);
+    expect(r.note).toBeNull();
+  });
+  it('finds the row by district and location when the name differs', () => {
+    const p = newProfile({ id: 'b', name: 'Something Else', districtCode: '553', locationIds: ['001'], funds: [] });
+    expect(parseAllocationTable(lines, p).row.amount).toBe(99000);
+    const q = newProfile({ id: 'c', name: 'Something Else', districtCode: '068', locationIds: ['004'], funds: [] });
+    expect(parseAllocationTable(lines, q).row.amount).toBe(80000);
+  });
+  it('says so when the school is not in the table, and does not take the grand total or the date', () => {
+    const r = parseAward(lines, newProfile({ id: 'd', name: 'Not Listed', districtCode: '009', locationIds: ['999'], funds: [] }));
+    expect(r.award).toBeNull();
+    expect(r.note).toMatch(/row was not found/);
+    expect(r.fund.value).toBe('27528');
+  });
+  it('does not read part of a date as money', () => {
+    const r = parseAward(['Award vp-8.14.26 updated'], byName);
+    expect(r.award).toBeNull();
+  });
+});
+
+describe('salary lines built from an award letter carry their FTE', () => {
+  it('puts the typed FTE on a salary line (and ignores it on other lines)', () => {
+    const { bar } = buildAwardBar(gil, {
+      type: 'IB', fund: '24101', loc: '001707',
+      revenue: [{ obj: '44000', amount: 100000 }],
+      rows: [
+        { on: true, func: '2200', obj: '51100', prog: '1010', job: '1211', amount: 80000, fte: '1' },
+        { on: true, func: '2200', obj: '52111', prog: '1010', job: '1211', amount: 20000, fte: '1' },
+      ],
+    });
+    const sal = bar.lines.find((l) => l.obj === '51100');
+    expect(sal.fte).toBe(1);
+    expect(sal.fteManual).toBe(true);
+    expect(bar.lines.find((l) => l.obj === '52111').fte).toBe(0);
+    const csv = makeBarFile(Object.assign(bar, { contact: { first: 'A', middle: '', last: 'B' } }), { profile: gil, fiscalYear: 2027 }).csv;
+    expect(csv).toContain('UBL,24101,2200,51100,1010,707,1211,80000,1');
+  });
+});
