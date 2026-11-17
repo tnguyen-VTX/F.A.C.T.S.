@@ -57,3 +57,22 @@ describe('building from the panel', () => {
     expect(document.querySelector('#bbdraft').innerHTML).toContain('53414');
   });
 });
+
+describe('typing a fund that is not on the profile', () => {
+  it('lets the Start a BAR fund box take any 5-digit code, and refuses a bad one', async () => {
+    document.querySelector('.nav button[data-v="bars"]').click();
+    const box = document.querySelector('input[data-in="bbStartFund"]');
+    expect(box).not.toBeNull();
+    box.value = '2410';
+    box.dispatchEvent(new Event('input', { bubbles: true }));
+    document.querySelector('[data-act="bbStart"]').click();
+    expect(document.querySelector('#bbstartmsg').textContent).toContain('5-digit');
+    window.confirm = () => true; // an earlier test left a draft
+    box.value = '24190';
+    box.dispatchEvent(new Event('input', { bubbles: true }));
+    document.querySelector('[data-act="bbStart"]').click();
+    await new Promise((r) => setTimeout(r, 30));
+    expect(document.querySelector('#bbstartmsg').textContent).toBe('');
+    expect(document.querySelector('#bbdraft').textContent).toContain('24190');
+  });
+});

@@ -30,7 +30,8 @@ export function awardPanelHTML() {
   return `<section class="panel"><h2>Start from an award letter</h2>${intro}
   <h3>Check what was read</h3>
   <div class="filters"><label>BAR type<select data-in="awardField" data-k="type">${[['IB', 'Initial Budget (IB)'], ['I', 'Increase (I)'], ['D', 'Decrease (D)']].map(([v, t]) => `<option value="${v}"${f.type === v ? ' selected' : ''}>${t}</option>`).join('')}</select></label>
-  <label>Fund<select data-in="awardField" data-k="fund"><option value="">Choose…</option>${funds.map((x) => `<option value="${esc(x)}"${f.fund === x ? ' selected' : ''}>${esc(fundLabel(x))}</option>`).join('')}</select></label>${SRC(a.parsed.fund)}
+  <label>Fund<input type="text" list="awardfundlist" data-in="awardField" data-k="fund" value="${esc(f.fund || '')}" maxlength="5" inputmode="numeric" placeholder="5-digit code" autocomplete="off" size="14"></label>
+  <datalist id="awardfundlist">${funds.map((x) => `<option value="${esc(x)}">${esc(fundLabel(x))}</option>`).join('')}</datalist>${SRC(a.parsed.fund)}
   ${inp('Location segment', 'loc', 'maxlength="12"')}</div>
   ${a.parsed.planning ? `<p class="muted">The letter shows a planning award of ${fmtM(a.parsed.planning.value)} and a final award of ${fmtM(a.parsed.final.value)}; the BAR is for the increase.</p>` : ''}
   <h3>Revenue</h3>
@@ -149,8 +150,13 @@ export const AWARD_IN = {
     const f = aw().form,
       k = t.dataset.k;
     f[k] = t.value;
-    if (k === 'fund') for (const r of f.revenue) r.obj = r.obj || profile().awardRevenue?.[t.value] || '';
-    if (k === 'fund' || k === 'type') return redraw();
+    if (k === 'fund') {
+      // typed one digit at a time: act only once it is a whole fund code
+      if (!/^\d{5}$/.test(t.value)) return;
+      for (const r of f.revenue) r.obj = r.obj || profile().awardRevenue?.[t.value] || '';
+      return redraw();
+    }
+    if (k === 'type') return redraw();
   },
   awardRev: (t) => {
     aw().form.revenue[+t.dataset.i][t.dataset.f] = t.value;

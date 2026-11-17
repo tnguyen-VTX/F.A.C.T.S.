@@ -121,10 +121,11 @@ export function viewBarBuilder() {
     )}</div><p class="muted">${b.funds.size ? `${b.funds.size} selected.` : 'None picked: all funds are shown.'}</p></section>
   <section class="panel"><h2>Start a BAR</h2><div class="filters">
   <label>BAR type<select data-in="bbType">${TYPES.map((t) => `<option value="${t}"${b.type === t ? ' selected' : ''}>${esc(BAR_TYPES[t])} (${t})</option>`).join('')}</select></label>
-  <label>Fund<select data-in="bbStartFund"><option value="">Choose…</option>${funds.map((f) => `<option value="${esc(f.code)}"${b.startFund === f.code ? ' selected' : ''}>${esc(fundLabel(f.code))}</option>`).join('')}</select></label>
+  <label>Fund<input type="text" list="bbfundlist" data-in="bbStartFund" value="${esc(b.startFund || '')}" maxlength="5" inputmode="numeric" placeholder="5-digit code" autocomplete="off" size="14"></label>
+  <datalist id="bbfundlist">${funds.map((f) => `<option value="${esc(f.code)}">${esc(fundLabel(f.code))}</option>`).join('')}</datalist>
   <button class="btn" data-act="bbStart">Start an empty ${esc(BAR_TYPES[b.type])} BAR</button></div>${
     TYPE_HELP[b.type] ? `<p class="muted">${esc(TYPE_HELP[b.type])}</p>` : ''
-  }</section>
+  }<p class="warn" id="bbstartmsg" role="alert"></p></section>
   <div id="bbaward">${awardPanelHTML()}</div><div id="bbdef"></div><div id="bbdraft"></div><div id="bbsaved"></div><div id="bbbackup"></div>`;
   bbDeficits();
   bbDraft();
@@ -191,7 +192,11 @@ export function bbBuildTransfer(fund, func, kind = 'T') {
 }
 export function bbStartEmpty() {
   const b = bb();
-  if (!b.startFund || !replaceOk()) return;
+  const msg = $('#bbstartmsg');
+  const fund = String(b.startFund || '').trim();
+  if (msg) msg.textContent = /^\d{5}$/.test(fund) ? '' : 'Type or choose the 5-digit fund code first.';
+  if (!/^\d{5}$/.test(fund) || !replaceOk()) return;
+  b.startFund = fund;
   b.draft = newBar(b.type, b.startFund);
   b.note = '';
   keep();
