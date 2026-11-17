@@ -33,6 +33,7 @@ export function awardPanelHTML() {
   <label>Fund<input type="text" list="awardfundlist" data-in="awardField" data-k="fund" value="${esc(f.fund || '')}" maxlength="5" inputmode="numeric" placeholder="5-digit code" autocomplete="off" size="14"></label>
   <datalist id="awardfundlist">${funds.map((x) => `<option value="${esc(x)}">${esc(fundLabel(x))}</option>`).join('')}</datalist>${SRC(a.parsed.fund)}
   ${inp('Location segment', 'loc', 'maxlength="12"')}</div>
+  ${a.parsed.note ? `<p class="warn">${esc(a.parsed.note)}</p>` : ''}
   ${a.parsed.planning ? `<p class="muted">The letter shows a planning award of ${fmtM(a.parsed.planning.value)} and a final award of ${fmtM(a.parsed.final.value)}; the BAR is for the increase.</p>` : ''}
   <h3>Revenue</h3>
   <div class="scroll"><table class="t"><thead><tr><th>Revenue object (4xxxx)</th><th class="r">Amount</th><th></th></tr></thead><tbody>${f.revenue

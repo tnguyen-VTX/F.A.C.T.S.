@@ -4,7 +4,7 @@
 import { parseMoney } from './barReport.js';
 import { spreadByWeight } from './barLogic.js';
 
-const MONEY = /\(?-?\$?\s?\d{1,3}(?:,\d{3})+(?:\.\d{1,2})?\)?|\(?-?\$\s?\d+(?:\.\d{1,2})?\)?|\b\d+\.\d{2}\b/g;
+const MONEY = /\(?-?\$?\s?\d{1,3}(?:,\d{3})+(?:\.\d{1,2})?\)?|\(?-?\$\s?\d+(?:\.\d{1,2})?\)?|(?<![\d.])\d+\.\d{2}(?![\d.])/g;
 const MONTHS = 'jan feb mar apr may jun jul aug sep oct nov dec'.split(' ');
 const DATE =
   /\b(\d{1,2})\/(\d{1,2})\/(\d{4})\b|\b(\d{4})-(\d{2})-(\d{2})\b|\b(jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)[a-z]*\.?\s+(\d{1,2}),?\s+(\d{4})\b/gi;
@@ -50,6 +50,11 @@ function byLabel(lines, labels) {
 
 function findFund(lines, profile) {
   const known = new Set((profile?.funds || []).map((f) => f.code));
+  // A title such as "EXHIBIT A (27528 - Planning Award - FY26-27)" names the fund.
+  for (const line of lines) {
+    const t = line.match(/\((\d{5})\s*[-–]\s*[A-Za-z]/) || line.match(/\bfund\s*(?:code|no\.?|number)?\s*[:#-]?\s*(\d{5})\b/i);
+    if (t) return { value: t[1], src: line };
+  }
   const re = /(?<![\d-])(\d{5})(?![\d])/g;
   let loose = null;
   for (const line of lines)
@@ -159,6 +164,28 @@ export function parseSegMemo(lines, profile) {
   return { fund, revenue, src: row };
 }
 
+// A memo that lists every school's allocation: `OBMS ENTITY CODE | School | $ amount`, with the revenue code in the header
+// (e.g. "(Revenue Code 43202)"). Only this school's row is read: by name, else by entity code (district + PED location).
+export function parseAllocationTable(lines, profile) {
+  const revObj = lines.map((l) => l.match(/revenue\s+code\s*:?\s*(4\d{4})/i)?.[1]).find(Boolean) || null;
+  const rows = [];
+  for (const line of lines) {
+    const m = line.match(/^(\S*\d\S*)\s+(.+?)\s+\$\s*([\d,]+(?:\.\d{1,2})?)\s*$/);
+    if (m) rows.push({ code: m[1], name: m[2], amount: parseMoney(m[3]), src: line });
+  }
+  if (!rows.length || !revObj) return null;
+  const norm = (t) => String(t || '').toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim();
+  const names = [profile?.name, profile?.entityName, ...(profile?.reportNames || [])].map(norm).filter(Boolean);
+  const dist = String(parseInt(profile?.districtCode || '', 10) || '');
+  const locs = (profile?.locationIds || []).map(String);
+  const byCode = (r) => {
+    const d = r.code.replace(/\D/g, '').replace(/^0+/, '');
+    return !!dist && locs.some((l) => d.length >= dist.length + 3 && d.startsWith(dist) && d.endsWith(l));
+  };
+  const hit = rows.find((r) => names.includes(norm(r.name))) || rows.find(byCode);
+  return { revObj, row: hit || null };
+}
+
 function findEnd(lines) {
   for (const line of lines) {
     const m = line.match(/(?:terminate|terminates|expires?|ends?|no\s+later\s+than)\s+(?:on\s+)?(.{0,40})/i);
@@ -175,6 +202,7 @@ export function parseAward(text, profile) {
   const period = findPeriod(lines);
   const table = findTable(lines);
   const seg = parseSegMemo(lines, profile);
+  const alloc = seg ? null : parseAllocationTable(lines, profile);
   const revCode = lines.map((l) => l.match(/revenue\s+(?:code|account|object)\s*:?\s*(4\d{4})/i)?.[1]).find(Boolean) || null;
   const found = byLabel(lines, AWARD_LABELS);
   const end = period ? null : findEnd(lines);
@@ -203,7 +231,18 @@ export function parseAward(text, profile) {
       type = sum < 0 ? 'D' : 'I';
     }
   }
-  const revObj = table?.revObj || revCode || null;
+  let note = null;
+  if (alloc) {
+    if (alloc.row) {
+      award = { value: alloc.row.amount, src: alloc.row.src };
+      revenue = [{ obj: alloc.revObj, amount: alloc.row.amount, src: alloc.row.src }];
+      if (!type && lines.some((l) => /planning\s+award|initial\s+budget/i.test(l))) type = 'IB';
+    } else {
+      award = null;
+      note = "This memo lists many schools, and this school's row was not found (checked its name and its district and location codes). Check the school on the Schools screen, or type the amount.";
+    }
+  }
+  const revObj = table?.revObj || alloc?.revObj || revCode || null;
   if (!revenue.length && award && revObj) revenue = [{ obj: revObj, amount: award.value, src: table?.src || '' }];
   return {
     fund,
@@ -220,6 +259,7 @@ export function parseAward(text, profile) {
     total: byLabel(lines, TOTAL_LABELS),
     name: table?.name ? { value: table.name, src: table.src } : findName(lines),
     rows: seg ? [] : findRows(lines, profile),
+    note,
     lineCount: lines.length,
   };
 }
