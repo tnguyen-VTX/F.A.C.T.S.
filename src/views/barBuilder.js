@@ -230,6 +230,12 @@ export function bbChangeType(type) {
   bar.narrTpl = '';
   b.narrMsg = '';
   if (untouched) bar.justification = suggestJustification(bar, wording);
+  else {
+    // The standard sentence for Initial Budget or Increase (even with a fund name added) is switched to the new type's wording.
+    const m = bar.justification.match(/^(?:Initial budget|Increase) of (\$[\d.]+ in .*?) to budget (?:the award|additional award funds) received\.$/);
+    if (m && (type === 'IB' || type === 'I'))
+      bar.justification = `${type === 'IB' ? 'Initial budget' : 'Increase'} of ${m[1]} to budget ${type === 'IB' ? 'the award' : 'additional award funds'} received.`;
+  }
   keep();
 }
 export function bbStartEmpty() {

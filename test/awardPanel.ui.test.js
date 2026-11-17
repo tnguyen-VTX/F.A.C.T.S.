@@ -177,3 +177,14 @@ describe('changing the type of the working BAR', () => {
     expect(document.querySelector('#bbdraft h2').textContent).toContain('Initial budget');
   });
 });
+
+describe('the standard Initial Budget sentence follows a type change even with a fund name in it', () => {
+  it('rewrites it for an Increase', async () => {
+    const { bbChangeType, bb } = await import('../src/views/barBuilder.js');
+    const d = bb().draft;
+    d.type = 'IB';
+    d.justification = 'Initial budget of $80000 in fund 27528 (Community Schools) to budget the award received.';
+    bbChangeType('I');
+    expect(d.justification).toBe('Increase of $80000 in fund 27528 (Community Schools) to budget additional award funds received.');
+  });
+});
