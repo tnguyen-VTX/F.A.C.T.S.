@@ -6,6 +6,23 @@ import { D, PF, UI, profile, storage } from '../state.js';
 import { bb, keep } from './barBuilder.js';
 
 const aw = () => UI.award;
+// Small icon buttons for a table row: what each does shows on hover (and to screen readers).
+const ICONS = {
+  dup: '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h9"/></svg>',
+  clear: '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 20H9L3.5 14.5a2 2 0 0 1 0-2.8L12 3.2a2 2 0 0 1 2.8 0L21 9.4a2 2 0 0 1 0 2.8L13 20"/><path d="M8 8l8 8"/></svg>',
+  del: '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6h18M8 6V4h8v2M6 6l1 14h10l1-14M10 11v6M14 11v6"/></svg>',
+};
+const iconBtns = (kind, i, what) =>
+  `<span class="rowicons">${[
+    ['dup', `Duplicate this ${what}`],
+    ['clear', `Clear the fields of this ${what}`],
+    ['del', `Remove this ${what}`],
+  ]
+    .map(
+      ([k, tip]) =>
+        `<button type="button" class="iconbtn${k === 'del' ? ' danger' : ''}" data-act="award${{ dup: 'Dup', clear: 'Clear', del: 'Del' }[k]}${kind}" data-i="${i}" title="${tip}" aria-label="${tip}">${ICONS[k]}</button>`,
+    )
+    .join('')}</span>`;
 const SRC = (x) => (x?.src ? `<span class="muted fnote" title="From the letter: ${esc(x.src)}">from: ${esc(x.src.slice(0, 70))}</span>` : '');
 const fundLabel = (c) => {
   const n = profile().funds.find((x) => x.code === c)?.name || D.fundNames?.[c];
@@ -41,7 +58,7 @@ export function awardPanelHTML() {
       (r, i) =>
         `<tr><td><input type="text" class="amt" data-in="awardRev" data-f="obj" data-i="${i}" value="${esc(r.obj ?? '')}" size="7" maxlength="5" placeholder="4xxxx" aria-label="Revenue object ${i + 1}"></td>
     <td class="r"><input type="number" step="0.01" class="amt" data-in="awardRev" data-f="amount" data-i="${i}" value="${esc(r.amount ?? '')}" aria-label="Revenue amount ${i + 1}"></td>
-    <td><button class="linkbtn" data-act="awardDelRev" data-i="${i}">Remove</button></td></tr>`,
+    <td>${iconBtns('Rev', i, 'revenue line')}</td></tr>`,
     )
     .join('')}</tbody></table></div>
   <div class="toolbar"><button class="btn" data-act="awardAddRev">Add a revenue line</button> ${SRC(a.parsed.revObj)}</div>
@@ -57,7 +74,7 @@ export function awardPanelHTML() {
         `<tr><td><input type="checkbox" data-in="awardRow" data-f="on" data-i="${i}"${r.on ? ' checked' : ''} aria-label="Use line ${i + 1}"></td>
     ${['func', 'obj', 'prog', 'job'].map((k) => `<td><input type="text" class="amt" data-in="awardRow" data-f="${k}" data-i="${i}" value="${esc(r[k] ?? '')}" size="6" aria-label="${k} line ${i + 1}"></td>`).join('')}
     <td class="r"><input type="number" step="1" class="amt" data-in="awardRow" data-f="amount" data-i="${i}" value="${esc(r.amount ?? '')}" aria-label="Amount line ${i + 1}"></td>
-    <td class="muted fnote">${esc((r.src || '').slice(0, 60))}</td><td><button class="linkbtn" data-act="awardDelRow" data-i="${i}">Remove</button></td></tr>`,
+    <td class="muted fnote srccell" title="${esc(r.src || '')}">${esc(r.src || '')}</td><td>${iconBtns('Row', i, 'expenditure line')}</td></tr>`,
     )
     .join('')}</tbody></table></div>
   <div class="toolbar"><button class="btn" data-act="awardAddRow">Add a line</button>${D.asr ? ' <button class="btn" data-act="awardSpread">Spread over this fund\'s budget</button>' : ''} <span id="awardsum">${esc(awardSum())}</span></div>
@@ -177,6 +194,16 @@ export const AWARD_ACT = {
     aw().form.revenue.push({ obj: '', amount: '' });
     redraw();
   },
+  awardDupRev: (t) => {
+    const f = aw().form,
+      i = +t.dataset.i;
+    f.revenue.splice(i + 1, 0, { ...f.revenue[i] });
+    redraw();
+  },
+  awardClearRev: (t) => {
+    Object.assign(aw().form.revenue[+t.dataset.i], { obj: '', amount: '' });
+    redraw();
+  },
   awardDelRev: (t) => {
     const f = aw().form;
     if (f.revenue.length > 1) f.revenue.splice(+t.dataset.i, 1);
@@ -191,6 +218,16 @@ export const AWARD_ACT = {
   },
   awardAddRow: () => {
     aw().form.rows.push({ on: true, func: '', obj: '', prog: '0000', job: '0000', amount: '' });
+    redraw();
+  },
+  awardDupRow: (t) => {
+    const f = aw().form,
+      i = +t.dataset.i;
+    f.rows.splice(i + 1, 0, { ...f.rows[i] });
+    redraw();
+  },
+  awardClearRow: (t) => {
+    Object.assign(aw().form.rows[+t.dataset.i], { func: '', obj: '', prog: '0000', job: '0000', amount: '', src: '' });
     redraw();
   },
   awardDelRow: (t) => {

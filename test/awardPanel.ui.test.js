@@ -102,3 +102,30 @@ describe('Suggest wording without an Account Summary', () => {
     expect(document.querySelector('textarea[data-k="justification"]').value).toMatch(/^Initial budget of \$2350 in /);
   });
 });
+
+describe('row icons: duplicate, clear and remove', () => {
+  it('each icon says what it does and works on an expenditure line', async () => {
+    document.querySelector('.nav button[data-v="bars"]').click();
+    const ta = document.querySelector('textarea[data-in="awardPaste"]');
+    ta.value = 'Fund: 24101\nTotal Award: $2,350.00\n1000 51100 Salaries 800.00\n2100 52311 Benefits 900.00';
+    ta.dispatchEvent(new Event('input', { bubbles: true }));
+    document.querySelector('[data-act="awardRead"]').click();
+    const rows = () => document.querySelectorAll('input[data-in="awardRow"][data-f="func"]');
+    expect(rows().length).toBe(2);
+    const dup = document.querySelector('[data-act="awardDupRow"][data-i="0"]');
+    expect(dup.title).toBe('Duplicate this expenditure line');
+    expect(document.querySelector('[data-act="awardClearRow"][data-i="0"]').getAttribute('aria-label')).toBe('Clear the fields of this expenditure line');
+    expect(document.querySelector('[data-act="awardDelRow"][data-i="0"]').title).toBe('Remove this expenditure line');
+    dup.click();
+    expect(rows().length).toBe(3);
+    expect([...rows()].map((x) => x.value)).toEqual(['1000', '1000', '2100']);
+    document.querySelector('[data-act="awardClearRow"][data-i="1"]').click();
+    expect([...rows()].map((x) => x.value)).toEqual(['1000', '', '2100']);
+    expect(document.querySelectorAll('input[data-f="amount"][data-i="1"]')[0].value).toBe('');
+    document.querySelector('[data-act="awardDelRow"][data-i="1"]').click();
+    expect(rows().length).toBe(2);
+    // revenue rows have them too
+    document.querySelector('[data-act="awardDupRev"][data-i="0"]').click();
+    expect(document.querySelectorAll('input[data-in="awardRev"][data-f="amount"]').length).toBe(2);
+  });
+});
