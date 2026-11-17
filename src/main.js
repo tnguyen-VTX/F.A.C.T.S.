@@ -356,7 +356,14 @@ const ACT = {
   },
   bbSuggest: () => {
     const d = bb().draft;
-    d.justification = suggestJustification(d, { funcNames: D.asr.funcNames, fundNames: D.fundNames });
+    const text = suggestJustification(d, { funcNames: D.asr?.funcNames, fundNames: D.fundNames });
+    if (!text) {
+      // nothing to word yet: say why instead of doing nothing
+      const m = $('#bbsuggestmsg');
+      if (m) m.textContent = 'Add the revenue line (an Initial Budget, Increase or Decrease) or the transfer lines first; the wording is made from them.';
+      return;
+    }
+    d.justification = text;
     keepBB();
     bbDraft();
   },

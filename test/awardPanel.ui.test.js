@@ -78,3 +78,27 @@ describe('typing a fund that is not on the profile', () => {
     expect(document.querySelector('#bbdraft').textContent).toContain('24190');
   });
 });
+
+describe('Suggest wording without an Account Summary', () => {
+  it('fills the justification from the revenue line, and explains when there is nothing to word', async () => {
+    document.querySelector('.nav button[data-v="bars"]').click();
+    window.confirm = () => true;
+    const box = document.querySelector('input[data-in="bbStartFund"]');
+    box.value = '24190';
+    box.dispatchEvent(new Event('input', { bubbles: true }));
+    document.querySelector('[data-act="bbStart"]').click();
+    await new Promise((r) => setTimeout(r, 30));
+    document.querySelector('[data-act="bbSuggest"]').click();
+    expect(document.querySelector('#bbsuggestmsg').textContent).toContain('revenue line');
+    // add a revenue line (a code that fits Gilbert's layout), then ask again
+    const code = document.querySelector('input[data-in="bbAddCode"]');
+    code.value = '24190-0000-44000-0000-001707-0000';
+    code.dispatchEvent(new Event('input', { bubbles: true }));
+    const amt = document.querySelector('input[data-in="bbAddAmt"]');
+    amt.value = '2350';
+    amt.dispatchEvent(new Event('input', { bubbles: true }));
+    document.querySelector('[data-act="bbAddLine"]').click();
+    document.querySelector('[data-act="bbSuggest"]').click();
+    expect(document.querySelector('textarea[data-k="justification"]').value).toMatch(/^Initial budget of \$2350 in /);
+  });
+});

@@ -241,7 +241,7 @@ export function bbDraft() {
   }
   ${['I', 'IB', 'D'].includes(bar.type) ? fieldIn(bar.type === 'D' ? 'Amount of the decrease (optional cap)' : 'Award amount (optional cap)', 'award', bar.award, 'inputmode="decimal" size="14"') : ''}
   <label class="fld"><span>Justification <span id="bbcount" class="muted"></span></span><textarea rows="3" data-in="bbField" data-k="justification">${esc(bar.justification)}</textarea></label>
-  <div class="toolbar"><button class="btn" data-act="bbSuggest">Suggest wording</button></div>
+  <div class="toolbar"><button class="btn" data-act="bbSuggest">Suggest wording</button> <span class="muted" id="bbsuggestmsg"></span></div>
   ${narrativePanel(bar)}
   <div class="scroll"><table class="t"><thead><tr><th>Account</th><th>Type</th><th>Func</th><th>Object</th><th class="r">Adj amount</th><th class="r">Line FTE</th><th class="r">FTE adj</th><th></th></tr></thead><tbody>${
     bar.lines.map((l, i) => lineRow(l, i)).join('') ||
