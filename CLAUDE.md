@@ -83,6 +83,10 @@ entry for an approved BAR** (PED's approved BAR report as Excel; decrease = cred
 Every code is checked against the school's AptaFund Chart Of Accounts report (loaded per school and year, kept in IndexedDB as
 `chart:<school>:<fy>`); codes missing there are listed as strings to add in AptaFund. Codes are also checked against the PED Chart Line Listing (zip or CSVs, read as a stream and kept only for the funds the school uses, stored as `ped:<fy>`; no location in it; bank lines are skipped because the listing has object 11111, not 11011). Saved entries live in `S().jes` and the backup. Encumbrance entries are out of scope (AptaFund makes them).
 
+## School-level spending, PED 3.4 (added after v0.1; screen: School-level spending (PED 3.4))
+
+Accreditation component 3.4 check, reached from the nav or from Load reports once reports are loaded (full app only, not the suite pages). Uses the loaded Fund Audit (Account Summary if no Fund Audit) and 910B-5 school-level SEG amounts typed or pasted per site; compares site spending shares with SEG shares, checks Special Education, Gifted and At-Risk program alignment, and flags a charter over the program 0000 limit (default 60%). Rules and their open assumptions are in `context/business-rules.md`.
+
 ## Hosting (ledgersandlearning.com)
 
 The built app is static files for the ledgerandlearning.com suite (facts.ledgerandlearning.com). Decisions: no sign-in and no
@@ -140,6 +144,7 @@ src/lib/pedZip.js     Reads the listing from a CSV or zip byte stream, a piece a
 src/lib/jeLog.js      Saved journal entries, status log (Prepared, Entered in AptaFund, Posted, Cancelled), what is already reclassed (pure)
 src/lib/awardLetter.js  Award letter text to suggestions (fund, award, dates, flowthrough amounts, budget rows) and the confirmed form to an IB/Increase BAR (pure)
 src/lib/pdfText.js    PDF text as lines with pdf.js (lazy loaded; worker file bundled, `worker-src 'self'`)
+src/lib/schoolLevel.js PED 3.4 school-level expenditures: site spending vs 910B-5 SEG shares, program alignment, charter program 0000 limit (pure)
 src/lib/fte.js        FTE change for salary lines (proportional to dollars; assumption to confirm) (pure)
 src/lib/format.js     Formatting, math, and account-code helpers
 src/lib/idb.js        IndexedDB cache for the last workbook
