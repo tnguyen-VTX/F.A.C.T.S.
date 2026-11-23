@@ -49,3 +49,14 @@ The CSV has no Src column. Source is derived: `Number` prefix `Reg:` = payroll r
 ## Report tie-out
 
 A Fund Audit and an Account Summary run for the same school and period tie exactly: each fund's Budget, Actual, Encumbrance and Available equal that fund's `[Fund]` subtotal, and the sums equal the Account Summary Grand Total. A fund with no activity in either report is ignored. A difference means a different period, school or filter, and the load warns.
+
+## School-level expenditures (PED accreditation component 3.4)
+
+Screen: School-level spending (PED 3.4), `lib/schoolLevel.js`. Q1 expenditures are due in OBMS by 11/30. Rules as built, all **[assumed]** until checked against the School Budget Bureau training slides (10/21/2026):
+
+- Operational spending = actuals on expenditure objects (5xxxx) in the operational fund(s) (default 11000), year to date through the quarter's end, from the Fund Audit (by transaction date). With only an Account Summary loaded, its actuals for the report's own period are used.
+- Spending by site: the 3-digit location (profile location rule). A location in the profile's PED location IDs, or with a 910B-5 row, is a school site; anything else (e.g. 000) is flagged as not coded to a site. Each site's share of site spending is compared with its share of the 910B-5 total SEG; more than the tolerance apart (default 10 points) is flagged, as is a site with SEG but no spending or spending but no SEG.
+- 910B-5 amounts (total SEG, Special Education, Gifted, At-Risk per site) are typed or pasted by the user; the file is not parsed.
+- Special Education, Gifted and At-Risk: the program codes for each are settings (no defaults; PED program codes not yet confirmed). Flagged when the 910B-5 shows SEG but no spending is coded to the program, or spending is coded but no SEG is shown. Otherwise spending is shown against the quarter's straight-line share of the year's SEG (Q1 = 25%), with no pass/fail threshold.
+- Charters: flagged when program 0000 holds more than the limit (default 60%) of operational spending.
+- Settings are saved per school and fiscal year (`S().sl34`).

@@ -68,7 +68,7 @@ export function viewImport() {
     )
     .join('')}</select></label></div>
   <div class="grid2">${slotHTML('asr')}${slotHTML('fa')}</div>
-  ${ready ? `<div class="toolbar"><button class="btn primary" data-act="nav" data-v="${homeScreen()}">${homeLabel()}</button></div>` : ''}
+  ${ready ? `<div class="toolbar"><button class="btn primary" data-act="nav" data-v="${homeScreen()}">${homeLabel()}</button>${barOnly() ? '' : '<button class="btn" data-act="nav" data-v="sl34">Check school-level spending (PED 3.4)</button>'}</div>` : ''}
   <section class="panel" id="earlier" hidden></section>
   ${
     barOnly()

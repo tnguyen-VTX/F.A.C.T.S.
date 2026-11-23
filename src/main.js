@@ -83,6 +83,7 @@ import { txResults, viewTx } from './views/transactions.js';
 
 import { barOnly, homeScreen, pageScreens, pageTitle } from './mode.js';
 import { JEM_ACT, JEM_IN, viewJEM } from './views/jem.js';
+import { SL_ACT, SL_IN, viewSchoolLevel } from './views/schoolLevel.js';
 
 const NAV = [
   ['import', 'Load reports'],
@@ -94,6 +95,7 @@ const NAV = [
   ['bar', 'BAR spread (v0.1)'],
   ['rfr', 'Reimbursements'],
   ['cr', 'Cash receipts'],
+  ['sl34', 'School-level spending (PED 3.4)'],
   ['cap', 'Capital outlay'],
   ['schools', 'Schools'],
   ['help', 'How to use'],
@@ -172,6 +174,7 @@ const VIEWS = {
   bar: viewBAR,
   rfr: viewRfR,
   cr: viewCR,
+  sl34: viewSchoolLevel,
   cap: viewCap,
   schools: viewSchools,
   about: viewAbout,
@@ -200,6 +203,7 @@ const csv = (rows) =>
     .join('\n');
 const ACT = {
   ...JEM_ACT,
+  ...SL_ACT,
   nav: (t) => {
     UI.view = t.dataset.v;
     render();
@@ -364,7 +368,9 @@ const ACT = {
     if (!text) {
       // nothing to word yet: say why instead of doing nothing
       const m = $('#bbsuggestmsg');
-      if (m) m.textContent = 'Add the revenue line (an Initial Budget, Increase or Decrease) or the transfer lines first; the wording is made from them.';
+      if (m)
+        m.textContent =
+          'Add the revenue line (an Initial Budget, Increase or Decrease) or the transfer lines first; the wording is made from them.';
       return;
     }
     d.justification = text;
@@ -374,8 +380,20 @@ const ACT = {
   bbDownload: () => {
     const r = bbFile();
     if (!r.ok) return;
-    const noFte = bb().draft.lines.filter((l) => isSalaryObject(l.obj, profile().fteObjects) && !isRevenueObject(l.obj) && l.amount !== 0 && !(l.fte > 0)).length;
-    if (noFte && !confirm(`${noFte} salary line${noFte > 1 ? 's have' : ' has'} no FTE. OBMS rejects a salary line with no FTE ("Missing projected FTE"). Download anyway?`)) return;
+    const noFte = bb().draft.lines.filter(
+      (l) =>
+        isSalaryObject(l.obj, profile().fteObjects) &&
+        !isRevenueObject(l.obj) &&
+        l.amount !== 0 &&
+        !(l.fte > 0),
+    ).length;
+    if (
+      noFte &&
+      !confirm(
+        `${noFte} salary line${noFte > 1 ? 's have' : ' has'} no FTE. OBMS rejects a salary line with no FTE ("Missing projected FTE"). Download anyway?`,
+      )
+    )
+      return;
     const a = document.createElement('a');
     a.href = URL.createObjectURL(new Blob([r.csv], { type: 'text/csv;charset=utf-8' }));
     a.download = r.name;
@@ -458,6 +476,7 @@ const saveBar = () => {
 };
 const IN = {
   ...JEM_IN,
+  ...SL_IN,
   file: (t) => t.files[0] && handleFile(t.files[0]),
   overOnly: (t) => {
     UI.overOnly = t.checked;
